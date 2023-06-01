@@ -96,6 +96,11 @@ class muse():
 
         self.STITCHING_FLAG = (self.NUM_TILES != 1)
 
+        num_tiles_x = len(np.unique(xy_positions[:,0]))
+        num_tiles_y = len(np.unique(xy_positions[:,1]))
+
+        assert self.NUM_TILES == num_tiles_x * num_tiles_y
+
         if self.STITCHING_FLAG:
             self.stitcher = Stitcher()
             self.SORTED_INDICES =self. stitcher.convert_xy_positions_to_tile_configuration(xy_positions, self.PIXEL_SIZE, self.TILE_CONFIG_PATH)
@@ -107,7 +112,7 @@ class muse():
         folder_created = True
 
         if self.STITCHING_FLAG:
-            folder_created = self.stitcher.set_up_zarr_store_for_stitched_images(self.STITCHED_DIRECTORY, num_time_points, self.NUM_TILES, self.TILE_SIZE_X, self.TILE_SIZE_Y)
+            folder_created = self.stitcher.set_up_zarr_store_for_stitched_images(self.STITCHED_DIRECTORY, num_time_points, self.NUM_TILES, self.TILE_SIZE_X, self.TILE_SIZE_Y, num_tiles_x, num_tiles_y)
         
         if folder_created:
             self.core = Core()

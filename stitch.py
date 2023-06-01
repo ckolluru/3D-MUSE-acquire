@@ -63,10 +63,7 @@ class Stitcher():
 
         return sorted_indices
 
-    def set_up_zarr_store_for_stitched_images(self, stitched_directory, num_time_points, num_tiles, tile_size_x, tile_size_y):
-
-        num_tiles_x = int(math.sqrt(num_tiles))
-        num_tiles_y = int(math.sqrt(num_tiles))
+    def set_up_zarr_store_for_stitched_images(self, stitched_directory, num_time_points, num_tiles, tile_size_x, tile_size_y, num_tiles_x, num_tiles_y):
         
         self.Y_SHAPE_ZARR = tile_size_y * num_tiles_y    
         self.X_SHAPE_ZARR = tile_size_x * num_tiles_x
