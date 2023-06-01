@@ -14,7 +14,7 @@ class acquisition():
         self.TILE_SIZE_Y = None
 
     # Get XY positions, set in MDA window in MM
-    def get_xy_positions(self):
+    def get_xyz_positions(self):
 
         studio = Studio()
 
@@ -25,6 +25,7 @@ class acquisition():
         position_list = position_list_manager.get_position_list()
         number_positions = position_list.get_number_of_positions()
         xy_positions = np.empty((number_positions,2))
+        z_positions = np.empty((number_positions))
 
         # iterate through position list to extract XY positions    
         for idx in range(number_positions):
@@ -33,12 +34,17 @@ class acquisition():
                 stage_pos = pos.get(ipos)
                 if (stage_pos.get_stage_device_label() == 'XYStage'):
                     xy_positions[idx,:] = [stage_pos.x, stage_pos.y]
+                if (stage_pos.get_stage_device_label() == 'Stage'):
+                    z_positions[idx] = stage_pos.z
 
-        return xy_positions
+        return xy_positions, z_positions
 
     # Just before capturing an image
     def post_hardware_hook_fn(self, event):
         
+        mmc = Core()
+        mmc.full_focus()
+
         return event
 
     # After capturing an image
@@ -56,7 +62,8 @@ class acquisition():
 
         os.makedirs(self.STORAGE_DIRECTORY, exist_ok=True)
 
-        xy_positions = self.get_xy_positions()
+        xy_positions, z_positions = self.get_xyz_positions()
+        xyz_positions = np.hstack((xy_positions, np.expand_dims(z_positions, axis=1)))
         self.NUM_TILES = xy_positions.shape[0]
         assert self.NUM_TILES == 1
 
@@ -68,7 +75,7 @@ class acquisition():
         self.core = Core()
 
         with Acquisition(directory=self.STORAGE_DIRECTORY, name='pycromanager_acq', image_process_fn=self.image_process_fn, post_hardware_hook_fn=self.post_hardware_hook_fn) as acq:
-            events = multi_d_acquisition_events(xy_positions=xy_positions, num_time_points=num_time_points, time_interval_s=time_interval_s)
+            events = multi_d_acquisition_events(xyz_positions=xyz_positions, num_time_points=num_time_points, time_interval_s=time_interval_s)
             acq.acquire(events)
 
 if __name__ == '__main__':
