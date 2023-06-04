@@ -14,6 +14,7 @@ class Window(QMainWindow):
         self.show() 
 
         self.board = None
+        self.tiles = []
 
     # Get XYZ positions from Micromanager
     def get_xyz_positions(self):
@@ -78,9 +79,6 @@ class Window(QMainWindow):
     # After capturing an image
     def image_process_fn(self, image, metadata):
 
-        if not hasattr(self.image_process_fn, "tiles"):
-            self.image_process_fn.tiles = []
-
         # Accumulate individual tiles
         self.tiles.append(np.reshape(image, (self.TILE_SIZE_Y, self.TILE_SIZE_X)))
 
@@ -96,8 +94,8 @@ class Window(QMainWindow):
 
             # Get the time point index
             time_index = metadata['Axes']['time']
-            self.progressBar.setValue(time_index)
-            self.statusBar().showMessage('End of section ' + str(time_index))
+            # self.progressBar.setValue(time_index)
+            # self.statusBar().showMessage('End of section ' + str(time_index))
 
             # Sort the tiles based on the sorting indices
             self.tiles = [self.tiles[i] for i in self.SORTED_INDICES]
@@ -105,7 +103,7 @@ class Window(QMainWindow):
             # ZYX array
             if self.STITCHING_FLAG:
                 self.stitcher.stitch_tiles(self.tiles, self.TILE_CONFIG_PATH, self.PIXEL_SIZE, time_index-1)
-                self.statusBar().showMessage('Tile stitching complete for section ' + str(time_index))
+                #self.statusBar().showMessage('Tile stitching complete for section ' + str(time_index))
 
             # Reset the list container
             self.tiles = []
@@ -134,6 +132,9 @@ class Window(QMainWindow):
             self.board.digital[8].write(1)
             self.board.digital[9].write(1)
             self.board.digital[10].write(1)
+
+            # Let the cut complete
+            time.sleep(10)
 
             self.statusBar().showMessage('Arduino initialization complete', 5000)
         
@@ -266,7 +267,9 @@ class Window(QMainWindow):
 
                 with Acquisition(directory=self.STORAGE_DIRECTORY, name='MUSE_acq', image_process_fn=self.image_process_fn, post_hardware_hook_fn=self.post_hardware_hook_fn) as acq:
                     events = multi_d_acquisition_events(xyz_positions=xyz_positions,  num_time_points=num_time_points, time_interval_s=time_interval_s)
-                    acq.acquire(events)
+                    
+                    for event in events:
+                        acq.acquire(event)
 
         self.progressBar.setValue(0)
         self.statusBar().showMessage('Acquisition complete.')

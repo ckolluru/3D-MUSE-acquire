@@ -318,6 +318,9 @@ font: 14pt &quot;Segoe UI&quot;;</string>
                <bold>false</bold>
               </font>
              </property>
+             <property name="text">
+              <string>C:/Users/MUSE/Desktop/Test</string>
+             </property>
             </widget>
            </item>
            <item>
@@ -387,6 +390,9 @@ font: 14pt &quot;Segoe UI&quot;;</string>
                <weight>50</weight>
                <bold>false</bold>
               </font>
+             </property>
+             <property name="text">
+              <string>C:/Users/MUSE/Desktop/Test/Stitched</string>
              </property>
             </widget>
            </item>
