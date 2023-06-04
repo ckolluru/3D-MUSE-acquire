@@ -15,7 +15,8 @@ class Window(QMainWindow):
 
         self.board = None
         self.tiles = []
-
+        self.mmc = Core()
+        
     # Get XYZ positions from Micromanager
     def get_xyz_positions(self):
 
@@ -71,8 +72,7 @@ class Window(QMainWindow):
         self.board.digital[10].write(0)
 
         if self.autofocusCheckbox.isChecked():
-            mmc = Core()
-            mmc.full_focus()
+            self.mmc.full_focus()
 
         return event
 
@@ -288,6 +288,8 @@ class Window(QMainWindow):
         self.scrollAreaWidgetContents.setEnabled(True)
 
         # TODO: Image registration with elastix
+        # TODO: Zarr attributes, data verification
+        # TODO: Autofocus
 
 if __name__ == "__main__":
     app = QApplication([])
