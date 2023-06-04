@@ -62,13 +62,13 @@ class Stitcher():
     # Set up the Zarr store to save the stitched images
     def set_up_zarr_store_for_stitched_images(self, stitched_directory, num_time_points, num_tiles, tile_size_x, tile_size_y, num_tiles_x, num_tiles_y):
         
-        self.Y_SHAPE_ZARR = tile_size_y * num_tiles_y * 1.01   
-        self.X_SHAPE_ZARR = tile_size_x * num_tiles_x * 1.01
+        self.Y_SHAPE_ZARR = int(tile_size_y * num_tiles_y * 1.01)
+        self.X_SHAPE_ZARR = int(tile_size_x * num_tiles_x * 1.01)
 
         # Create new zarr folder
         self.ZARR_STORE = zarr.open(stitched_directory, mode="w")
         ch0 = self.ZARR_STORE.zeros(
-            "muse", shape=(num_time_points, 1, self.Y_SHAPE_ZARR, self.X_SHAPE_ZARR), chunks=(32, 1, self.Y_SHAPE_ZARR, self.X_SHAPE_ZARR), dtype="i2"
+            "muse", shape=(num_time_points, 1, self.Y_SHAPE_ZARR, self.X_SHAPE_ZARR), chunks=(16, 1, self.Y_SHAPE_ZARR, self.X_SHAPE_ZARR), dtype="i2"
         )
         print('Zarr directory tree')
         print(self.ZARR_STORE.tree())
@@ -131,4 +131,5 @@ class Stitcher():
 
         array = self.pad_array(np.array(resampleF.GetOutput()))
         print('Padded array shape: ', array.shape)
-        self.DS[time_index, 0, :, :] = array
+        
+        self.DS[int(time_index), 0, :, :] = np.round(array).astype(np.uint16)

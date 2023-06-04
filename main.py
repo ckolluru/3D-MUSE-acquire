@@ -102,7 +102,7 @@ class Window(QMainWindow):
 
             # ZYX array
             if self.STITCHING_FLAG:
-                self.stitcher.stitch_tiles(self.tiles, self.TILE_CONFIG_PATH, self.PIXEL_SIZE, time_index-1)
+                self.stitcher.stitch_tiles(self.tiles, self.TILE_CONFIG_PATH, self.PIXEL_SIZE, time_index)
                 #self.statusBar().showMessage('Tile stitching complete for section ' + str(time_index))
 
             # Reset the list container
@@ -114,6 +114,8 @@ class Window(QMainWindow):
     def initialize_arduino(self):
 
         if self.board is None:
+
+            self.initializeArduinoButton.setEnabled(False)
 
             # Define the arduino board
             self.board = pyfirmata.Arduino(str(self.arduinoPortEdit.text()))
@@ -137,6 +139,8 @@ class Window(QMainWindow):
             time.sleep(10)
 
             self.statusBar().showMessage('Arduino initialization complete', 5000)
+
+            self.initializeArduinoButton.setEnabled(True)
         
         else:
             self.statusBar().showMessage('Arduino already initialized, relaunch 3D-MUSE-acquire if need to change values')
@@ -223,6 +227,14 @@ class Window(QMainWindow):
         # Find number of tiles
         num_tiles_x = len(np.unique(xy_positions[:,0]))
         num_tiles_y = len(np.unique(xy_positions[:,1]))
+
+        if num_tiles_x == 0 and num_tiles_y == 0:
+            msgBox = QMessageBox()
+            msgBox.setText("Did not find tile set up in MicroManager. Please ensure tiles are specified using the MultiD Acq. window in MM.")
+            msgBox.exec()
+
+            self.scrollAreaWidgetContents.setEnabled(True)
+            return None
 
         if self.NUM_TILES != (num_tiles_x * num_tiles_y):
             raise ValueError('Expected tile positions to be on a uniform grid')
