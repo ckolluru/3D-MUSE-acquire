@@ -96,13 +96,14 @@ font: 14pt &quot;Segoe UI&quot;;</string>
           <property name="text">
            <string>Steps
 1. Home X, Y, and Z stages using the Zaber console software
-2. Place block in the microtome, switch on microtome, ensure cut mode is single
-3. Pull the sample completely away from the knife
-4. Launch Micromanager, select the hardware configuration file
-5. Set up tiles in MDA window, save positions to a file at a suitable location 
-6. Setup autofocus settings in the MDA window if desired
-7. Provide metadata below 
-8. Click Run acquisition</string>
+2. Enter the arduino port and press initialize arduino button
+3. Place block in the microtome, switch on microtome, ensure cut mode is single
+4. Pull the sample completely away from the knife
+5. Launch Micromanager, select the hardware configuration file
+6. Set up tiles in MDA window, save positions to a file at a suitable location 
+7. Setup autofocus settings in the MDA window if desired
+8. Provide metadata below 
+9. Click Run acquisition</string>
           </property>
          </widget>
         </item>
@@ -521,7 +522,7 @@ font: 14pt &quot;Segoe UI&quot;;</string>
              <property name="sizeHint" stdset="0">
               <size>
                <width>353</width>
-               <height>20</height>
+               <height>17</height>
               </size>
              </property>
             </spacer>
@@ -539,6 +540,23 @@ font: 14pt &quot;Segoe UI&quot;;</string>
                <width>0</width>
                <height>25</height>
               </size>
+             </property>
+             <property name="font">
+              <font>
+               <family>Segoe UI</family>
+               <pointsize>11</pointsize>
+               <weight>50</weight>
+               <bold>false</bold>
+              </font>
+             </property>
+             <property name="layoutDirection">
+              <enum>Qt::LeftToRight</enum>
+             </property>
+             <property name="text">
+              <string>COM5</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
              </property>
             </widget>
            </item>

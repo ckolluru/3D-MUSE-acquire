@@ -129,6 +129,11 @@ class Window(QMainWindow):
             it = pyfirmata.util.Iterator(self.board)
             it.start()
 
+            # Switch off the emergency stop, cutting and light source, inverted logic
+            self.board.digital[8].write(1)
+            self.board.digital[9].write(1)
+            self.board.digital[10].write(1)
+
             self.statusBar().showMessage('Arduino initialization complete', 5000)
         
         else:
@@ -139,12 +144,7 @@ class Window(QMainWindow):
 
         # Disable the UI so that user cannot edit line items during acq
         self.scrollAreaWidgetContents.setEnabled(False)
-
-        # Switch off the emergency stop, cutting and light source, inverted logic
-        self.board.digital[8].write(1)
-        self.board.digital[9].write(1)
-        self.board.digital[10].write(1)
-
+        
         # Set values from the UI
         self.PIXEL_SIZE = float(self.pixelSizeEdit.text())
         self.STORAGE_DIRECTORY = str(self.storageDirEdit.text())
