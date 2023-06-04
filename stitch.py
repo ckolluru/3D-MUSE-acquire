@@ -65,10 +65,6 @@ class Stitcher():
         self.Y_SHAPE_ZARR = tile_size_y * num_tiles_y * 1.05   
         self.X_SHAPE_ZARR = tile_size_x * num_tiles_x * 1.05
 
-        if len(os.listdir(stitched_directory)) != 0:
-            print('Stitching directory file path already exists. Returning..')
-            return False
-
         # Create new zarr folder
         self.ZARR_STORE = zarr.open(stitched_directory, mode="w")
         ch0 = self.ZARR_STORE.zeros(

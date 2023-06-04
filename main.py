@@ -78,6 +78,9 @@ class Window(QMainWindow):
     # After capturing an image
     def image_process_fn(self, image, metadata):
 
+        if not hasattr(self.image_process_fn, "tiles"):
+            self.image_process_fn.tiles = []
+
         # Accumulate individual tiles
         self.tiles.append(np.reshape(image, (self.TILE_SIZE_Y, self.TILE_SIZE_X)))
 
