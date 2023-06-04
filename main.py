@@ -1,5 +1,5 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QMainWindow, QMessageBox
+from PyQt5.QtWidgets import QApplication, QMainWindow, QMessageBox, QFileDialog
 from PyQt5 import uic
 import os
 from pycromanager import Acquisition, Studio, multi_d_acquisition_events, Core
@@ -53,11 +53,10 @@ class Window(QMainWindow):
             return None
         
         else:
-
             if isChecked:
-                self.board.digital[11].write(0)
+                self.board.digital[10].write(0)
             else:
-                self.board.digital[11].write(1)
+                self.board.digital[10].write(1)
 
     # Switch on the light source and open the shutter before snapping a picture
     def post_hardware_hook_fn(self, event):
@@ -69,7 +68,6 @@ class Window(QMainWindow):
             time.sleep(1)
 
         self.board.digital[10].write(0)
-        self.core.set_config("Arduino-Switch", "Switch on light source")
 
         if self.autofocusCheckbox.isChecked():
             mmc = Core()
@@ -90,7 +88,7 @@ class Window(QMainWindow):
 
             # Send a cutting signal
             self.board.digital[9].write(0)
-            time.sleep(1)
+            time.sleep(3)
             self.board.digital[9].write(1)
 
             # Get the time point index
@@ -139,16 +137,50 @@ class Window(QMainWindow):
         else:
             self.statusBar().showMessage('Arduino already initialized, relaunch 3D-MUSE-acquire if need to change values')
 
+        
+    # Open directory to store raw data
+    def open_storage_dir(self):
+        title = "Open Folder to save data"
+        flags = QFileDialog.ShowDirsOnly
+        path = QFileDialog.getExistingDirectory(self,
+                                                title,
+                                                os.path.expanduser("."),
+                                                flags)
+
+        self.storageDirEdit.setText(path)
+
+        self.statusBar().showMessage('Storage folder location saved', 2000)
+
+    # Open directory to store stitched data
+    def open_stitched_dir(self):
+        title = "Open Folder to save stitched data"
+        flags = QFileDialog.ShowDirsOnly
+        path = QFileDialog.getExistingDirectory(self,
+                                                title,
+                                                os.path.expanduser("."),
+                                                flags)
+
+        self.stitchDirEdit.setText(path)
+
+        self.statusBar().showMessage('Stitched folder location saved', 2000)
+
     # Run the acquisition    
     def run_acquisition(self):
 
+        if self.board is None:
+            self.REGISTER_FLAG = False
+            msgBox = QMessageBox()
+            msgBox.setText("Arduino board is not initialized, press Initialize Arduino button first.")
+            msgBox.exec()
+            return None
+                    
         # Disable the UI so that user cannot edit line items during acq
         self.scrollAreaWidgetContents.setEnabled(False)
-        
+
         # Set values from the UI
         self.PIXEL_SIZE = float(self.pixelSizeEdit.text())
         self.STORAGE_DIRECTORY = str(self.storageDirEdit.text())
-        self.STITCHED_DIRECTORY = str(self.stitchedDirEdit.text()) + r'\\stitched.zarr'
+        self.STITCHED_DIRECTORY = str(self.stitchDirEdit.text()) + r'\\stitched.zarr'
         self.TILE_SIZE_X = int(self.imageSizeXEdit.text())
         self.TILE_SIZE_Y = int(self.imageSizeYEdit.text())
 
@@ -160,7 +192,7 @@ class Window(QMainWindow):
         xy_positions, z_positions = self.get_xyz_positions()
         xyz_positions = np.hstack((xy_positions, np.expand_dims(z_positions, axis=1)))
         self.NUM_TILES = xy_positions.shape[0]
-        self.TILE_CONFIG_PATH = self.STORAGE_DIRECTORY / 'TileConfiguration.txt'
+        self.TILE_CONFIG_PATH = self.STORAGE_DIRECTORY + r'\\TileConfiguration.txt'
         self.statusBar().showMessage('Received XYZ positions from Micromanager')
 
         # Stitching and registration are needed if there is more than one tile
@@ -200,8 +232,8 @@ class Window(QMainWindow):
 
         # Number of cuts, trimming flag will not image
         num_time_points = int(self.numberCutsEdit.text())
-        self.progressBar.SetMinimum(0)
-        self.progressBar.SetMaximum(num_time_points)
+        self.progressBar.setMinimum(0)
+        self.progressBar.setMaximum(num_time_points)
         self.TRIMMING_FLAG = self.trimBlockCheckbox.isChecked()
 
         # If only trimming and not imaging
@@ -209,7 +241,8 @@ class Window(QMainWindow):
             for i in range(num_time_points):
                 self.progressBar.setValue(i)
                 self.board.digital[9].write(0)
-                time.sleep(1)
+                time.sleep(3)
+                self.board.digital[9].write(1)
 
                 # Poll every second to see if cut complete signal is high
                 while (not self.board.digital[12].read()):

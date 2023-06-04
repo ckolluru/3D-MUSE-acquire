@@ -462,7 +462,7 @@ font: 14pt &quot;Segoe UI&quot;;</string>
               </font>
              </property>
              <property name="text">
-              <string>100</string>
+              <string>10</string>
              </property>
              <property name="alignment">
               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -824,10 +824,44 @@ font: 14pt &quot;Segoe UI&quot;;</string>
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>storageDirButton</sender>
+   <signal>released()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>open_storage_dir()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>634</x>
+     <y>467</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>349</x>
+     <y>449</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>stitchedDirButton</sender>
+   <signal>released()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>open_stitched_dir()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>634</x>
+     <y>519</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>349</x>
+     <y>449</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>run_acquisition()</slot>
   <slot>switch_on_light_source()</slot>
   <slot>initialize_arduino()</slot>
+  <slot>open_storage_dir()</slot>
+  <slot>open_stitched_dir()</slot>
  </slots>
 </ui>
