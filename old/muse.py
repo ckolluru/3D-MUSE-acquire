@@ -47,6 +47,8 @@ class muse():
     # Switch on the light source and open the shutter before snapping a picture
     def post_hardware_hook_fn(self, event):
         
+        # Check here whether the cut signal is high
+        # Else stay here
         self.core.set_config("Arduino-Switch", "Switch on light source")
 
         mmc = Core()
