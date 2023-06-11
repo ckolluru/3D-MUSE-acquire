@@ -6,6 +6,7 @@ import os
 class acquisition():
     def __init__(self):
         self.core = None
+        self.studio = None
 
         self.NUM_TILES = 1
         self.PIXEL_SIZE = 0
@@ -16,12 +17,12 @@ class acquisition():
     # Get XY positions, set in MDA window in MM
     def get_xyz_positions(self):
 
-        studio = Studio()
+        self.studio = Studio()
 
         # pull current MDA window positions
-        acq_manager = studio.acquisitions()
+        acq_manager = self.studio.acquisitions()
         acq_settings = acq_manager.get_acquisition_settings()
-        position_list_manager = studio.positions()
+        position_list_manager = self.studio.positions()
         position_list = position_list_manager.get_position_list()
         number_positions = position_list.get_number_of_positions()
         xy_positions = np.empty((number_positions,2))
@@ -41,9 +42,15 @@ class acquisition():
 
     # Just before capturing an image
     def post_hardware_hook_fn(self, event):
-        
-        mmc = Core()
-        mmc.full_focus()
+
+        afm = self.studio.get_autofocus_manager()
+        afm_method = afm.get_autofocus_method()
+        print(afm_method)
+        afm_method.full_focus()
+
+        # mmc = Core()
+        # mmc.full_focus()
+        print('Focusing complete')
 
         return event
 
@@ -72,11 +79,10 @@ class acquisition():
         time_per_slice = (0 + 3 * self.NUM_TILES)
         time_interval_s = time_interval_s + [time_per_slice] * (num_time_points-1)
 
-        self.core = Core()
-
         with Acquisition(directory=self.STORAGE_DIRECTORY, name='pycromanager_acq', image_process_fn=self.image_process_fn, post_hardware_hook_fn=self.post_hardware_hook_fn) as acq:
             events = multi_d_acquisition_events(xyz_positions=xyz_positions, num_time_points=num_time_points, time_interval_s=time_interval_s)
-            acq.acquire(events)
+            for event in events:
+                acq.acquire(event)
 
 if __name__ == '__main__':
     acquisition = acquisition()

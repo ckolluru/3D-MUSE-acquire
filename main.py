@@ -15,17 +15,17 @@ class Window(QMainWindow):
 
         self.board = None
         self.tiles = []
-        self.mmc = Core()
-        
+        self.studio = None
+
     # Get XYZ positions from Micromanager
     def get_xyz_positions(self):
 
-        studio = Studio()
+        self.studio = Studio()
 
         # Pull current MDA window positions
-        acq_manager = studio.acquisitions()
+        acq_manager = self.studio.acquisitions()
         acq_settings = acq_manager.get_acquisition_settings()
-        position_list_manager = studio.positions()
+        position_list_manager = self.studio.positions()
         position_list = position_list_manager.get_position_list()
         number_positions = position_list.get_number_of_positions()
         xy_positions = np.empty((number_positions,2))
@@ -69,10 +69,14 @@ class Window(QMainWindow):
         while not self.board.digital[12].read():
             time.sleep(1)
 
+        # Switch on the light source
         self.board.digital[10].write(0)
 
         if self.autofocusCheckbox.isChecked():
-            self.mmc.full_focus()
+            afm = self.studio.get_autofocus_manager()
+            afm_method = afm.get_autofocus_method()
+            afm_method.full_focus()
+            print('Autofocus complete')
 
         return event
 
@@ -289,7 +293,7 @@ class Window(QMainWindow):
 
         # TODO: Image registration with elastix
         # TODO: Zarr attributes, data verification
-        # TODO: Autofocus
+        # TODO: Verify autofocus
 
 if __name__ == "__main__":
     app = QApplication([])
