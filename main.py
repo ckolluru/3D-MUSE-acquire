@@ -39,7 +39,7 @@ class Window(QMainWindow):
                 if (stage_pos.get_stage_device_label() == 'XYStage'):
                     xy_positions[idx,:] = [stage_pos.x, stage_pos.y]
                 if (stage_pos.get_stage_device_label() == 'Stage'):
-                    z_positions[idx] = stage_pos.z
+                    z_positions[idx] = stage_pos.x
 
         return xy_positions, z_positions
 
@@ -68,6 +68,9 @@ class Window(QMainWindow):
         # Poll once every second to see if the cut signal is complete.
         while not self.board.digital[12].read():
             time.sleep(1)
+
+        # Wait for a few seconds to ensure that the block-face is cleared.
+        time.sleep(3)
 
         # Switch on the light source
         self.board.digital[10].write(0)
@@ -98,14 +101,18 @@ class Window(QMainWindow):
 
             # Get the time point index
             time_index = metadata['Axes']['time']
-            # self.progressBar.setValue(time_index)
-            # self.statusBar().showMessage('End of section ' + str(time_index))
-
-            # Sort the tiles based on the sorting indices
-            self.tiles = [self.tiles[i] for i in self.SORTED_INDICES]
+            self.progressBar.setValue(time_index)
+            self.statusBar().showMessage('End of section ' + str(time_index))
+            print('End of section ' + str(time_index))
 
             # ZYX array
             if self.STITCHING_FLAG:
+
+                print(self.SORTED_INDICES)
+                
+                # Sort the tiles based on the sorting indices
+                self.tiles = [self.tiles[i] for i in self.SORTED_INDICES]
+
                 self.stitcher.stitch_tiles(self.tiles, self.TILE_CONFIG_PATH, self.PIXEL_SIZE, time_index)
                 #self.statusBar().showMessage('Tile stitching complete for section ' + str(time_index))
 
@@ -206,6 +213,12 @@ class Window(QMainWindow):
         self.NUM_TILES = xy_positions.shape[0]
         self.TILE_CONFIG_PATH = self.STORAGE_DIRECTORY + r'\\TileConfiguration.txt'
         self.statusBar().showMessage('Received XYZ positions from Micromanager')
+
+        print('XY positions')
+        print(xy_positions)
+
+        print('Z positions')
+        print(z_positions)
 
         # Stitching and registration are needed if there is more than one tile
         self.STITCHING_FLAG = (self.NUM_TILES != 1)

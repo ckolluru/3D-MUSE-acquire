@@ -56,6 +56,7 @@ class Stitcher():
                 fp.write('img_' + str(index) + '.h5;;(' + str(xy_positions_sorted[index, 0]) + ', ' + str(xy_positions_sorted[index, 1]) + ')\n')
 
         print('Sorted XY tile positions:\n ', xy_positions_sorted)
+        print('Sorted indices: ', sorted_indices)
 
         return sorted_indices
 
