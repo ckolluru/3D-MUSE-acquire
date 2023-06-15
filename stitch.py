@@ -63,8 +63,8 @@ class Stitcher():
     # Set up the Zarr store to save the stitched images
     def set_up_zarr_store_for_stitched_images(self, stitched_directory, num_time_points, num_tiles, tile_size_x, tile_size_y, num_tiles_x, num_tiles_y):
         
-        self.Y_SHAPE_ZARR = int(tile_size_y * num_tiles_y * 1.01)
-        self.X_SHAPE_ZARR = int(tile_size_x * num_tiles_x * 1.01)
+        self.Y_SHAPE_ZARR = int(tile_size_y * num_tiles_y * 1.05)
+        self.X_SHAPE_ZARR = int(tile_size_x * num_tiles_x * 1.05)
 
         # Create new zarr folder
         self.ZARR_STORE = zarr.open(stitched_directory, mode="w")
@@ -83,6 +83,7 @@ class Stitcher():
         y, x = a.shape
         y_pad = int(self.Y_SHAPE_ZARR-y)
         x_pad = int(self.X_SHAPE_ZARR-x)
+        
         return np.pad(a,((y_pad//2, y_pad//2 + y_pad%2), 
                         (x_pad//2, x_pad//2 + x_pad%2)),
                     mode = 'constant')

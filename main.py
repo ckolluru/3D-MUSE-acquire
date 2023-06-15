@@ -17,6 +17,8 @@ class Window(QMainWindow):
         self.tiles = []
         self.studio = None
 
+        self.current_time_index = None
+
     # Get XYZ positions from Micromanager
     def get_xyz_positions(self):
 
@@ -75,11 +77,13 @@ class Window(QMainWindow):
         # Switch on the light source
         self.board.digital[10].write(0)
 
-        if self.autofocusCheckbox.isChecked():
-            afm = self.studio.get_autofocus_manager()
-            afm_method = afm.get_autofocus_method()
-            afm_method.full_focus()
-            print('Autofocus complete')
+        if self.current_time_index is not None: 
+            if self.current_time_index % 10 == 0 and self.current_time_index != 0:
+                if self.autofocusCheckbox.isChecked():
+                    afm = self.studio.get_autofocus_manager()
+                    afm_method = afm.get_autofocus_method()
+                    afm_method.full_focus()
+                    print('Autofocus complete')
 
         return event
 
@@ -104,12 +108,13 @@ class Window(QMainWindow):
             self.progressBar.setValue(time_index)
             self.statusBar().showMessage('End of section ' + str(time_index))
             print('End of section ' + str(time_index))
+            self.current_time_index = time_index
 
             # ZYX array
             if self.STITCHING_FLAG:
 
                 print(self.SORTED_INDICES)
-                
+
                 # Sort the tiles based on the sorting indices
                 self.tiles = [self.tiles[i] for i in self.SORTED_INDICES]
 
