@@ -87,6 +87,8 @@ class Stitcher():
         print('X Pad: ', x_pad)
         print('Y Pad: ', y_pad)
         
+        # TODO: If pad values are less than zero, then crop.
+        
         return np.pad(a,((y_pad//2, y_pad//2 + y_pad%2), 
                         (x_pad//2, x_pad//2 + x_pad%2)),
                     mode = 'constant')
