@@ -84,6 +84,9 @@ class Stitcher():
         y_pad = int(self.Y_SHAPE_ZARR-y)
         x_pad = int(self.X_SHAPE_ZARR-x)
         
+        print('X Pad: ', x_pad)
+        print('Y Pad: ', y_pad)
+        
         return np.pad(a,((y_pad//2, y_pad//2 + y_pad%2), 
                         (x_pad//2, x_pad//2 + x_pad%2)),
                     mode = 'constant')
