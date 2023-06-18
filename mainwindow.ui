@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>700</width>
-    <height>900</height>
+    <width>1000</width>
+    <height>1411</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -18,8 +18,8 @@
   </property>
   <property name="minimumSize">
    <size>
-    <width>700</width>
-    <height>900</height>
+    <width>1000</width>
+    <height>1411</height>
    </size>
   </property>
   <property name="windowTitle">
@@ -43,8 +43,8 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>680</width>
-         <height>839</height>
+         <width>963</width>
+         <height>1450</height>
         </rect>
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -78,7 +78,7 @@ font: 14pt &quot;Segoe UI&quot;;</string>
          </widget>
         </item>
         <item>
-         <widget class="QLabel" name="Notes">
+         <widget class="QLabel" name="notesInitialization">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
             <horstretch>0</horstretch>
@@ -94,16 +94,74 @@ font: 14pt &quot;Segoe UI&quot;;</string>
            </font>
           </property>
           <property name="text">
-           <string>Steps
-1. Home X, Y, and Z stages using the Zaber console software
-2. Enter the arduino port and press initialize arduino button
-3. Place block in the microtome, switch on microtome, ensure cut mode is single
-4. Pull the sample completely away from the knife
-5. Launch Micromanager, select the hardware configuration file
-6. Set up tiles in MDA window, save positions to a file at a suitable location 
-7. Setup autofocus settings in the MDA window if desired
-8. Provide metadata below 
-9. Click Run acquisition</string>
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Steps for initialization&lt;/span&gt;&lt;/p&gt;&lt;p&gt;1. Clean the knife with the brush and/or styrofoam stick &lt;/p&gt;&lt;p&gt;2. Place block in the microtome, switch on microtome, ensure cut mode is single &lt;/p&gt;&lt;p&gt;3. Pull the sample completely away from the knife using the control panel and slowly advance so that it is close to the knife, but not touching &lt;/p&gt;&lt;p&gt;4. Home X, Y, and Z stages using the Zaber console software, COM3 and COM4 ports. Close the Zaber console software &lt;/p&gt;&lt;p&gt;5.Press initialize arduino button. CAUTION: Microtome will run a cut cycle!&lt;/p&gt;&lt;p&gt;6.Launch Micromanager, select the hardware configuration file (pycromanager.cfg)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          </property>
+          <property name="wordWrap">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="Line" name="line_2">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>2</height>
+           </size>
+          </property>
+          <property name="lineWidth">
+           <number>1</number>
+          </property>
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="notesTrimming">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="font">
+           <font>
+            <family>Segoe UI</family>
+            <pointsize>11</pointsize>
+            <weight>50</weight>
+            <bold>false</bold>
+           </font>
+          </property>
+          <property name="text">
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Steps for trimming&lt;/span&gt;&lt;/p&gt;&lt;p&gt;1. For trimming, select the trim the block - do not collect images checkbox below&lt;/p&gt;&lt;p&gt;2.Ensure switch on light source, autofocus at each image and register each image boxes are off &lt;/p&gt;&lt;p&gt;3. Enter number of cuts as desired below and click the start acquisition button.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          </property>
+          <property name="wordWrap">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="Line" name="line_3">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="notesImaging">
+          <property name="font">
+           <font>
+            <family>Segoe UI</family>
+            <weight>75</weight>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="text">
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt;Steps for imaging&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt; font-weight:400;&quot;&gt;1. In MicroManager, select the initialization preset in the startup group from the dropdown list&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt; font-weight:400;&quot;&gt;2. Open Multi D acquisition, select Edit Position list. Open the stage control window as well&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt; font-weight:400;&quot;&gt;3. Switch on light source from the checkbox below. Use the stage to move around the sample, changing the move step sizes on the stage window if required. Do not change the X and Y distances for the field with three arrows (&amp;gt;&amp;gt;&amp;gt;).&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt; font-weight:400;&quot;&gt;4. Pan around the sample and focus on the block as desired. If the sample is not visible, you may need to trim further. See steps above.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt; font-weight:400;&quot;&gt;5. If nerve is completely visible (full cross-section), use the create grid option in the edit position list window. Set the overlap to 10%, ensure the pixel size is correct (0.9 if you are using the 4x objective).&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt; font-weight:400;&quot;&gt;6. You can set the individual corners as desired. The step distance with the &amp;gt;&amp;gt;&amp;gt; in the stage window is now useful, since one step by &amp;gt;&amp;gt;&amp;gt; will move the stage by amount that is slightly less than a tile. This will let you set up perfect tiles (one step in X and one step in Y and setting the appropriate corners will result in a 2x2 grid).&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt; font-weight:400;&quot;&gt;7. Select OK on the grid creator window, now you should see positions populate in the MDA window. Save the positions to a file with a suitable name in the same directory as the storage directory to ensure easy loading of positions later if required.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt; font-weight:400;&quot;&gt;8. Set number of cuts and the storage directory below. If stitching is needed, it will be done automatically and saved in a separate directory in the same storage folder.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt; font-weight:400;&quot;&gt;9. Uncheck switch on light source and trim the block options. Check the autofocus every 10 images if desired. Image registration (register each image) will be implemented soon.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt; font-weight:400;&quot;&gt;10. Click start acquisition button.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          </property>
+          <property name="wordWrap">
+           <bool>true</bool>
           </property>
          </widget>
         </item>
@@ -115,151 +173,28 @@ font: 14pt &quot;Segoe UI&quot;;</string>
          </widget>
         </item>
         <item>
-         <widget class="QWidget" name="widget" native="true">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
+         <widget class="QLabel" name="label">
+          <property name="font">
+           <font>
+            <family>Segoe UI</family>
+            <pointsize>11</pointsize>
+            <weight>50</weight>
+            <bold>false</bold>
+           </font>
           </property>
-          <layout class="QHBoxLayout" name="horizontalLayout">
-           <item>
-            <widget class="QLabel" name="label_3">
-             <property name="font">
-              <font>
-               <family>Segoe UI</family>
-               <pointsize>11</pointsize>
-               <weight>50</weight>
-               <bold>false</bold>
-              </font>
-             </property>
-             <property name="text">
-              <string>Pixel size (in microns) 
- 4x objective - 0.9 
- 5x objective - 0.74</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <spacer name="horizontalSpacer">
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>40</width>
-               <height>20</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-           <item>
-            <widget class="QLineEdit" name="pixelSizeEdit">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="font">
-              <font>
-               <family>Segoe UI</family>
-               <pointsize>11</pointsize>
-               <weight>50</weight>
-               <bold>false</bold>
-              </font>
-             </property>
-             <property name="text">
-              <string>0.9</string>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-             </property>
-            </widget>
-           </item>
-          </layout>
+          <property name="text">
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Pausing and restarting imaging&lt;/span&gt;&lt;/p&gt;&lt;p&gt;If there is an error in the program, this software may shut down. &lt;/p&gt;&lt;p&gt;If the block was trimming, you can relaunch the software and try running again.&lt;/p&gt;&lt;p&gt;If the block was being imaged, the acquisition window displaying the images in MicroManager will need to be relaunched. For that, close Micromanager and restart it. You will need to set the startup group to the initialization preset again, and set the positions again in the MultiD acquisition window. It is easy to load in the position file again if you saved it earlier.&lt;/p&gt;&lt;p&gt;Relaunch this software and try again.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          </property>
+          <property name="wordWrap">
+           <bool>true</bool>
+          </property>
          </widget>
         </item>
         <item>
-         <widget class="QWidget" name="widget_4" native="true">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
+         <widget class="Line" name="line_4">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
           </property>
-          <layout class="QHBoxLayout" name="horizontalLayout_4">
-           <item>
-            <widget class="QLabel" name="label_6">
-             <property name="font">
-              <font>
-               <family>Segoe UI</family>
-               <pointsize>11</pointsize>
-               <weight>50</weight>
-               <bold>false</bold>
-              </font>
-             </property>
-             <property name="text">
-              <string>Image size in pixels (X, Y)</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <spacer name="horizontalSpacer_4">
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>150</width>
-               <height>20</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-           <item>
-            <widget class="QLineEdit" name="imageSizeXEdit">
-             <property name="enabled">
-              <bool>true</bool>
-             </property>
-             <property name="font">
-              <font>
-               <family>Segoe UI</family>
-               <pointsize>11</pointsize>
-               <weight>50</weight>
-               <bold>false</bold>
-              </font>
-             </property>
-             <property name="text">
-              <string>4000</string>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QLineEdit" name="imageSizeYEdit">
-             <property name="enabled">
-              <bool>true</bool>
-             </property>
-             <property name="font">
-              <font>
-               <family>Segoe UI</family>
-               <pointsize>11</pointsize>
-               <weight>50</weight>
-               <bold>false</bold>
-              </font>
-             </property>
-             <property name="text">
-              <string>3000</string>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-             </property>
-            </widget>
-           </item>
-          </layout>
          </widget>
         </item>
         <item>
@@ -310,6 +245,18 @@ font: 14pt &quot;Segoe UI&quot;;</string>
              <property name="enabled">
               <bool>true</bool>
              </property>
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>500</width>
+               <height>0</height>
+              </size>
+             </property>
              <property name="font">
               <font>
                <family>Segoe UI</family>
@@ -318,86 +265,19 @@ font: 14pt &quot;Segoe UI&quot;;</string>
                <bold>false</bold>
               </font>
              </property>
+             <property name="layoutDirection">
+              <enum>Qt::LeftToRight</enum>
+             </property>
              <property name="text">
               <string>C:/Users/MUSE/Desktop/Test</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
              </property>
             </widget>
            </item>
            <item>
             <widget class="QPushButton" name="storageDirButton">
-             <property name="font">
-              <font>
-               <family>Segoe UI</family>
-               <pointsize>11</pointsize>
-               <weight>50</weight>
-               <bold>false</bold>
-              </font>
-             </property>
-             <property name="text">
-              <string>Browse</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </widget>
-        </item>
-        <item>
-         <widget class="QWidget" name="widget_3" native="true">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <layout class="QHBoxLayout" name="horizontalLayout_3">
-           <item>
-            <widget class="QLabel" name="label_5">
-             <property name="font">
-              <font>
-               <family>Segoe UI</family>
-               <pointsize>11</pointsize>
-               <weight>50</weight>
-               <bold>false</bold>
-              </font>
-             </property>
-             <property name="text">
-              <string>Stitched directory</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <spacer name="horizontalSpacer_3">
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>214</width>
-               <height>20</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-           <item>
-            <widget class="QLineEdit" name="stitchDirEdit">
-             <property name="enabled">
-              <bool>true</bool>
-             </property>
-             <property name="font">
-              <font>
-               <family>Segoe UI</family>
-               <pointsize>11</pointsize>
-               <weight>50</weight>
-               <bold>false</bold>
-              </font>
-             </property>
-             <property name="text">
-              <string>C:/Users/MUSE/Desktop/Test/</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QPushButton" name="stitchedDirButton">
              <property name="font">
               <font>
                <family>Segoe UI</family>
@@ -459,6 +339,12 @@ font: 14pt &quot;Segoe UI&quot;;</string>
                <verstretch>0</verstretch>
               </sizepolicy>
              </property>
+             <property name="minimumSize">
+              <size>
+               <width>575</width>
+               <height>0</height>
+              </size>
+             </property>
              <property name="font">
               <font>
                <family>Segoe UI</family>
@@ -479,97 +365,6 @@ font: 14pt &quot;Segoe UI&quot;;</string>
          </widget>
         </item>
         <item>
-         <widget class="QWidget" name="widget_7" native="true">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>35</height>
-           </size>
-          </property>
-          <layout class="QHBoxLayout" name="horizontalLayout_6">
-           <item>
-            <widget class="QLabel" name="label">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="minimumSize">
-              <size>
-               <width>0</width>
-               <height>25</height>
-              </size>
-             </property>
-             <property name="font">
-              <font>
-               <family>Segoe UI</family>
-               <pointsize>11</pointsize>
-               <weight>50</weight>
-               <bold>false</bold>
-              </font>
-             </property>
-             <property name="text">
-              <string>Arduino port name</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <spacer name="horizontalSpacer_10">
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>353</width>
-               <height>17</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-           <item>
-            <widget class="QLineEdit" name="arduinoPortEdit">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="minimumSize">
-              <size>
-               <width>0</width>
-               <height>25</height>
-              </size>
-             </property>
-             <property name="font">
-              <font>
-               <family>Segoe UI</family>
-               <pointsize>11</pointsize>
-               <weight>50</weight>
-               <bold>false</bold>
-              </font>
-             </property>
-             <property name="layoutDirection">
-              <enum>Qt::LeftToRight</enum>
-             </property>
-             <property name="text">
-              <string>COM5</string>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </widget>
-        </item>
-        <item>
          <widget class="QWidget" name="widget_6" native="true">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -578,7 +373,7 @@ font: 14pt &quot;Segoe UI&quot;;</string>
            </sizepolicy>
           </property>
           <layout class="QGridLayout" name="gridLayout">
-           <item row="4" column="0">
+           <item row="4" column="3">
             <spacer name="horizontalSpacer_8">
              <property name="orientation">
               <enum>Qt::Horizontal</enum>
@@ -591,8 +386,27 @@ font: 14pt &quot;Segoe UI&quot;;</string>
              </property>
             </spacer>
            </item>
-           <item row="1" column="1">
-            <widget class="QCheckBox" name="autofocusCheckbox">
+           <item row="6" column="3">
+            <spacer name="horizontalSpacer_6">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item row="0" column="2">
+            <widget class="QCheckBox" name="switchOnLightCheckbox">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
              <property name="font">
               <font>
                <family>Segoe UI</family>
@@ -605,14 +419,54 @@ font: 14pt &quot;Segoe UI&quot;;</string>
               <enum>Qt::RightToLeft</enum>
              </property>
              <property name="styleSheet">
-              <string notr="true">spacing:100px;</string>
+              <string notr="true">spacing:120px;</string>
              </property>
              <property name="text">
-              <string>Autofocus at each image</string>
+              <string>Switch on light source</string>
              </property>
             </widget>
            </item>
-           <item row="4" column="1">
+           <item row="6" column="2">
+            <widget class="QCheckBox" name="autofocusCheckbox">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="font">
+              <font>
+               <family>Segoe UI</family>
+               <pointsize>11</pointsize>
+               <weight>50</weight>
+               <bold>false</bold>
+              </font>
+             </property>
+             <property name="layoutDirection">
+              <enum>Qt::RightToLeft</enum>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">spacing:82px;</string>
+             </property>
+             <property name="text">
+              <string>Autofocus every 10 images</string>
+             </property>
+            </widget>
+           </item>
+           <item row="5" column="3">
+            <spacer name="horizontalSpacer_9">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item row="4" column="2">
             <widget class="QCheckBox" name="trimBlockCheckbox">
              <property name="font">
               <font>
@@ -633,21 +487,14 @@ font: 14pt &quot;Segoe UI&quot;;</string>
              </property>
             </widget>
            </item>
-           <item row="5" column="0">
-            <spacer name="horizontalSpacer_9">
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>40</width>
-               <height>20</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-           <item row="5" column="1">
+           <item row="5" column="2">
             <widget class="QCheckBox" name="registerImageCheckbox">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
              <property name="font">
               <font>
                <family>Segoe UI</family>
@@ -667,20 +514,7 @@ font: 14pt &quot;Segoe UI&quot;;</string>
              </property>
             </widget>
            </item>
-           <item row="1" column="0">
-            <spacer name="horizontalSpacer_6">
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>40</width>
-               <height>20</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-           <item row="0" column="0">
+           <item row="0" column="3">
             <spacer name="horizontalSpacer_7">
              <property name="orientation">
               <enum>Qt::Horizontal</enum>
@@ -692,27 +526,6 @@ font: 14pt &quot;Segoe UI&quot;;</string>
               </size>
              </property>
             </spacer>
-           </item>
-           <item row="0" column="1">
-            <widget class="QCheckBox" name="switchOnLightCheckbox">
-             <property name="font">
-              <font>
-               <family>Segoe UI</family>
-               <pointsize>11</pointsize>
-               <weight>50</weight>
-               <bold>false</bold>
-              </font>
-             </property>
-             <property name="layoutDirection">
-              <enum>Qt::RightToLeft</enum>
-             </property>
-             <property name="styleSheet">
-              <string notr="true">spacing:120px;</string>
-             </property>
-             <property name="text">
-              <string>Switch on light source</string>
-             </property>
-            </widget>
            </item>
           </layout>
          </widget>
@@ -773,7 +586,7 @@ font: 14pt &quot;Segoe UI&quot;;</string>
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>700</width>
+     <width>1000</width>
      <height>21</height>
     </rect>
    </property>
@@ -839,22 +652,6 @@ font: 14pt &quot;Segoe UI&quot;;</string>
     <hint type="sourcelabel">
      <x>634</x>
      <y>467</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>349</x>
-     <y>449</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>stitchedDirButton</sender>
-   <signal>released()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>open_stitched_dir()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>634</x>
-     <y>519</y>
     </hint>
     <hint type="destinationlabel">
      <x>349</x>

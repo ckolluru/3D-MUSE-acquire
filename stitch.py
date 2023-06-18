@@ -84,14 +84,30 @@ class Stitcher():
         y_pad = int(self.Y_SHAPE_ZARR-y)
         x_pad = int(self.X_SHAPE_ZARR-x)
         
-        print('X Pad: ', x_pad)
-        print('Y Pad: ', y_pad)
-        
-        # TODO: If pad values are less than zero, then crop.
-        
-        return np.pad(a,((y_pad//2, y_pad//2 + y_pad%2), 
+        try:
+            return np.pad(a,((y_pad//2, y_pad//2 + y_pad%2), 
                         (x_pad//2, x_pad//2 + x_pad%2)),
-                    mode = 'constant')
+                    mode = 'constant') 
+        
+        except Exception as error:
+
+            print(str(error))
+
+            if x_pad < 0:
+                x_pad = 0
+
+            if y_pad < 0:
+                y_pad = 0
+            
+            # Pad in the dimension that is not an issue
+            b = np.pad(a,((y_pad//2, y_pad//2 + y_pad%2), 
+                        (x_pad//2, x_pad//2 + x_pad%2)),
+                    mode = 'constant') 
+
+            # Crop the center portion
+            startx = x//2-(self.X_SHAPE_ZARR//2)
+            starty = y//2-(self.Y_SHAPE_ZARR//2)    
+            return b[starty:starty+self.Y_SHAPE_ZARR,startx:startx+self.X_SHAPE_ZARR]      
 
     # Images should be a list of 2D numpy arrays
     # xy_positions is a 2D numpy array with positions of x and y stage

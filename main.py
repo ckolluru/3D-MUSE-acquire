@@ -6,6 +6,7 @@ from pycromanager import Acquisition, Studio, multi_d_acquisition_events, Core
 from stitch import *
 import pyfirmata
 import time
+import glob
 
 class Window(QMainWindow):
     def __init__(self):
@@ -133,8 +134,9 @@ class Window(QMainWindow):
 
             self.initializeArduinoButton.setEnabled(False)
 
-            # Define the arduino board
-            self.board = pyfirmata.Arduino(str(self.arduinoPortEdit.text()))
+            # Define the arduino board (get from UI later, hardcode for now)
+            #self.board = pyfirmata.Arduino(str(self.arduinoPortEdit.text()))
+            self.board = pyfirmata.Arduino(str("COM5"))
 
             # Set input and output pins
             self.board.digital[8].mode = pyfirmata.OUTPUT
@@ -156,7 +158,7 @@ class Window(QMainWindow):
 
             self.statusBar().showMessage('Arduino initialization complete', 5000)
 
-            self.initializeArduinoButton.setEnabled(True)
+            self.initializeArduinoButton.setEnabled(False)
         
         else:
             self.statusBar().showMessage('Arduino already initialized, relaunch 3D-MUSE-acquire if need to change values')
@@ -201,14 +203,32 @@ class Window(QMainWindow):
         # Disable the UI so that user cannot edit line items during acq
         self.scrollAreaWidgetContents.setEnabled(False)
 
-        # Set values from the UI
-        self.PIXEL_SIZE = float(self.pixelSizeEdit.text())
-        self.STORAGE_DIRECTORY = str(self.storageDirEdit.text())
-        self.STITCHED_DIRECTORY = str(self.stitchDirEdit.text()) + r'\\stitched.zarr'
-        self.TILE_SIZE_X = int(self.imageSizeXEdit.text())
-        self.TILE_SIZE_Y = int(self.imageSizeYEdit.text())
+        # Hardcode these values in for now, get from UI later
+        # self.PIXEL_SIZE = float(self.pixelSizeEdit.text())
+        # self.TILE_SIZE_X = int(self.imageSizeXEdit.text())
+        # self.TILE_SIZE_Y = int(self.imageSizeYEdit.text())
 
-        # Create directories if necessary
+        self.PIXEL_SIZE = float(0.9)
+        self.TILE_SIZE_X = int(4000)
+        self.TILE_SIZE_Y = int(3000)
+
+        # Set values from the UI
+        self.STORAGE_DIRECTORY = str(self.storageDirEdit.text())
+
+        prev_acqs = glob.glob(self.STORAGE_DIRECTORY + r'\\MUSE_acq_*')
+
+        self.STITCHED_DIRECTORY = self.STORAGE_DIRECTORY + r'\\MUSE_stitched_acq_' + str(len(prev_acqs) + 1) + '.zarr'
+
+        # Create if directories exist, return if you don't want to overwrite
+        if os.path.exists(self.STITCHED_DIRECTORY):
+            msgBox = QMessageBox()
+            msgBox.setText("Found a directory with the expected stitched folder name in the provided storage directory. Overwrite? If No is selected, acquisition will not start.")
+            msgBox.setStandardButtons(QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No)
+            x = msgBox.exec()
+
+            if x == QMessageBox.StandardButton.No:
+                return None
+
         os.makedirs(self.STORAGE_DIRECTORY, exist_ok=True)
         os.makedirs(self.STITCHED_DIRECTORY, exist_ok=True)
 
@@ -216,7 +236,7 @@ class Window(QMainWindow):
         xy_positions, z_positions = self.get_xyz_positions()
         xyz_positions = np.hstack((xy_positions, np.expand_dims(z_positions, axis=1)))
         self.NUM_TILES = xy_positions.shape[0]
-        self.TILE_CONFIG_PATH = self.STORAGE_DIRECTORY + r'\\TileConfiguration.txt'
+        self.TILE_CONFIG_PATH = self.STORAGE_DIRECTORY + r'\\TileConfiguration_acq_' + str(len(prev_acqs) + 1) + '.txt'
         self.statusBar().showMessage('Received XYZ positions from Micromanager')
 
         print('XY positions')
@@ -311,7 +331,6 @@ class Window(QMainWindow):
 
         # TODO: Image registration with elastix
         # TODO: Zarr attributes, data verification
-        # TODO: Verify autofocus
 
 if __name__ == "__main__":
     app = QApplication([])
