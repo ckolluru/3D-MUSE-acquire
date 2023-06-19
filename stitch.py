@@ -107,9 +107,13 @@ class Stitcher():
                     mode = 'constant') 
 
             # Crop the center portion
-            startx = x//2-(self.X_SHAPE_ZARR//2)
-            starty = y//2-(self.Y_SHAPE_ZARR//2)    
-            return b[starty:starty+self.Y_SHAPE_ZARR,startx:startx+self.X_SHAPE_ZARR]      
+            if x_pad == 0:
+                startx = x//2-(self.X_SHAPE_ZARR//2)
+                return b[:,startx:startx+self.X_SHAPE_ZARR]      
+            if y_pad == 0:
+                starty = y//2-(self.Y_SHAPE_ZARR//2)
+                return b[starty:starty+self.Y_SHAPE_ZARR,:]  
+
 
     # Images should be a list of 2D numpy arrays
     # xy_positions is a 2D numpy array with positions of x and y stage
