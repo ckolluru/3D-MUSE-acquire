@@ -1,5 +1,5 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QMainWindow, QMessageBox, QFileDialog
+from PyQt5.QtWidgets import QApplication, QMainWindow, QMessageBox, QFileDialog, QDialog
 from PyQt5 import uic
 import os
 from pycromanager import Studio, Core
@@ -19,6 +19,8 @@ class Window(QMainWindow):
 
 		self.board = None
 		self.studio = None
+
+		self.dialog = None
 
 	# Get XYZ positions from Micromanager
 	def get_xyz_positions(self):
@@ -157,6 +159,16 @@ class Window(QMainWindow):
 
 		self.progressBar.setValue(0)
 		self.scrollAreaWidgetContents.setEnabled(True)
+
+	# Open a dialog box with instructions
+	def open_instructions(self):
+
+		# Create an instance of the dialog to open the .ui file
+		self.dialog = QDialog()
+		# Load the .ui file into the dialog
+		uic.loadUi("helpwindow.ui", self.dialog)
+		# Show the dialog
+		self.dialog.show()
 				
 	# Run the acquisition    
 	def run_acquisition(self):
