@@ -95,7 +95,7 @@ class acquisitionClass(QtCore.QThread):
 
 			# Get the time point index
 			time_index = metadata['Axes']['time']
-			self.statusBarSignal.emit('End of section ' + str(time_index))
+			self.statusBarSignal.emit('End of section ' + str(time_index + 1))
 			self.progressSignal.emit(int(time_index))
 			self.current_time_index = time_index
 

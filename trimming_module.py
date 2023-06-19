@@ -26,7 +26,7 @@ class trimmingClass(QtCore.QThread):
 
 	def run(self):
 		print('Trimming block-face')
-		
+
 		for i in tqdm(range(self.timepoints)):
 			self.progressSignal.emit(i)
 
@@ -39,7 +39,7 @@ class trimmingClass(QtCore.QThread):
 			while (not self.board.digital[12].read()):
 				time.sleep(1)
 
-			self.statusBarSignal.emit('Trimming: End of section ' + str(i) + ' out of ' + str(self.timepoints))
+			self.statusBarSignal.emit('Trimming: End of section ' + str(i + 1) + ' out of ' + str(self.timepoints))
 
 			# Break out of the for loop if user clicks stop acquisition button
 			if not self.runFlag:
