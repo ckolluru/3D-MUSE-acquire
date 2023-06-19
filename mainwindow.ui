@@ -363,7 +363,7 @@ font: 14pt &quot;Segoe UI&quot;;</string>
               <string notr="true">spacing:5;</string>
              </property>
              <property name="text">
-              <string>Trim the block - do not collect images?</string>
+              <string>Trim the block (will not collect images)</string>
              </property>
             </widget>
            </item>
