@@ -2,6 +2,7 @@ from PyQt5 import QtCore
 from pycromanager import Acquisition, multi_d_acquisition_events
 import time
 import numpy as np
+from tqdm import tqdm
 
 class acquisitionClass(QtCore.QThread):
 	
@@ -116,12 +117,12 @@ class acquisitionClass(QtCore.QThread):
 		self.runFlag = flag
 
 	def run(self):
-		print('In acquisition thread')
+		print('Acquiring serial block-face images')
 
 		with Acquisition(directory=self.STORAGE_DIRECTORY, name='MUSE_acq', image_process_fn=self.image_process_fn, post_hardware_hook_fn=self.post_hardware_hook_fn) as acq:
 			events = multi_d_acquisition_events(xyz_positions=self.xyz_positions,  num_time_points=self.num_time_points, time_interval_s=self.time_interval_s)
 
-			for event in events:		
+			for event in tqdm(events):		
 				acq.acquire(event)
 
 				# Break out of the for loop if user clicks stop acquisition button

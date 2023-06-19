@@ -1,5 +1,6 @@
 from PyQt5 import QtCore
 import time
+from tqdm import tqdm
 
 class trimmingClass(QtCore.QThread):
 	
@@ -24,7 +25,9 @@ class trimmingClass(QtCore.QThread):
 		self.runFlag = flag
 
 	def run(self):
-		for i in range(self.timepoints):
+		print('Trimming block-face')
+		
+		for i in tqdm(range(self.timepoints)):
 			self.progressSignal.emit(i)
 
 			# Cutting signal
