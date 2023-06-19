@@ -69,12 +69,37 @@ class Window(QMainWindow):
 			else:
 				self.board.digital[10].write(1)
 
+	def stop_run(self):
+		if self.TRIMMING_FLAG:
+			self.trimmingThread.setRunFlag(False)
+
+		else:
+			self.acquisitionThread.setRunFlag(False)
+
+	def block_ui(self, flag):
+
+		if flag:
+			self.storageDirEdit.setEnabled(False)
+			self.numberCutsEdit.setEnabled(False)
+			self.trimBlockCheckbox.setEnabled(False)
+			self.registerImageCheckbox.setEnabled(False)
+			self.autofocusCheckbox.setEnabled(False)
+			self.startAcquisitionButton.setText('Stop acquisition')
+			self.startAcquisitionButton.released.connect(self.stop_run)
+
+		else:
+			self.storageDirEdit.setEnabled(True)
+			self.numberCutsEdit.setEnabled(True)
+			self.trimBlockCheckbox.setEnabled(True)
+			self.registerImageCheckbox.setEnabled(True)
+			self.autofocusCheckbox.setEnabled(True)
+			self.startAcquisitionButton.setText('Start acquisition')
+			self.startAcquisitionButton.released.connect(self.run_acquisition)
+
 	# Initialize the arduino board
 	def initialize_arduino(self):
 
 		if self.board is None:
-
-			self.initializeArduinoButton.setEnabled(False)
 
 			# Define the arduino board (get from UI later, hardcode for now)
 			#self.board = pyfirmata.Arduino(str(self.arduinoPortEdit.text()))
@@ -158,7 +183,7 @@ class Window(QMainWindow):
 			self.trimmingThread.terminate_thread()
 
 		self.progressBar.setValue(0)
-		self.scrollAreaWidgetContents.setEnabled(True)
+		self.block_ui(False)
 
 	# Open a dialog box with instructions
 	def open_instructions(self):
@@ -181,7 +206,7 @@ class Window(QMainWindow):
 			return None
 					
 		# Disable the UI so that user cannot edit line items during acq
-		self.scrollAreaWidgetContents.setEnabled(False)
+		self.block_ui(True)
 		
 		# Number of cuts, trimming flag will not image
 		num_time_points = int(self.numberCutsEdit.text())
@@ -197,6 +222,7 @@ class Window(QMainWindow):
 			self.trimmingThread.progressMaximumSignal.connect(self.progressMaximum)
 			self.trimmingThread.completeSignal.connect(self.acquisitionComplete)
 			self.trimmingThread.statusBarSignal.connect(self.statusBarMessage)
+			self.trimmingThread.setRunFlag(True)
 			self.trimmingThread.start()
 
 		# Imaging
@@ -225,7 +251,7 @@ class Window(QMainWindow):
 				x = msgBox.exec()
 
 				if x == QMessageBox.StandardButton.No:
-					self.scrollAreaWidgetContents.setEnabled(True)
+					self.block_ui(False)
 					return None
 
 			os.makedirs(self.STORAGE_DIRECTORY, exist_ok=True)
@@ -281,7 +307,7 @@ class Window(QMainWindow):
 				msgBox.setText("Did not find tile set up in MicroManager. Please ensure tiles are specified using the MultiD Acq. window in MM.")
 				msgBox.exec()
 
-				self.scrollAreaWidgetContents.setEnabled(True)
+				self.block_ui(False)
 				return None
 
 			if self.NUM_TILES != (num_tiles_x * num_tiles_y):
@@ -314,6 +340,7 @@ class Window(QMainWindow):
 				self.acquisitionThread.progressMaximumSignal.connect(self.progressMaximum)
 				self.acquisitionThread.completeSignal.connect(self.acquisitionComplete)
 				self.acquisitionThread.statusBarSignal.connect(self.statusBarMessage)
+				self.acquisitionThread.setRunFlag(True)
 				self.acquisitionThread.start()
 
 		# TODO: Image registration with elastix

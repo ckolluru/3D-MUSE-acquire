@@ -128,7 +128,7 @@ class Stitcher():
 
         # For registration
         itk_images = []  
-        for t in tqdm(range(stage_tiles.LinearSize())):
+        for t in range(stage_tiles.LinearSize()):
             origin = stage_tiles.GetTile(t).GetPosition()
             image = itk.GetImageFromArray(np.ascontiguousarray(images[t]))
             image.SetSpacing((pixel_size, pixel_size))
@@ -152,13 +152,12 @@ class Stitcher():
 
         resampleF = itk.TileMergeImageFilter[type(itk_images[0]), itk.D].New()
         resampleF.SetMontageSize(stage_tiles.GetAxisSizes())
-        for t in tqdm(range(stage_tiles.LinearSize())):
+        for t in range(stage_tiles.LinearSize()):
             resampleF.SetInputTile(t, itk_images[t])
             index = stage_tiles.LinearIndexToNDIndex(t)
             resampleF.SetTileTransform(index, montage.GetOutputTransform(index))
         resampleF.Update()
 
         array = self.pad_array(np.array(resampleF.GetOutput()))
-        print('Padded array shape: ', array.shape)
         
         self.DS[int(time_index), 0, :, :] = np.round(array).astype(np.uint16)

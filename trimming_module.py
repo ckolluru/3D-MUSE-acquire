@@ -18,6 +18,11 @@ class trimmingClass(QtCore.QThread):
 		self.progressMinimumSignal.emit(0)
 		self.progressMaximumSignal.emit(timepoints)
 
+		self.runFlag = None
+
+	def setRunFlag(self, flag):
+		self.runFlag = flag
+
 	def run(self):
 		for i in range(self.timepoints):
 			self.progressSignal.emit(i)
@@ -32,6 +37,10 @@ class trimmingClass(QtCore.QThread):
 				time.sleep(1)
 
 			self.statusBarSignal.emit('Trimming: End of section ' + str(i) + ' out of ' + str(self.timepoints))
+
+			# Break out of the for loop if user clicks stop acquisition button
+			if not self.runFlag:
+				break
 			
 		self.completeSignal.emit(2)
 

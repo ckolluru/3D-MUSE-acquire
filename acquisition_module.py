@@ -41,6 +41,8 @@ class acquisitionClass(QtCore.QThread):
 
 		self.best_z_positions = np.zeros((self.NUM_TILES))
 
+		self.runFlag = None
+
 	# Switch on the light source and open the shutter before snapping a picture
 	def post_hardware_hook_fn(self, event):
 		
@@ -99,8 +101,6 @@ class acquisitionClass(QtCore.QThread):
 			# ZYX array
 			if self.STITCHING_FLAG:
 
-				print(self.SORTED_INDICES)
-
 				# Sort the tiles based on the sorting indices
 				self.tiles = [self.tiles[i] for i in self.SORTED_INDICES]
 
@@ -111,7 +111,10 @@ class acquisitionClass(QtCore.QThread):
 			self.tiles = []
 
 		return image, metadata
-	
+
+	def setRunFlag(self, flag):
+		self.runFlag = flag
+
 	def run(self):
 		print('In acquisition thread')
 
@@ -120,6 +123,10 @@ class acquisitionClass(QtCore.QThread):
 
 			for event in events:		
 				acq.acquire(event)
+
+				# Break out of the for loop if user clicks stop acquisition button
+				if not self.runFlag:
+					break
 
 		self.completeSignal.emit(1)
 
