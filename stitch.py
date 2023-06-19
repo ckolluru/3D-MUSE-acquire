@@ -48,6 +48,10 @@ class Stitcher():
         # Create tile config text string
         tile_config_str = f"# Tile coordinates are in index space, not physical space\ndim = 2\n"
 
+        # If there is a tile config path with the same name, delete it
+        if os.path.exists(tile_config_path):
+            os.remove(tile_config_path)
+
         # Create output dir and save tile config, file names are dummy
         with open(tile_config_path, 'w') as fp:
             fp.write(tile_config_str)
@@ -89,9 +93,7 @@ class Stitcher():
                         (x_pad//2, x_pad//2 + x_pad%2)),
                     mode = 'constant') 
         
-        except Exception as error:
-
-            print(str(error))
+        except ValueError:
 
             if x_pad < 0:
                 x_pad = 0
