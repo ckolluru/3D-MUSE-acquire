@@ -23,7 +23,7 @@
       <property name="geometry">
        <rect>
         <x>0</x>
-        <y>-178</y>
+        <y>0</y>
         <width>924</width>
         <height>1052</height>
        </rect>
@@ -46,7 +46,7 @@
           </font>
          </property>
          <property name="text">
-          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Steps for initialization&lt;/span&gt;&lt;/p&gt;&lt;p&gt;1. Clean the knife with the brush and/or styrofoam stick &lt;/p&gt;&lt;p&gt;2. Place block in the microtome, switch on microtome, ensure cut mode is single &lt;/p&gt;&lt;p&gt;3. Pull the sample completely away from the knife using the control panel and slowly advance so that it is close to the knife, but not touching &lt;/p&gt;&lt;p&gt;4. Home X, Y, and Z stages using the Zaber console software, COM3 and COM4 ports. Close the Zaber console software &lt;/p&gt;&lt;p&gt;5.Press initialize arduino button. CAUTION: Microtome will run a cut cycle!&lt;/p&gt;&lt;p&gt;6.Launch Micromanager, select the hardware configuration file (pycromanager.cfg)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Steps for initialization&lt;/span&gt;&lt;/p&gt;&lt;p&gt;1. Clean the knife with the brush and styrofoam stick &lt;/p&gt;&lt;p&gt;2. Place block in the microtome, switch on microtome, ensure cut mode is single &lt;/p&gt;&lt;p&gt;3. Pull the sample completely away from the knife using the control panel and slowly advance so that it is close to the knife, but not touching &lt;/p&gt;&lt;p&gt;4. Home X, Y, and Z stages using the Zaber console software, COM3 and COM4 ports. Close the Zaber console software &lt;/p&gt;&lt;p&gt;5.Press initialize arduino button. CAUTION: Microtome will run a cut cycle!&lt;/p&gt;&lt;p&gt;6.Launch Micromanager, select the hardware configuration file (pycromanager.cfg)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
          <property name="wordWrap">
           <bool>true</bool>

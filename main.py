@@ -17,17 +17,17 @@ class Window(QMainWindow):
 		uic.loadUi('mainwindow.ui', self)
 		self.show() 
 
-		helpWindow = uic.loadUi('helpwindow.ui', self)
-		self.addDockWidget(1, helpWindow)
-		helpWindow.setFloating(True)
-
 		self.board = None
 		self.studio = None
 
 	# Get XYZ positions from Micromanager
 	def get_xyz_positions(self):
 
-		self.studio = Studio()
+		try:
+			self.studio = Studio()
+		except Exception as e:
+			print(str(e))
+			return None, None
 
 		# Pull current MDA window positions
 		acq_manager = self.studio.acquisitions()
@@ -221,6 +221,13 @@ class Window(QMainWindow):
 
 			# Get XYZ positions for the tiles from MDA window, calculate number of tiles
 			xy_positions, z_positions = self.get_xyz_positions()
+
+			if xy_positions is None and z_positions is None:
+				msgBox = QMessageBox()
+				msgBox.setText("Could not retrieve positions, try running the acquisition again. Ensure MicroManager is open.")
+				msgBox.exec()
+				return
+
 			xyz_positions = np.hstack((xy_positions, np.expand_dims(z_positions, axis=1)))
 			self.NUM_TILES = xy_positions.shape[0]
 			self.TILE_CONFIG_PATH = self.STORAGE_DIRECTORY + r'\\TileConfiguration_acq_' + str(len(prev_acqs) + 1) + '.txt'
