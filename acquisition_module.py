@@ -54,7 +54,7 @@ class acquisitionClass(QtCore.QThread):
 		time.sleep(3)
 
 		# Switch on the light source
-sition		self.board.digital[10].write(0)
+		self.board.digital[10].write(0)
 
 		if self.current_time_index is not None: 
 			if self.current_time_index % 10 == 0 and self.current_time_index != 0:
