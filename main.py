@@ -71,12 +71,21 @@ class Window(QMainWindow):
 
 	def stop_run(self):
 		if self.TRIMMING_FLAG:
-			self.trimmingThread.setRunFlag(False)
+			self.trimmingThread.stop()
 
 		else:
-			self.acquisitionThread.setRunFlag(False)
+			self.acquisitionThread.stop()	
+
+		self.progressBar.setValue(0)
+		self.statusBar().showMessage('Acquisition stopped.', 4000)	
 
 	def block_ui(self, flag):
+
+		try:
+			self.startAcquisitionButton.released.disconnect()
+		except TypeError:
+			print('No functions set up to run on start/stop push button click.')
+			pass
 
 		if flag:
 			self.storageDirEdit.setEnabled(False)
@@ -222,7 +231,6 @@ class Window(QMainWindow):
 			self.trimmingThread.progressMaximumSignal.connect(self.progressMaximum)
 			self.trimmingThread.completeSignal.connect(self.acquisitionComplete)
 			self.trimmingThread.statusBarSignal.connect(self.statusBarMessage)
-			self.trimmingThread.setRunFlag(True)
 			self.trimmingThread.start()
 
 		# Imaging
@@ -340,7 +348,6 @@ class Window(QMainWindow):
 				self.acquisitionThread.progressMaximumSignal.connect(self.progressMaximum)
 				self.acquisitionThread.completeSignal.connect(self.acquisitionComplete)
 				self.acquisitionThread.statusBarSignal.connect(self.statusBarMessage)
-				self.acquisitionThread.setRunFlag(True)
 				self.acquisitionThread.start()
 
 		# TODO: Image registration with elastix

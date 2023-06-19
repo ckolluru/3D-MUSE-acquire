@@ -42,7 +42,7 @@ class acquisitionClass(QtCore.QThread):
 
 		self.best_z_positions = np.zeros((self.NUM_TILES))
 
-		self.runFlag = None
+		self.threadActive = True
 
 	# Switch on the light source and open the shutter before snapping a picture
 	def post_hardware_hook_fn(self, event):
@@ -113,11 +113,13 @@ class acquisitionClass(QtCore.QThread):
 
 		return image, metadata
 
-	def setRunFlag(self, flag):
-		self.runFlag = flag
+	def stop(self):
+		self.threadActive = False
+		self.wait()
 
 	def run(self):
 		print('Acquiring serial block-face images')
+		self.threadActive = True
 
 		with Acquisition(directory=self.STORAGE_DIRECTORY, name='MUSE_acq', image_process_fn=self.image_process_fn, post_hardware_hook_fn=self.post_hardware_hook_fn) as acq:
 			events = multi_d_acquisition_events(xyz_positions=self.xyz_positions,  num_time_points=self.num_time_points, time_interval_s=self.time_interval_s)
@@ -126,7 +128,7 @@ class acquisitionClass(QtCore.QThread):
 				acq.acquire(event)
 
 				# Break out of the for loop if user clicks stop acquisition button
-				if not self.runFlag:
+				if not self.threadActive:
 					break
 
 		self.completeSignal.emit(1)
