@@ -568,6 +568,22 @@ font: 14pt &quot;Segoe UI&quot;;</string>
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>startAcquisitionButton</sender>
+   <signal>released()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>run_acquisition()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>384</x>
+     <y>468</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>384</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>run_acquisition()</slot>
