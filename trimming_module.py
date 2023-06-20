@@ -2,6 +2,9 @@ from PyQt5 import QtCore
 import time
 from tqdm import tqdm
 
+import humanize
+import datetime as dt
+
 class trimmingClass(QtCore.QThread):
 	
 	progressSignal = QtCore.pyqtSignal(int)
@@ -27,10 +30,9 @@ class trimmingClass(QtCore.QThread):
 
 	def run(self):
 		print('Trimming block-face')
-		self.threadActive = True
 
 		for i in tqdm(range(self.timepoints)):
-			self.progressSignal.emit(i)
+			self.progressSignal.emit(i + 1)
 
 			# Cutting signal
 			self.board.digital[9].write(0)

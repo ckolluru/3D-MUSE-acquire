@@ -22,6 +22,9 @@ class Window(QMainWindow):
 
 		self.dialog = None
 
+		self.trimmingThread = None
+		self.acquisitionThread = None
+
 	# Get XYZ positions from Micromanager
 	def get_xyz_positions(self):
 
@@ -71,10 +74,12 @@ class Window(QMainWindow):
 
 	def stop_run(self):
 		if self.TRIMMING_FLAG:
-			self.trimmingThread.stop()
+			if self.trimmingThread is not None:
+				self.trimmingThread.stop()
 
 		else:
-			self.acquisitionThread.stop()	
+			if self.acquisitionThread is not None:
+				self.acquisitionThread.stop()	
 
 		self.progressBar.setValue(0)
 		self.statusBar().showMessage('Acquisition stopped.', 4000)	
@@ -129,9 +134,6 @@ class Window(QMainWindow):
 			self.board.digital[9].write(1)
 			self.board.digital[10].write(1)
 
-			# Let the cut complete
-			time.sleep(10)
-
 			self.statusBar().showMessage('Arduino initialization complete', 5000)
 
 			self.initializeArduinoButton.setEnabled(False)
@@ -180,7 +182,11 @@ class Window(QMainWindow):
   
 	# Set status bar from threads
 	def statusBarMessage(self, string):
-		self.statusBar().showMessage(string)
+
+		if "End of" in string:
+			self.statusBar().showMessage(string, 2000)
+		else:
+			self.statusBar().showMessage(string)
 
 	# Complete signal from the threads
 	def acquisitionComplete(self, value):
@@ -324,6 +330,8 @@ class Window(QMainWindow):
 			self.statusBar().showMessage('Found ' + str(num_tiles_x) + ' tiles in x and ' + str(num_tiles_y) + ' tiles in y')
 
 			# Identify the correct sorting of the tiles, used to arrange tiles before sending to the stitching module
+			self.SORTED_INDICES = None
+			self.stitcher = None
 			if self.STITCHING_FLAG:
 				self.stitcher = Stitcher()
 				self.SORTED_INDICES =self.stitcher.convert_xy_positions_to_tile_configuration(xy_positions, self.PIXEL_SIZE, self.TILE_CONFIG_PATH)

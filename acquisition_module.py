@@ -4,6 +4,9 @@ import time
 import numpy as np
 from tqdm import tqdm
 
+import humanize
+import datetime as dt
+
 class acquisitionClass(QtCore.QThread):
 	
 	progressSignal = QtCore.pyqtSignal(int)
@@ -49,12 +52,13 @@ class acquisitionClass(QtCore.QThread):
 		
 		time.sleep(1)
 
+		# Delete the events if the thread is no longer active
+		if not self.threadActive:
+			return None
+
 		# Poll once every second to see if the cut signal is complete.
 		while not self.board.digital[12].read():
 			time.sleep(1)
-
-		# Wait for a few seconds to ensure that the block-face is cleared.
-		time.sleep(3)
 
 		# Switch on the light source
 		self.board.digital[10].write(0)
@@ -96,7 +100,7 @@ class acquisitionClass(QtCore.QThread):
 			# Get the time point index
 			time_index = metadata['Axes']['time']
 			self.statusBarSignal.emit('End of section ' + str(time_index + 1))
-			self.progressSignal.emit(int(time_index))
+			self.progressSignal.emit(int(time_index + 1))
 			self.current_time_index = time_index
 
 			# ZYX array
@@ -119,17 +123,12 @@ class acquisitionClass(QtCore.QThread):
 
 	def run(self):
 		print('Acquiring serial block-face images')
-		self.threadActive = True
 
 		with Acquisition(directory=self.STORAGE_DIRECTORY, name='MUSE_acq', image_process_fn=self.image_process_fn, post_hardware_hook_fn=self.post_hardware_hook_fn) as acq:
 			events = multi_d_acquisition_events(xyz_positions=self.xyz_positions,  num_time_points=self.num_time_points, time_interval_s=self.time_interval_s)
 
-			for event in tqdm(events):		
+			for event in events:	
 				acq.acquire(event)
-
-				# Break out of the for loop if user clicks stop acquisition button
-				if not self.threadActive:
-					break
 
 		self.completeSignal.emit(1)
 
