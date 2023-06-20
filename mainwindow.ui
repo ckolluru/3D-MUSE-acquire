@@ -505,22 +505,6 @@ font: 14pt &quot;Segoe UI&quot;;</string>
  <resources/>
  <connections>
   <connection>
-   <sender>startAcquisitionButton</sender>
-   <signal>released()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>run_acquisition()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>349</x>
-     <y>714</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>349</x>
-     <y>387</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>switchOnLightCheckbox</sender>
    <signal>toggled(bool)</signal>
    <receiver>MainWindow</receiver>
