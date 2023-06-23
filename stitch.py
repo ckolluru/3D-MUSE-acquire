@@ -71,14 +71,14 @@ class Stitcher():
         self.X_SHAPE_ZARR = int(tile_size_x * num_tiles_x * 1.05)
 
         # Create new zarr folder
-        self.ZARR_STORE = zarr.open(stitched_directory, mode="w")
-        ch0 = self.ZARR_STORE.zeros(
-            "muse", shape=(num_time_points, 1, self.Y_SHAPE_ZARR, self.X_SHAPE_ZARR), chunks=(16, 1, self.Y_SHAPE_ZARR, self.X_SHAPE_ZARR), dtype="i2"
-        )
-        print('Zarr directory tree')
-        print(self.ZARR_STORE.tree())
 
-        self.DS = self.ZARR_STORE["muse"]
+        store = zarr.DirectoryStore(stitched_directory, dimension_separator='/')
+        root = zarr.group(store=store, overwrite=True)
+        muse = root.create_group('muse')
+        self.DS = muse.zeros('stitched', shape=(1, num_time_points, self.Y_SHAPE_ZARR, self.X_SHAPE_ZARR), chunks=(1, 16, self.Y_SHAPE_ZARR, self.X_SHAPE_ZARR), dtype="i2" )
+
+        print('Zarr directory tree')
+        print(store.tree())
 
         return True
 
@@ -160,4 +160,4 @@ class Stitcher():
 
         array = self.pad_array(np.array(resampleF.GetOutput()))
         
-        self.DS[int(time_index), 0, :, :] = np.round(array).astype(np.uint16)
+        self.DS[0, int(time_index), :, :] = np.round(array).astype(np.uint16)
