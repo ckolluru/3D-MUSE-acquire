@@ -77,9 +77,6 @@ class Stitcher():
         muse = root.create_group('muse')
         self.DS = muse.zeros('stitched', shape=(num_time_points, self.Y_SHAPE_ZARR, self.X_SHAPE_ZARR), chunks=(16, self.Y_SHAPE_ZARR, self.X_SHAPE_ZARR), dtype="i2" )
 
-        print('Zarr directory tree')
-        print(store.tree())
-
         return True
 
     # Pad the arrays
