@@ -235,8 +235,8 @@ class Window(QMainWindow):
 		self.progressBar.setMaximum(num_cuts)
 		self.TRIMMING_FLAG = self.trimBlockCheckbox.isChecked()
 
-		if self.skipImagingEveryLineEdit.text():
-			num_images = len(range(0, num_cuts, self.skipImagingEveryLineEdit.text()))
+		if int(self.skipImagingEveryLineEdit.text()):
+			num_images = len(range(0, num_cuts, int(self.skipImagingEveryLineEdit.text())))
 		else:
 			num_images = num_cuts
 
