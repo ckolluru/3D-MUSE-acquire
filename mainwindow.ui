@@ -240,8 +240,29 @@
              </property>
             </spacer>
            </item>
-           <item row="6" column="3">
-            <spacer name="horizontalSpacer_6">
+           <item row="4" column="2">
+            <widget class="QCheckBox" name="trimBlockCheckbox">
+             <property name="font">
+              <font>
+               <family>Segoe UI</family>
+               <pointsize>11</pointsize>
+               <weight>50</weight>
+               <bold>false</bold>
+              </font>
+             </property>
+             <property name="layoutDirection">
+              <enum>Qt::RightToLeft</enum>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">spacing:5;</string>
+             </property>
+             <property name="text">
+              <string>Trim the block (will not collect images)</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="3">
+            <spacer name="horizontalSpacer_7">
              <property name="orientation">
               <enum>Qt::Horizontal</enum>
              </property>
@@ -252,6 +273,54 @@
               </size>
              </property>
             </spacer>
+           </item>
+           <item row="7" column="2">
+            <widget class="QLabel" name="label">
+             <property name="font">
+              <font>
+               <family>Segoe UI</family>
+               <pointsize>11</pointsize>
+               <weight>50</weight>
+               <bold>false</bold>
+              </font>
+             </property>
+             <property name="text">
+              <string> Skip imaging every __ slices (0 to not skip)</string>
+             </property>
+            </widget>
+           </item>
+           <item row="7" column="3">
+            <widget class="QLineEdit" name="skipImagingEveryLineEdit">
+             <property name="font">
+              <font>
+               <family>Segoe UI</family>
+               <pointsize>11</pointsize>
+               <weight>50</weight>
+               <bold>false</bold>
+              </font>
+             </property>
+             <property name="text">
+              <string>0</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item row="6" column="2">
+            <widget class="QLabel" name="label_2">
+             <property name="font">
+              <font>
+               <family>Segoe UI</family>
+               <pointsize>11</pointsize>
+               <weight>50</weight>
+               <bold>false</bold>
+              </font>
+             </property>
+             <property name="text">
+              <string>Autofocus every __ images (0 to not focus)</string>
+             </property>
+            </widget>
            </item>
            <item row="0" column="2">
             <widget class="QCheckBox" name="switchOnLightCheckbox">
@@ -280,33 +349,6 @@
              </property>
             </widget>
            </item>
-           <item row="6" column="2">
-            <widget class="QCheckBox" name="autofocusCheckbox">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="font">
-              <font>
-               <family>Segoe UI</family>
-               <pointsize>11</pointsize>
-               <weight>50</weight>
-               <bold>false</bold>
-              </font>
-             </property>
-             <property name="layoutDirection">
-              <enum>Qt::RightToLeft</enum>
-             </property>
-             <property name="styleSheet">
-              <string notr="true">spacing:82px;</string>
-             </property>
-             <property name="text">
-              <string>Autofocus every 10 images</string>
-             </property>
-            </widget>
-           </item>
            <item row="5" column="3">
             <spacer name="horizontalSpacer_9">
              <property name="orientation">
@@ -319,27 +361,6 @@
               </size>
              </property>
             </spacer>
-           </item>
-           <item row="4" column="2">
-            <widget class="QCheckBox" name="trimBlockCheckbox">
-             <property name="font">
-              <font>
-               <family>Segoe UI</family>
-               <pointsize>11</pointsize>
-               <weight>50</weight>
-               <bold>false</bold>
-              </font>
-             </property>
-             <property name="layoutDirection">
-              <enum>Qt::RightToLeft</enum>
-             </property>
-             <property name="styleSheet">
-              <string notr="true">spacing:5;</string>
-             </property>
-             <property name="text">
-              <string>Trim the block (will not collect images)</string>
-             </property>
-            </widget>
            </item>
            <item row="5" column="2">
             <widget class="QCheckBox" name="registerImageCheckbox">
@@ -368,18 +389,23 @@
              </property>
             </widget>
            </item>
-           <item row="0" column="3">
-            <spacer name="horizontalSpacer_7">
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
+           <item row="6" column="3">
+            <widget class="QLineEdit" name="autoFocusEveryLineEdit">
+             <property name="font">
+              <font>
+               <family>Segoe UI</family>
+               <pointsize>11</pointsize>
+               <weight>50</weight>
+               <bold>false</bold>
+              </font>
              </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>40</width>
-               <height>20</height>
-              </size>
+             <property name="text">
+              <string>0</string>
              </property>
-            </spacer>
+             <property name="alignment">
+              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+             </property>
+            </widget>
            </item>
           </layout>
          </widget>

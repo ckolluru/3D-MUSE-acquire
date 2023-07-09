@@ -97,7 +97,8 @@ class Window(QMainWindow):
 			self.numberCutsEdit.setEnabled(False)
 			self.trimBlockCheckbox.setEnabled(False)
 			self.registerImageCheckbox.setEnabled(False)
-			self.autofocusCheckbox.setEnabled(False)
+			self.skipImagingEveryLineEdit.setEnabled(False)
+			self.autoFocusEveryLineEdit.setEnabled(False)
 			self.startAcquisitionButton.setText('Stop acquisition')
 			self.startAcquisitionButton.released.connect(self.stop_run)
 
@@ -106,7 +107,8 @@ class Window(QMainWindow):
 			self.numberCutsEdit.setEnabled(True)
 			self.trimBlockCheckbox.setEnabled(True)
 			self.registerImageCheckbox.setEnabled(True)
-			self.autofocusCheckbox.setEnabled(True)
+			self.skipImagingEveryLineEdit.setEnabled(True)
+			self.autoFocusEveryLineEdit.setEnabled(True)
 			self.startAcquisitionButton.setText('Start acquisition')
 			self.startAcquisitionButton.released.connect(self.run_acquisition)
 
@@ -350,9 +352,10 @@ class Window(QMainWindow):
 			
 			if folder_created:
 				self.core = Core()
-				autoFocus = self.autofocusCheckbox.isChecked()
+				autoFocusEvery = int(self.autoFocusEveryLineEdit.text())
+				skipEvery = int(self.skipImagingEveryLineEdit.text())
 
-				self.acquisitionThread = acquisitionClass(self.STORAGE_DIRECTORY, xyz_positions, num_time_points, time_interval_s, self.board, autoFocus, self.studio,
+				self.acquisitionThread = acquisitionClass(self.STORAGE_DIRECTORY, xyz_positions, num_time_points, time_interval_s, self.board, autoFocusEvery, skipEvery, self.studio,
 														self.NUM_TILES, self.STITCHING_FLAG, self.SORTED_INDICES, self.stitcher,  self.TILE_SIZE_Y, self.TILE_SIZE_X, 
 														self.PIXEL_SIZE, self.TILE_CONFIG_PATH, self.core)
 				

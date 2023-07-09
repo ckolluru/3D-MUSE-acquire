@@ -15,7 +15,7 @@ class acquisitionClass(QtCore.QThread):
 	completeSignal = QtCore.pyqtSignal(int) 
 	statusBarSignal = QtCore.pyqtSignal(str)
 	
-	def __init__(self, STORAGE_DIRECTORY, xyz_positions, num_time_points, time_interval_s, board, autoFocus, studio, NUM_TILES, STITCHING_FLAG, SORTED_INDICES, stitcher, TILE_SIZE_Y, TILE_SIZE_X, PIXEL_SIZE, TILE_CONFIG_PATH, core):
+	def __init__(self, STORAGE_DIRECTORY, xyz_positions, num_time_points, time_interval_s, board, autoFocusEvery, skipEvery, studio, NUM_TILES, STITCHING_FLAG, SORTED_INDICES, stitcher, TILE_SIZE_Y, TILE_SIZE_X, PIXEL_SIZE, TILE_CONFIG_PATH, core):
 		
 		super(acquisitionClass, self).__init__(None)
 		self.STORAGE_DIRECTORY = STORAGE_DIRECTORY
@@ -23,7 +23,8 @@ class acquisitionClass(QtCore.QThread):
 		self.num_time_points = num_time_points
 		self.time_interval_s= time_interval_s
 		self.board = board
-		self.autoFocus = autoFocus
+		self.autoFocusEvery = autoFocusEvery
+		self.skipEvery = skipEvery
 		self.studio = studio
 		self.NUM_TILES = NUM_TILES
 		self.STITCHING_FLAG = STITCHING_FLAG
@@ -60,8 +61,8 @@ class acquisitionClass(QtCore.QThread):
 		self.board.digital[10].write(0)
 
 		if self.current_time_index is not None: 
-			if self.current_time_index % 10 == 0 and self.current_time_index != 0:
-				if self.autoFocus:
+			if self.autoFocusEvery:
+				if self.current_time_index % self.autoFocusEvery == 0 and self.current_time_index != 0:
 					afm = self.studio.get_autofocus_manager()
 					afm_method = afm.get_autofocus_method()
 					afm_method.full_focus()
@@ -124,11 +125,28 @@ class acquisitionClass(QtCore.QThread):
 			events = multi_d_acquisition_events(xyz_positions=self.xyz_positions,  num_time_points=self.num_time_points, time_interval_s=self.time_interval_s)
 
 			for event in events:	
-				acq.acquire(event)
-
 				# Get out of loop if not active anymore (user clicks stop acquisition)
 				if not self.threadActive:
-					break
+					break				
+				
+				# Acquire an image
+				acq.acquire(event)
+
+				# Skip imaging every N slices
+				if self.skipEvery:
+					for i in range(self.skipEvery):
+
+						# Send a cutting signal
+						self.board.digital[9].write(0)
+						time.sleep(3)
+						self.board.digital[9].write(1)
+
+						# Poll every 1 second to see if cut complete
+						while not self.board.digital[12].read():
+							time.sleep(1)
+
+						if not self.threadActive:
+							break
 
 		self.completeSignal.emit(1)
 
