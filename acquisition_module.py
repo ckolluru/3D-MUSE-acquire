@@ -15,12 +15,12 @@ class acquisitionClass(QtCore.QThread):
 	completeSignal = QtCore.pyqtSignal(int) 
 	statusBarSignal = QtCore.pyqtSignal(str)
 	
-	def __init__(self, STORAGE_DIRECTORY, xyz_positions, num_time_points, time_interval_s, board, autoFocusEvery, skipEvery, studio, NUM_TILES, STITCHING_FLAG, SORTED_INDICES, stitcher, TILE_SIZE_Y, TILE_SIZE_X, PIXEL_SIZE, TILE_CONFIG_PATH, core):
+	def __init__(self, STORAGE_DIRECTORY, xyz_positions, num_cuts, num_images, time_interval_s, board, autoFocusEvery, skipEvery, studio, NUM_TILES, STITCHING_FLAG, SORTED_INDICES, stitcher, TILE_SIZE_Y, TILE_SIZE_X, PIXEL_SIZE, TILE_CONFIG_PATH, core):
 		
 		super(acquisitionClass, self).__init__(None)
 		self.STORAGE_DIRECTORY = STORAGE_DIRECTORY
 		self.xyz_positions = xyz_positions
-		self.num_time_points = num_time_points
+		self.num_images = num_images
 		self.time_interval_s= time_interval_s
 		self.board = board
 		self.autoFocusEvery = autoFocusEvery
@@ -40,7 +40,7 @@ class acquisitionClass(QtCore.QThread):
 		self.tiles = []
 
 		self.progressMinimumSignal.emit(0)
-		self.progressMaximumSignal.emit(self.num_time_points)
+		self.progressMaximumSignal.emit(self.num_cuts)
 		
 		self.current_time_index = None
 
@@ -96,8 +96,8 @@ class acquisitionClass(QtCore.QThread):
 
 			# Get the time point index
 			time_index = metadata['Axes']['time']
-			self.statusBarSignal.emit('End of section ' + str(time_index + 1))
-			self.progressSignal.emit(int(time_index + 1))
+			self.statusBarSignal.emit('End of section ' + str(time_index + 1 + (self.skipEvery*time_index)))
+			self.progressSignal.emit(int(time_index + 1) + int(self.skipEvery*time_index))
 			self.current_time_index = time_index
 
 			# ZYX array
@@ -106,7 +106,7 @@ class acquisitionClass(QtCore.QThread):
 				# Sort the tiles based on the sorting indices
 				self.tiles = [self.tiles[i] for i in self.SORTED_INDICES]
 
-				self.stitcher.stitch_tiles(self.tiles, self.TILE_CONFIG_PATH, self.PIXEL_SIZE, time_index)
+				self.stitcher.stitch_tiles(self.tiles, self.TILE_CONFIG_PATH, self.PIXEL_SIZE, self.current_time_index)
 				self.statusBarSignal.emit('Tile stitching complete for section ' + str(time_index))
 
 			# Reset the list container
@@ -122,7 +122,7 @@ class acquisitionClass(QtCore.QThread):
 		print('Acquiring serial block-face images')
 
 		with Acquisition(directory=self.STORAGE_DIRECTORY, name='MUSE_acq', image_process_fn=self.image_process_fn, post_hardware_hook_fn=self.post_hardware_hook_fn) as acq:
-			events = multi_d_acquisition_events(xyz_positions=self.xyz_positions,  num_time_points=self.num_time_points, time_interval_s=self.time_interval_s)
+			events = multi_d_acquisition_events(xyz_positions=self.xyz_positions,  num_time_points=self.num_images, time_interval_s=self.time_interval_s)
 
 			for event in events:	
 				# Get out of loop if not active anymore (user clicks stop acquisition)
@@ -144,6 +144,9 @@ class acquisitionClass(QtCore.QThread):
 						# Poll every 1 second to see if cut complete
 						while not self.board.digital[12].read():
 							time.sleep(1)
+
+						self.statusBarSignal.emit('End of section ' + str(self.current_time_index + 1 + (i*self.current_time_index)))
+						self.progressSignal.emit(int(self.current_time_index + 1) + int(i*self.current_time_index))
 
 						if not self.threadActive:
 							break

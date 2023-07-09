@@ -216,7 +216,6 @@ class Window(QMainWindow):
 		self.dialog.show()
 				
 	# Run the acquisition  
-	# TODO: Add a skip slices option
 	# TODO: Add image some slices first, middle and end  
 	def run_acquisition(self):
 
@@ -231,14 +230,19 @@ class Window(QMainWindow):
 		self.block_ui(True)
 		
 		# Number of cuts, trimming flag will not image
-		num_time_points = int(self.numberCutsEdit.text())
+		num_cuts = int(self.numberCutsEdit.text())
 		self.progressBar.setMinimum(0)
-		self.progressBar.setMaximum(num_time_points)
+		self.progressBar.setMaximum(num_cuts)
 		self.TRIMMING_FLAG = self.trimBlockCheckbox.isChecked()
+
+		if self.skipImagingEveryLineEdit.text():
+			num_images = len(range(0, num_cuts, self.skipImagingEveryLineEdit.text()))
+		else:
+			num_images = num_cuts
 
 		# If only trimming and not imaging
 		if self.TRIMMING_FLAG:
-			self.trimmingThread = trimmingClass(num_time_points, self.board)
+			self.trimmingThread = trimmingClass(num_cuts, self.board)
 			self.trimmingThread.progressSignal.connect(self.progressUpdate)
 			self.trimmingThread.progressMinimumSignal.connect(self.progressMinimum)
 			self.trimmingThread.progressMaximumSignal.connect(self.progressMaximum)
@@ -348,14 +352,14 @@ class Window(QMainWindow):
 			folder_created = True
 
 			if self.STITCHING_FLAG:
-				folder_created = self.stitcher.set_up_zarr_store_for_stitched_images(self.STITCHED_DIRECTORY, num_time_points, self.NUM_TILES, self.TILE_SIZE_X, self.TILE_SIZE_Y, num_tiles_x, num_tiles_y)
+				folder_created = self.stitcher.set_up_zarr_store_for_stitched_images(self.STITCHED_DIRECTORY, num_images, self.NUM_TILES, self.TILE_SIZE_X, self.TILE_SIZE_Y, num_tiles_x, num_tiles_y)
 			
 			if folder_created:
 				self.core = Core()
 				autoFocusEvery = int(self.autoFocusEveryLineEdit.text())
 				skipEvery = int(self.skipImagingEveryLineEdit.text())
 
-				self.acquisitionThread = acquisitionClass(self.STORAGE_DIRECTORY, xyz_positions, num_time_points, time_interval_s, self.board, autoFocusEvery, skipEvery, self.studio,
+				self.acquisitionThread = acquisitionClass(self.STORAGE_DIRECTORY, xyz_positions, num_cuts, num_images, time_interval_s, self.board, autoFocusEvery, skipEvery, self.studio,
 														self.NUM_TILES, self.STITCHING_FLAG, self.SORTED_INDICES, self.stitcher,  self.TILE_SIZE_Y, self.TILE_SIZE_X, 
 														self.PIXEL_SIZE, self.TILE_CONFIG_PATH, self.core)
 				
