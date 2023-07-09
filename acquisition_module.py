@@ -52,10 +52,6 @@ class acquisitionClass(QtCore.QThread):
 		
 		time.sleep(1)
 
-		# Delete the events if the thread is no longer active
-		if not self.threadActive:
-			return None
-
 		# Poll once every second to see if the cut signal is complete.
 		while not self.board.digital[12].read():
 			time.sleep(1)
@@ -129,6 +125,10 @@ class acquisitionClass(QtCore.QThread):
 
 			for event in events:	
 				acq.acquire(event)
+
+				# Get out of loop if not active anymore (user clicks stop acquisition)
+				if not self.threadActive:
+					break
 
 		self.completeSignal.emit(1)
 

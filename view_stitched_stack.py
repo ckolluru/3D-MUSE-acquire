@@ -7,7 +7,7 @@ import cv2
 plt.ion()
 
 # Inputs
-zarr_filename = r'C:\MUSE datasets\REVA\Polymerization Tests\S4\MUSE_stitched_acq_2.zarr'
+zarr_filename = r'C:\MUSE datasets\REVA\Polymerization Tests\S8\MUSE_stitched_acq_1.zarr'
 skip = 100
 
 gamma = 0.75
@@ -16,13 +16,13 @@ vmax = 2500
 
 # Visualization
 zarr_file = zarr.open(zarr_filename)
-muse_data = zarr_file['muse']
+muse_data = zarr_file['muse/stitched']
 
 print('Dataset shape:')
 print(muse_data.shape)
 
 for k in range(0, muse_data.shape[0], skip):
-    image = np.squeeze(muse_data[k, :, :, :])
+    image = np.squeeze(muse_data[k, :, :])
 
     image[image > vmax] = vmax
     image[image < vmin] = vmin
@@ -31,7 +31,7 @@ for k in range(0, muse_data.shape[0], skip):
 
     image = exposure.adjust_gamma(image, gamma = gamma) 
 
-
+    print('Displaying slice #: ', k)
     plt.imshow(image, cmap='gray')
     plt.show()
     plt.pause(1)

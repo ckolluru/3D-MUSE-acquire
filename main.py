@@ -134,6 +134,9 @@ class Window(QMainWindow):
 			self.board.digital[9].write(1)
 			self.board.digital[10].write(1)
 
+			# Give it some time for cut complete
+			time.sleep(8)
+
 			self.statusBar().showMessage('Arduino initialization complete', 5000)
 
 			self.initializeArduinoButton.setEnabled(False)
@@ -210,7 +213,9 @@ class Window(QMainWindow):
 		# Show the dialog
 		self.dialog.show()
 				
-	# Run the acquisition    
+	# Run the acquisition  
+	# TODO: Add a skip slices option
+	# TODO: Add image some slices first, middle and end  
 	def run_acquisition(self):
 
 		if self.board is None:
