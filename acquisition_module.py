@@ -40,7 +40,7 @@ class acquisitionClass(QtCore.QThread):
 		self.tiles = []
 
 		self.progressMinimumSignal.emit(0)
-		self.progressMaximumSignal.emit(self.num_cuts)
+		self.progressMaximumSignal.emit(num_cuts)
 		
 		self.current_time_index = None
 
