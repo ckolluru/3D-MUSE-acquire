@@ -4,6 +4,7 @@ from tqdm import tqdm
 
 import humanize
 import datetime as dt
+import logging
 
 class trimmingClass(QtCore.QThread):
 	
@@ -13,7 +14,7 @@ class trimmingClass(QtCore.QThread):
 	completeSignal = QtCore.pyqtSignal(int) 
 	statusBarSignal = QtCore.pyqtSignal(str)
 	
-	def __init__(self, timepoints, board):
+	def __init__(self, timepoints, board, storage_directory):
 		
 		super(trimmingClass, self).__init__(None)
 		self.board = board
@@ -23,6 +24,11 @@ class trimmingClass(QtCore.QThread):
 		self.progressMaximumSignal.emit(timepoints)
 
 		self.threadActive = True
+
+		# Set up logging
+		logfile = storage_directory + '\\muse_application.log'
+		logging.basicConfig(filename = logfile, filemode = 'a', level = logging.DEBUG, format = '%(asctime)s - %(levelname)s: %(message)s', datefmt = '%m/%d/%Y %I:%M:%S %p')
+
 
 	def stop(self):
 		self.threadActive = False
@@ -47,7 +53,12 @@ class trimmingClass(QtCore.QThread):
 
 			# Break out of the for loop if user clicks stop acquisition button
 			if not self.threadActive:
+				
+				logging.info('Stopped trimming after %s cuts', (i+1))
 				break
+
+		if self.threadActive:
+			logging.info('Completed trimming after %s cuts', self.timepoints)
 			
 		self.completeSignal.emit(2)
 

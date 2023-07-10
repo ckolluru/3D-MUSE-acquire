@@ -6,6 +6,7 @@ from tqdm import tqdm
 
 import humanize
 import datetime as dt
+import logging
 
 class acquisitionClass(QtCore.QThread):
 	
@@ -20,6 +21,7 @@ class acquisitionClass(QtCore.QThread):
 		super(acquisitionClass, self).__init__(None)
 		self.STORAGE_DIRECTORY = STORAGE_DIRECTORY
 		self.xyz_positions = xyz_positions
+		self.num_cuts = num_cuts
 		self.num_images = num_images
 		self.time_interval_s= time_interval_s
 		self.board = board
@@ -42,11 +44,16 @@ class acquisitionClass(QtCore.QThread):
 		self.progressMinimumSignal.emit(0)
 		self.progressMaximumSignal.emit(num_cuts)
 		
-		self.current_time_index = 0
+		self.image_index = 0
+		self.image_flag = [False] * self.num_cuts
 
 		self.best_z_positions = np.zeros((self.NUM_TILES))
 
 		self.threadActive = True
+
+		# Set up logging
+		logfile = self.STORAGE_DIRECTORY + '\\muse_application.log'
+		logging.basicConfig(filename = logfile, filemode = 'a', level = logging.DEBUG, format = '%(asctime)s - %(levelname)s: %(message)s', datefmt = '%m/%d/%Y %I:%M:%S %p')
 
 	# Switch on the light source before snapping a picture
 	def post_hardware_hook_fn(self, event):
@@ -61,7 +68,7 @@ class acquisitionClass(QtCore.QThread):
 		self.board.digital[10].write(0)
 
 		if self.autoFocusEvery:
-			if self.current_time_index % self.autoFocusEvery == 0 and self.current_time_index != 0:
+			if ((self.image_index) % self.autoFocusEvery == 0):
 
 				# Move the z-stage to the position in the stage position list
 				self.core.set_position("Stage", event['z'])
@@ -73,6 +80,7 @@ class acquisitionClass(QtCore.QThread):
 				self.statusBarSignal.emit('Autofocus complete')
 
 				# Update best z positions
+				logging.info('Autofocus core position %s' ,self.core.get_position())
 				self.best_z_positions[int(event['axes']['position'])] = self.core.get_position()
 
 		if self.best_z_positions[int(event['axes']['position'])] == 0:
@@ -98,20 +106,14 @@ class acquisitionClass(QtCore.QThread):
 			time.sleep(3)
 			self.board.digital[9].write(1)
 
-			# Get the time point index
-			time_index = metadata['Axes']['time']
-			self.statusBarSignal.emit('End of section ' + str(time_index + 1 + (self.skipEvery*time_index)))
-			self.progressSignal.emit(int(time_index + 1) + int(self.skipEvery*time_index))
-			self.current_time_index = time_index
-
 			# ZYX array
 			if self.STITCHING_FLAG:
 
 				# Sort the tiles based on the sorting indices
 				self.tiles = [self.tiles[i] for i in self.SORTED_INDICES]
 
-				self.stitcher.stitch_tiles(self.tiles, self.TILE_CONFIG_PATH, self.PIXEL_SIZE, self.current_time_index)
-				self.statusBarSignal.emit('Tile stitching complete for section ' + str(time_index))
+				self.stitcher.stitch_tiles(self.tiles, self.TILE_CONFIG_PATH, self.PIXEL_SIZE, self.image_index)
+				self.statusBarSignal.emit('Tile stitching complete for image number ' + str(self.image_index + 1))
 
 			# Reset the list container
 			self.tiles = []
@@ -124,36 +126,56 @@ class acquisitionClass(QtCore.QThread):
 
 	def run(self):
 		print('Acquiring serial block-face images')
+		self.image_flag = [False] * self.num_cuts
+
+		# Find which indices we need to image
+		for i in range(len(self.image_flag)):
+			if i % (self.skipEvery + 1) == 0:
+				self.image_flag[i] = True
 
 		with Acquisition(directory=self.STORAGE_DIRECTORY, name='MUSE_acq', image_process_fn=self.image_process_fn, post_hardware_hook_fn=self.post_hardware_hook_fn) as acq:
 			events = multi_d_acquisition_events(xyz_positions=self.xyz_positions,  num_time_points=self.num_images, time_interval_s=self.time_interval_s)
 
-			for event in events:	
+			for i in range(len(self.image_flag)):
+				if self.image_flag[i] == True:
+
+					event = events[self.image_index]
+					
+					# Acquire an image
+					acq.acquire(event)
+
+					self.image_index = self.image_index + 1
+
+					time.sleep(2)
+
+				else:
+					# Poll every 1 second to see if cut complete
+					while not self.board.digital[12].read():
+						time.sleep(1)
+					
+					# Short sleep at the top
+					time.sleep(2)
+
+					# Send a cutting signal
+					self.board.digital[9].write(0)
+					time.sleep(3)
+					self.board.digital[9].write(1)
+
+				# Cutting cycle complete
+				while not self.board.digital[12].read():
+					time.sleep(1)
+
 				# Get out of loop if not active anymore (user clicks stop acquisition)
 				if not self.threadActive:
-					break				
-				
-				# Acquire an image
-				acq.acquire(event)
+					logging.info('Stopped acqusition cycle after %s cuts', i)
+					break		
 
-				# Skip imaging every N slices
-				if self.skipEvery:
-					for i in range(self.skipEvery):
+				# Update progress bar and status bar
+				self.statusBarSignal.emit('End of section ' + str(i+1))
+				self.progressSignal.emit(int(i+1))
 
-						# Send a cutting signal
-						self.board.digital[9].write(0)
-						time.sleep(3)
-						self.board.digital[9].write(1)
-
-						# Poll every 1 second to see if cut complete
-						while not self.board.digital[12].read():
-							time.sleep(1)
-
-						self.statusBarSignal.emit('End of section ' + str(self.current_time_index + 1 + (i*self.current_time_index)))
-						self.progressSignal.emit(int(self.current_time_index + 1) + int(i*self.current_time_index))
-
-						if not self.threadActive:
-							break
+		if self.threadActive:
+			logging.info('Completed acquisition cycle, finished %s cuts', self.num_cuts)							
 
 		self.completeSignal.emit(1)
 

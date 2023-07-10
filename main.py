@@ -11,6 +11,8 @@ import glob
 from acquisition_module import acquisitionClass
 from trimming_module import trimmingClass
 
+import logging
+
 class Window(QMainWindow):
 	def __init__(self):
 		super(Window, self).__init__()
@@ -219,10 +221,15 @@ class Window(QMainWindow):
 	# TODO: Add image some slices first, middle and end  
 	def run_acquisition(self):
 
+		# Set up logging
+		logfile = str(self.storageDirEdit.text()) + '\\muse_application.log'
+		logging.basicConfig(filename = logfile, filemode = 'a', level = logging.DEBUG, format = '%(asctime)s - %(levelname)s: %(message)s', datefmt = '%m/%d/%Y %I:%M:%S %p')
+
 		if self.board is None:
 			self.REGISTER_FLAG = False
 			msgBox = QMessageBox()
 			msgBox.setText("Arduino board is not initialized, press Initialize Arduino button first.")
+			logging.info("Arduino board is not initialized, press Initialize Arduino button first.")
 			msgBox.exec()
 			return None
 					
@@ -236,13 +243,15 @@ class Window(QMainWindow):
 		self.TRIMMING_FLAG = self.trimBlockCheckbox.isChecked()
 
 		if int(self.skipImagingEveryLineEdit.text()):
-			num_images = len(range(0, num_cuts, int(self.skipImagingEveryLineEdit.text())))
+			num_images = len(range(0, num_cuts, int(self.skipImagingEveryLineEdit.text())+1))
 		else:
 			num_images = num_cuts
 
 		# If only trimming and not imaging
 		if self.TRIMMING_FLAG:
-			self.trimmingThread = trimmingClass(num_cuts, self.board)
+			logging.info('----TRIMMING CYCLE----')
+			logging.info('Trimming set to %s cuts', num_cuts)
+			self.trimmingThread = trimmingClass(num_cuts, self.board, str(self.storageDirEdit.text()))
 			self.trimmingThread.progressSignal.connect(self.progressUpdate)
 			self.trimmingThread.progressMinimumSignal.connect(self.progressMinimum)
 			self.trimmingThread.progressMaximumSignal.connect(self.progressMaximum)
@@ -268,16 +277,8 @@ class Window(QMainWindow):
 
 			self.STITCHED_DIRECTORY = self.STORAGE_DIRECTORY + r'\\MUSE_stitched_acq_' + str(len(prev_acqs) + 1) + '.zarr'
 
-			# Create if directories exist, return if you don't want to overwrite
-			if os.path.exists(self.STITCHED_DIRECTORY):
-				msgBox = QMessageBox()
-				msgBox.setText("Found a directory with the expected stitched folder name in the provided storage directory. Overwrite? If No is selected, acquisition will not start.")
-				msgBox.setStandardButtons(QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No)
-				x = msgBox.exec()
-
-				if x == QMessageBox.StandardButton.No:
-					self.block_ui(False)
-					return None
+			logging.info('---- ACQUISITION CYCLE ' + str(len(prev_acqs) + 1) + '----')
+			logging.info('Imaging set to % s cuts', num_cuts)
 
 			os.makedirs(self.STORAGE_DIRECTORY, exist_ok=True)
 			os.makedirs(self.STITCHED_DIRECTORY, exist_ok=True)
@@ -288,6 +289,7 @@ class Window(QMainWindow):
 			if xy_positions is None and z_positions is None:
 				msgBox = QMessageBox()
 				msgBox.setText("Could not retrieve positions, try running the acquisition again. Ensure MicroManager is open.")
+				logging.warning("Could not retrieve positions, try running the acquisition again. Ensure MicroManager is open.")
 				msgBox.exec()
 				return
 
@@ -295,12 +297,16 @@ class Window(QMainWindow):
 			self.NUM_TILES = xy_positions.shape[0]
 			self.TILE_CONFIG_PATH = self.STORAGE_DIRECTORY + r'\\TileConfiguration_acq_' + str(len(prev_acqs) + 1) + '.txt'
 			self.statusBar().showMessage('Received XYZ positions from Micromanager')
+			logging.info('Received XYZ positions from Micromanager')
 
 			print('XY positions')
 			print(xy_positions)
 
 			print('Z positions')
 			print(z_positions)
+
+			logging.info('XY positions are: %s', xy_positions)
+			logging.info('Z positions are: %s', z_positions)
 
 			# Stitching and registration are needed if there is more than one tile
 			self.STITCHING_FLAG = (self.NUM_TILES != 1)
@@ -316,6 +322,7 @@ class Window(QMainWindow):
 				self.REGISTER_FLAG = False
 				msgBox = QMessageBox()
 				msgBox.setText("Since only one tile is acquired, registration is not required, skipping.")
+				logging.info("Since only one tile is acquired, registration is not required, skipping.")
 				msgBox.exec()
 
 			else:
@@ -330,6 +337,7 @@ class Window(QMainWindow):
 			if num_tiles_x == 0 and num_tiles_y == 0:
 				msgBox = QMessageBox()
 				msgBox.setText("Did not find tile set up in MicroManager. Please ensure tiles are specified using the MultiD Acq. window in MM.")
+				logging.info("Did not find tile set up in MicroManager. Please ensure tiles are specified using the MultiD Acq. window in MM.")
 				msgBox.exec()
 
 				self.block_ui(False)
@@ -338,6 +346,7 @@ class Window(QMainWindow):
 			if self.NUM_TILES != (num_tiles_x * num_tiles_y):
 				raise ValueError('Expected tile positions to be on a uniform grid')
 			
+			logging.info('Found %s tiles', self.NUM_TILES)			
 			self.statusBar().showMessage('Found ' + str(num_tiles_x) + ' tiles in x and ' + str(num_tiles_y) + ' tiles in y')
 
 			# Identify the correct sorting of the tiles, used to arrange tiles before sending to the stitching module
@@ -348,7 +357,7 @@ class Window(QMainWindow):
 				self.SORTED_INDICES =self.stitcher.convert_xy_positions_to_tile_configuration(xy_positions, self.PIXEL_SIZE, self.TILE_CONFIG_PATH)
 
 			# Imaging, pycro-manager acquisition
-			time_interval_s = 0.001
+			time_interval_s = 5
 			folder_created = True
 
 			if self.STITCHING_FLAG:
@@ -358,6 +367,9 @@ class Window(QMainWindow):
 				self.core = Core()
 				autoFocusEvery = int(self.autoFocusEveryLineEdit.text())
 				skipEvery = int(self.skipImagingEveryLineEdit.text())
+
+				logging.info('Skipping imaging every %s slices', skipEvery)
+				logging.info('Autofocus set to occur every %s images', autoFocusEvery)
 
 				self.acquisitionThread = acquisitionClass(self.STORAGE_DIRECTORY, xyz_positions, num_cuts, num_images, time_interval_s, self.board, autoFocusEvery, skipEvery, self.studio,
 														self.NUM_TILES, self.STITCHING_FLAG, self.SORTED_INDICES, self.stitcher,  self.TILE_SIZE_Y, self.TILE_SIZE_X, 
