@@ -27,6 +27,28 @@ class Window(QMainWindow):
 		self.trimmingThread = None
 		self.acquisitionThread = None
 
+		self.core = None
+
+	# Home stages
+	def home_stages(self):
+
+		try:
+			self.core = Core()	
+			self.core.set_property('Core', 'TimeoutMs', 25000)
+	
+			
+			self.block_ui(True)
+			self.core.home("XYStage")
+			self.core.home("Stage")
+			self.block_ui(False)
+
+			self.homeStagesPushButton.setEnabled(False)
+
+		except:
+			msgBox = QMessageBox()
+			msgBox.setText("Did not find MicroManager to be open, ensure that it is open.")
+			msgBox.exec()
+
 	# Get XYZ positions from Micromanager
 	def get_xyz_positions(self):
 
@@ -101,6 +123,7 @@ class Window(QMainWindow):
 			self.registerImageCheckbox.setEnabled(False)
 			self.skipImagingEveryLineEdit.setEnabled(False)
 			self.autoFocusEveryLineEdit.setEnabled(False)
+			self.homeStagesPushButton.setEnabled(False)
 			self.startAcquisitionButton.setText('Stop acquisition')
 			self.startAcquisitionButton.released.connect(self.stop_run)
 
@@ -111,6 +134,7 @@ class Window(QMainWindow):
 			self.registerImageCheckbox.setEnabled(True)
 			self.skipImagingEveryLineEdit.setEnabled(True)
 			self.autoFocusEveryLineEdit.setEnabled(True)
+			self.homeStagesPushButton.setEnabled(True)
 			self.startAcquisitionButton.setText('Start acquisition')
 			self.startAcquisitionButton.released.connect(self.run_acquisition)
 
@@ -365,13 +389,16 @@ class Window(QMainWindow):
 				folder_created = self.stitcher.set_up_zarr_store_for_stitched_images(self.STITCHED_DIRECTORY, num_images, self.NUM_TILES, self.TILE_SIZE_X, self.TILE_SIZE_Y, num_tiles_x, num_tiles_y)
 			
 			if folder_created:
-				self.core = Core()
 				autoFocusEvery = int(self.autoFocusEveryLineEdit.text())
 				skipEvery = int(self.skipImagingEveryLineEdit.text())
 
 				logging.info('Skipping imaging every %s slices', skipEvery)
 				logging.info('Autofocus set to occur every %s images', autoFocusEvery)
 				logging.info('This will generate %s images', num_images)
+
+				if self.core is None:					
+					self.core = Core()	
+					self.core.set_property('Core', 'TimeoutMs', 25000)
 
 				self.acquisitionThread = acquisitionClass(self.STORAGE_DIRECTORY, xyz_positions, num_cuts, num_images, time_interval_s, self.board, autoFocusEvery, skipEvery, self.studio,
 														self.NUM_TILES, self.STITCHING_FLAG, self.SORTED_INDICES, self.stitcher,  self.TILE_SIZE_Y, self.TILE_SIZE_X, 
