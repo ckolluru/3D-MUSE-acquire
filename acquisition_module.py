@@ -42,13 +42,13 @@ class acquisitionClass(QtCore.QThread):
 		self.progressMinimumSignal.emit(0)
 		self.progressMaximumSignal.emit(num_cuts)
 		
-		self.current_time_index = None
+		self.current_time_index = 0
 
 		self.best_z_positions = np.zeros((self.NUM_TILES))
 
 		self.threadActive = True
 
-	# Switch on the light source and open the shutter before snapping a picture
+	# Switch on the light source before snapping a picture
 	def post_hardware_hook_fn(self, event):
 		
 		time.sleep(1)
@@ -60,21 +60,20 @@ class acquisitionClass(QtCore.QThread):
 		# Switch on the light source
 		self.board.digital[10].write(0)
 
-		if self.current_time_index is not None: 
-			if self.autoFocusEvery:
-				if self.current_time_index % self.autoFocusEvery == 0 and self.current_time_index != 0:
+		if self.autoFocusEvery:
+			if self.current_time_index % self.autoFocusEvery == 0 and self.current_time_index != 0:
 
-					# Move the z-stage to the position in the stage position list
-					self.core.set_position("Stage", event['z'])
-					self.core.wait_for_device("Stage")
+				# Move the z-stage to the position in the stage position list
+				self.core.set_position("Stage", event['z'])
+				self.core.wait_for_device("Stage")
 
-					afm = self.studio.get_autofocus_manager()
-					afm_method = afm.get_autofocus_method()
-					afm_method.full_focus()
-					self.statusBarSignal.emit('Autofocus complete')
+				afm = self.studio.get_autofocus_manager()
+				afm_method = afm.get_autofocus_method()
+				afm_method.full_focus()
+				self.statusBarSignal.emit('Autofocus complete')
 
-					# Update best z positions
-					self.best_z_positions[int(event['axes']['position'])] = self.core.get_position()
+				# Update best z positions
+				self.best_z_positions[int(event['axes']['position'])] = self.core.get_position()
 
 		if self.best_z_positions[int(event['axes']['position'])] == 0:
 			return event
