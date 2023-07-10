@@ -1,9 +1,6 @@
 from PyQt5 import QtCore
 import time
 from tqdm import tqdm
-
-import humanize
-import datetime as dt
 import logging
 
 class trimmingClass(QtCore.QThread):

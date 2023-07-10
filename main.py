@@ -382,7 +382,7 @@ class Window(QMainWindow):
 				self.SORTED_INDICES =self.stitcher.convert_xy_positions_to_tile_configuration(xy_positions, self.PIXEL_SIZE, self.TILE_CONFIG_PATH)
 
 			# Imaging, pycro-manager acquisition
-			time_interval_s = 0
+			time_interval_s = 5
 			folder_created = True
 
 			if self.STITCHING_FLAG:

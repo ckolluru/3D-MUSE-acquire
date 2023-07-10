@@ -2,13 +2,7 @@ from PyQt5 import QtCore
 from pycromanager import Acquisition, multi_d_acquisition_events
 import time
 import numpy as np
-from tqdm import tqdm
-
-import humanize
-import datetime as dt
 import logging
-
-from collections import deque
 
 class acquisitionClass(QtCore.QThread):
 	
@@ -59,18 +53,16 @@ class acquisitionClass(QtCore.QThread):
 
 	# Switch on the light source before snapping a picture
 	def post_hardware_hook_fn(self, event):
-		
-		time.sleep(1)
 
 		# Poll once every second to see if the cut signal is complete.
-		while not self.board.digital[12].read():
+		while (not self.board.digital[12].read()):
 			time.sleep(1)
 
 		# Switch on the light source
 		self.board.digital[10].write(0)
 
 		if self.autoFocusEvery:
-			if ((self.image_index) % self.autoFocusEvery == 0):
+			if ((self.image_index + 1) % self.autoFocusEvery == 0):
 
 				# Move the z-stage to the position in the stage position list
 				self.core.set_position("Stage", event['z'])
@@ -84,7 +76,7 @@ class acquisitionClass(QtCore.QThread):
 				# Update best z positions
 				self.best_z_positions[int(event['axes']['position'])] = self.core.get_position()
 
-		logging.info('Returning event back, image_index: %s', self.image_index)
+		logging.info('Returning from post hardware hook function, image_index: %s', self.image_index)
 
 		if self.best_z_positions[int(event['axes']['position'])] == 0:
 			return event
@@ -121,7 +113,7 @@ class acquisitionClass(QtCore.QThread):
 			# Reset the list container
 			self.tiles = []
 
-			logging.info('Returning from image_process function: %s', self.image_index)
+			logging.info('Returning from image_process function, image index: %s', self.image_index)
 
 		return image, metadata
 
@@ -140,7 +132,7 @@ class acquisitionClass(QtCore.QThread):
 
 		logging.info('Image flag list: %s', self.image_flag)
 
-		# Ensure the number of images to be captured is consistent
+		# Ensure the number of images to be captured and number of cuts is consistent
 		assert self.num_images == np.sum(self.image_flag)
 		assert self.num_cuts == len(self.image_flag)
 
@@ -152,7 +144,8 @@ class acquisitionClass(QtCore.QThread):
 			for event in events:
 				acq.acquire(event)
 
-				time.sleep(5)
+				time.sleep(3)
+
 				current_index = current_index + 1	
 				self.image_index = self.image_index + 1
 
@@ -166,34 +159,36 @@ class acquisitionClass(QtCore.QThread):
 					logging.info('Stopped acqusition cycle after %s cuts', current_index)
 					break		
 
-				if not self.image_flag[current_index]:
-					# Any cutting flags, complete them here before the next image flag
-					while current_index < self.num_cuts:
-						if not self.image_flag[current_index]:
-							# Poll every 1 second to see if cut complete
-							while not self.board.digital[12].read():
-								time.sleep(1)
+				# Any cutting flags, complete them here before the next image flag
+				while current_index < self.num_cuts:
+					if not self.image_flag[current_index]:
+						# Poll every 1 second to see if cut complete
+						while (not self.board.digital[12].read()):
+							time.sleep(1)
 
-							# Send a cutting signal
-							self.board.digital[9].write(0)
-							time.sleep(3)
-							self.board.digital[9].write(1)
+						# Send a cutting signal
+						self.board.digital[9].write(0)
+						time.sleep(3)
+						self.board.digital[9].write(1)
 
-							# Cutting cycle complete
-							while not self.board.digital[12].read():
-								time.sleep(1)
+						# Cutting cycle complete
+						while (not self.board.digital[12].read()):
+							time.sleep(1)
 
-							current_index = current_index + 1
+						current_index = current_index + 1
 
-							# Update progress bar and status bar
-							self.statusBarSignal.emit('End of section ' + str(current_index))
-							self.progressSignal.emit(int(current_index))
-							logging.info('End of section ' + str(current_index))
+						# Update progress bar and status bar
+						self.statusBarSignal.emit('End of section ' + str(current_index))
+						self.progressSignal.emit(int(current_index))
+						logging.info('End of section ' + str(current_index))
 
-							# Get out of loop if not active anymore (user clicks stop acquisition)
-							if not self.threadActive:
-								logging.info('Stopped acqusition cycle after %s cuts', current_index)
-								break		
+						# Get out of loop if not active anymore (user clicks stop acquisition)
+						if not self.threadActive:
+							logging.info('Stopped acqusition cycle after %s cuts', current_index)
+							break		
+
+					else:
+						break
 
 				# Get out of loop if not active anymore (user clicks stop acquisition)
 				if not self.threadActive:
