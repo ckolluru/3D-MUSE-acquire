@@ -63,6 +63,11 @@ class acquisitionClass(QtCore.QThread):
 		if self.current_time_index is not None: 
 			if self.autoFocusEvery:
 				if self.current_time_index % self.autoFocusEvery == 0 and self.current_time_index != 0:
+
+					# Move the z-stage to the position in the stage position list
+					self.core.set_position("Stage", event['z'])
+					self.core.wait_for_device("Stage")
+
 					afm = self.studio.get_autofocus_manager()
 					afm_method = afm.get_autofocus_method()
 					afm_method.full_focus()
