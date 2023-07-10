@@ -357,7 +357,7 @@ class Window(QMainWindow):
 				self.SORTED_INDICES =self.stitcher.convert_xy_positions_to_tile_configuration(xy_positions, self.PIXEL_SIZE, self.TILE_CONFIG_PATH)
 
 			# Imaging, pycro-manager acquisition
-			time_interval_s = 5
+			time_interval_s = 0.001
 			folder_created = True
 
 			if self.STITCHING_FLAG:
@@ -370,6 +370,7 @@ class Window(QMainWindow):
 
 				logging.info('Skipping imaging every %s slices', skipEvery)
 				logging.info('Autofocus set to occur every %s images', autoFocusEvery)
+				logging.info('This will generate %s images', num_images)
 
 				self.acquisitionThread = acquisitionClass(self.STORAGE_DIRECTORY, xyz_positions, num_cuts, num_images, time_interval_s, self.board, autoFocusEvery, skipEvery, self.studio,
 														self.NUM_TILES, self.STITCHING_FLAG, self.SORTED_INDICES, self.stitcher,  self.TILE_SIZE_Y, self.TILE_SIZE_X, 

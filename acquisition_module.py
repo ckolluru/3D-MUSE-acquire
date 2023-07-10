@@ -134,6 +134,9 @@ class acquisitionClass(QtCore.QThread):
 			if i % (self.skipEvery + 1) == 0:
 				self.image_flag[i] = True
 
+		# Ensure the number of images to be captured is consistent
+		assert self.num_images == np.sum(self.image_flag)
+
 		with Acquisition(directory=self.STORAGE_DIRECTORY, name='MUSE_acq', image_process_fn=self.image_process_fn, post_hardware_hook_fn=self.post_hardware_hook_fn) as acq:
 			events = multi_d_acquisition_events(xyz_positions=self.xyz_positions,  num_time_points=self.num_images, time_interval_s=self.time_interval_s)
 
@@ -143,7 +146,7 @@ class acquisitionClass(QtCore.QThread):
 				if self.image_flag[i]:					
 					
 					time.sleep(1)
-					
+
 					# Acquire an image
 					acq.acquire(event_queue.popleft())
 					self.image_index = self.image_index + 1
