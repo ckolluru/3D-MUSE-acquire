@@ -8,6 +8,8 @@ import humanize
 import datetime as dt
 import logging
 
+from collections import deque
+
 class acquisitionClass(QtCore.QThread):
 	
 	progressSignal = QtCore.pyqtSignal(int)
@@ -80,7 +82,6 @@ class acquisitionClass(QtCore.QThread):
 				self.statusBarSignal.emit('Autofocus complete')
 
 				# Update best z positions
-				logging.info('Autofocus core position %s' ,self.core.get_position())
 				self.best_z_positions[int(event['axes']['position'])] = self.core.get_position()
 
 		if self.best_z_positions[int(event['axes']['position'])] == 0:
@@ -136,34 +137,30 @@ class acquisitionClass(QtCore.QThread):
 		with Acquisition(directory=self.STORAGE_DIRECTORY, name='MUSE_acq', image_process_fn=self.image_process_fn, post_hardware_hook_fn=self.post_hardware_hook_fn) as acq:
 			events = multi_d_acquisition_events(xyz_positions=self.xyz_positions,  num_time_points=self.num_images, time_interval_s=self.time_interval_s)
 
-			for i in range(len(self.image_flag)):
-				if self.image_flag[i] == True:
+			event_queue = deque(events)				
 
-					event = events[self.image_index]
+			for i in range(len(self.image_flag)):
+				if self.image_flag[i]:					
+					
+					time.sleep(1)
 					
 					# Acquire an image
-					acq.acquire(event)
-
+					acq.acquire(event_queue.popleft())
 					self.image_index = self.image_index + 1
-
-					time.sleep(2)
 
 				else:
 					# Poll every 1 second to see if cut complete
 					while not self.board.digital[12].read():
 						time.sleep(1)
-					
-					# Short sleep at the top
-					time.sleep(2)
 
 					# Send a cutting signal
 					self.board.digital[9].write(0)
 					time.sleep(3)
 					self.board.digital[9].write(1)
 
-				# Cutting cycle complete
-				while not self.board.digital[12].read():
-					time.sleep(1)
+					# Cutting cycle complete
+					while not self.board.digital[12].read():
+						time.sleep(1)
 
 				# Get out of loop if not active anymore (user clicks stop acquisition)
 				if not self.threadActive:
@@ -173,6 +170,7 @@ class acquisitionClass(QtCore.QThread):
 				# Update progress bar and status bar
 				self.statusBarSignal.emit('End of section ' + str(i+1))
 				self.progressSignal.emit(int(i+1))
+				logging.info('End of section ' + str(i+1))
 
 		if self.threadActive:
 			logging.info('Completed acquisition cycle, finished %s cuts', self.num_cuts)							
