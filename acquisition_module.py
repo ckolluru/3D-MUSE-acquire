@@ -84,6 +84,8 @@ class acquisitionClass(QtCore.QThread):
 				# Update best z positions
 				self.best_z_positions[int(event['axes']['position'])] = self.core.get_position()
 
+		logging.info('Returning event back, image_index: %s', self.image_index)
+
 		if self.best_z_positions[int(event['axes']['position'])] == 0:
 			return event
 		
@@ -119,6 +121,8 @@ class acquisitionClass(QtCore.QThread):
 			# Reset the list container
 			self.tiles = []
 
+			logging.info('Returning from image_process function: %s', self.image_index)
+
 		return image, metadata
 
 	def stop(self):
@@ -133,6 +137,8 @@ class acquisitionClass(QtCore.QThread):
 		for i in range(len(self.image_flag)):
 			if i % (self.skipEvery + 1) == 0:
 				self.image_flag[i] = True
+
+		logging.info('Image flag list: %s', self.image_flag)
 
 		# Ensure the number of images to be captured is consistent
 		assert self.num_images == np.sum(self.image_flag)
@@ -150,6 +156,7 @@ class acquisitionClass(QtCore.QThread):
 					acq.acquire(event)
 
 					current_index = current_index + 1	
+					self.image_index = self.image_index + 1
 
 					# Update progress bar and status bar
 					self.statusBarSignal.emit('End of section ' + str(current_index+1))
