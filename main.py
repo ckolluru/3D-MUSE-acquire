@@ -291,6 +291,7 @@ class Window(QMainWindow):
 				msgBox.setText("Could not retrieve positions, try running the acquisition again. Ensure MicroManager is open.")
 				logging.warning("Could not retrieve positions, try running the acquisition again. Ensure MicroManager is open.")
 				msgBox.exec()
+				self.block_ui(False)
 				return
 
 			xyz_positions = np.hstack((xy_positions, np.expand_dims(z_positions, axis=1)))
