@@ -125,6 +125,7 @@ class Window(QMainWindow):
 			self.storageDirButton.setEnabled(False)
 			self.exposureTimeLineEdit.setEnabled(False)
 			self.skipEveryLineEdit.setEnabled(False)
+			self.objectiveComboBox.setEnabled(False)
 			self.startAcquisitionButton.setText('Stop acquisition')
 			self.startAcquisitionButton.released.connect(self.stop_run)
 
@@ -133,6 +134,7 @@ class Window(QMainWindow):
 			self.label_3.setEnabled(False)
 			self.label_4.setEnabled(False)
 			self.label_5.setEnabled(False)
+			self.label.setEnabled(False)
 
 		else:
 			self.storageDirEdit.setEnabled(True)
@@ -144,6 +146,7 @@ class Window(QMainWindow):
 			self.storageDirButton.setEnabled(True)
 			self.exposureTimeLineEdit.setEnabled(True)
 			self.skipEveryLineEdit.setEnabled(True)
+			self.objectiveComboBox.setEnabled(True)
 			self.startAcquisitionButton.setText('Start acquisition')
 			self.startAcquisitionButton.released.connect(self.run_acquisition)
 
@@ -152,6 +155,7 @@ class Window(QMainWindow):
 			self.label_3.setEnabled(True)
 			self.label_4.setEnabled(True)
 			self.label_5.setEnabled(True)
+			self.label.setEnabled(True)
 
 	# Initialize the arduino board
 	def initialize_arduino(self):

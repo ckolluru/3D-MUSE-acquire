@@ -47,6 +47,7 @@ class acquisitionClass(QtCore.QThread):
 		# Indices that will keep track of index in image stack (image_index) and cut cycle (cut_index)
 		self.current_image_index = 0
 		self.current_cut_index = 0
+		self.old_image_index = 0
 
 		# Used to store focused positions at each tile
 		self.best_z_positions = np.zeros((self.NUM_TILES))
@@ -65,24 +66,28 @@ class acquisitionClass(QtCore.QThread):
 		
 		# If slices need to be skipped, run additional sectioning cycles here
 		if self.skipEvery and self.current_cut_index != 0:
-			for i in range(self.skipEvery):
 
-				# Poll once every second to see if the cut signal is complete
-				while not self.board.digital[12].read():
-					time.sleep(1)
+			if self.current_image_index != self.old_image_index:
+				for i in range(self.skipEvery):
 
-				# Send a cutting signal
-				self.current_cut_index = self.current_cut_index + 1
-				self.board.digital[9].write(0)
-				time.sleep(3)
-				self.board.digital[9].write(1)
+					# Poll once every second to see if the cut signal is complete
+					while not self.board.digital[12].read():
+						time.sleep(1)
 
-				self.progressSignal.emit(int(self.current_cut_index))
-				self.statusBarSignal.emit('End of cutting section # %s', int(self.current_cut_index))
-				logging.info('Image process function - Skipped imaging %s cut', i)
+					# Send a cutting signal
+					self.current_cut_index = self.current_cut_index + 1
+					self.board.digital[9].write(0)
+					time.sleep(3)
+					self.board.digital[9].write(1)
 
-				if not self.threadActive:
-					break
+					self.progressSignal.emit(int(self.current_cut_index))
+					self.statusBarSignal.emit('End of cutting section #' + str(int(self.current_cut_index)))
+					logging.info('Post hardware hook function - Skipped imaging %s cut', i)
+
+					if not self.threadActive:
+						break
+
+				self.old_image_index = self.current_image_index
 
 		# Poll once every second to see if the cut signal is complete.
 		while not self.board.digital[12].read():
@@ -138,9 +143,9 @@ class acquisitionClass(QtCore.QThread):
 			self.board.digital[9].write(1)
 
 			# Get the current image index
-			self.current_image_index  = metadata['Axes']['time']
-			self.statusBarSignal.emit('End of imaging slice # ' + str(self.current_image_index + 1))
-			logging.info('Image process function - End of imaging slice # ' + str(self.current_image_index + 1))
+			self.current_image_index  = metadata['Axes']['time'] + 1
+			self.statusBarSignal.emit('End of imaging slice # ' + str(self.current_image_index))
+			logging.info('Image process function - End of imaging slice # ' + str(self.current_image_index))
 			self.progressSignal.emit(int(self.current_cut_index))
 
 			# Pass array for stitching
@@ -149,10 +154,10 @@ class acquisitionClass(QtCore.QThread):
 				# Sort the tiles based on the sorting indices
 				self.tiles = [self.tiles[i] for i in self.SORTED_INDICES]
 
-				self.stitcher.stitch_tiles(self.tiles, self.TILE_CONFIG_PATH, self.PIXEL_SIZE, self.current_image_index)
-				self.statusBarSignal.emit('Tile stitching complete for image slice # ' + str(self.current_image_index + 1))
+				self.stitcher.stitch_tiles(self.tiles, self.TILE_CONFIG_PATH, self.PIXEL_SIZE, self.current_image_index - 1)
+				self.statusBarSignal.emit('Tile stitching complete for image slice # ' + str(self.current_image_index))
 				
-				logging.info('Image process function - Tile stitching complete for image slice # ' + str(self.current_image_index + 1))
+				logging.info('Image process function - Tile stitching complete for image slice # ' + str(self.current_image_index))
 
 			# Reset the list container
 			self.tiles = []
