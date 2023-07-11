@@ -411,6 +411,12 @@ class Window(QMainWindow):
 				self.core.set_exposure(int(self.exposureTimeLineEdit.text()))
 				self.core.set_config('Startup', 'Initialization')
 
+				if str(self.objectiveComboBox.currentText()) == '4x':
+					self.core.set_config('Objective', 'Objective-A')
+					
+				if str(self.objectiveComboBox.currentText()) == '10x':
+					self.core.set_config('Objective', 'Objective-B')
+
 				self.acquisitionThread = acquisitionClass(self.STORAGE_DIRECTORY, xyz_positions, num_cuts, num_images, time_interval_s, self.board, self.studio,
 														self.NUM_TILES, self.STITCHING_FLAG, self.SORTED_INDICES, self.stitcher,  self.TILE_SIZE_Y, self.TILE_SIZE_X, 
 														self.PIXEL_SIZE, self.TILE_CONFIG_PATH, self.core, autoFocusEvery, skipEvery)
