@@ -65,7 +65,7 @@ class Stitcher():
         return sorted_indices
 
     # Set up the Zarr store to save the stitched images
-    def set_up_zarr_store_for_stitched_images(self, stitched_directory, num_images, num_tiles, tile_size_x, tile_size_y, num_tiles_x, num_tiles_y):
+    def set_up_zarr_store_for_stitched_images(self, stitched_directory, num_time_points, num_tiles, tile_size_x, tile_size_y, num_tiles_x, num_tiles_y):
         
         self.Y_SHAPE_ZARR = int(tile_size_y * num_tiles_y * 1.05)
         self.X_SHAPE_ZARR = int(tile_size_x * num_tiles_x * 1.05)
@@ -75,7 +75,7 @@ class Stitcher():
         store = zarr.DirectoryStore(stitched_directory, dimension_separator='/')
         root = zarr.group(store=store, overwrite=True)
         muse = root.create_group('muse')
-        self.DS = muse.zeros('stitched', shape=(num_images, self.Y_SHAPE_ZARR, self.X_SHAPE_ZARR), chunks=(16, self.Y_SHAPE_ZARR, self.X_SHAPE_ZARR), dtype="i2" )
+        self.DS = muse.zeros('stitched', shape=(num_time_points, self.Y_SHAPE_ZARR, self.X_SHAPE_ZARR), chunks=(16, self.Y_SHAPE_ZARR, self.X_SHAPE_ZARR), dtype="i2" )
 
         return True
 

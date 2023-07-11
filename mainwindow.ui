@@ -83,7 +83,7 @@
            </font>
           </property>
           <property name="text">
-           <string>Home stages (only if stages were powered off)</string>
+           <string>Home stages (required only if stages were powered off)</string>
           </property>
          </widget>
         </item>
@@ -97,7 +97,7 @@
           </property>
           <layout class="QHBoxLayout" name="horizontalLayout_2">
            <item>
-            <widget class="QLabel" name="label_4">
+            <widget class="QLabel" name="label_1">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
                <horstretch>0</horstretch>
@@ -193,6 +193,34 @@
            </sizepolicy>
           </property>
           <layout class="QGridLayout" name="gridLayout_2">
+           <item row="2" column="0">
+            <widget class="QLabel" name="label_4">
+             <property name="font">
+              <font>
+               <family>Segoe UI</family>
+               <pointsize>11</pointsize>
+               <weight>50</weight>
+               <bold>false</bold>
+              </font>
+             </property>
+             <property name="text">
+              <string>Skip imaging every __ slices (0 to not skip)</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="1">
+            <spacer name="horizontalSpacer_3">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
            <item row="0" column="2">
             <widget class="QLineEdit" name="numberCutsEdit">
              <property name="sizePolicy">
@@ -236,6 +264,21 @@
              </property>
             </spacer>
            </item>
+           <item row="0" column="0">
+            <widget class="QLabel" name="label_2">
+             <property name="font">
+              <font>
+               <family>Segoe UI</family>
+               <pointsize>11</pointsize>
+               <weight>50</weight>
+               <bold>false</bold>
+              </font>
+             </property>
+             <property name="text">
+              <string>Number of cuts</string>
+             </property>
+            </widget>
+           </item>
            <item row="1" column="1">
             <spacer name="horizontalSpacer">
              <property name="orientation">
@@ -248,6 +291,39 @@
               </size>
              </property>
             </spacer>
+           </item>
+           <item row="2" column="2">
+            <widget class="QLineEdit" name="skipEveryLineEdit">
+             <property name="font">
+              <font>
+               <family>Segoe UI</family>
+               <pointsize>11</pointsize>
+               <weight>50</weight>
+               <bold>false</bold>
+              </font>
+             </property>
+             <property name="text">
+              <string>0</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QLabel" name="label_3">
+             <property name="font">
+              <font>
+               <family>Segoe UI</family>
+               <pointsize>11</pointsize>
+               <weight>50</weight>
+               <bold>false</bold>
+              </font>
+             </property>
+             <property name="text">
+              <string>Autofocus every __ slices (0 to not autofocus)</string>
+             </property>
+            </widget>
            </item>
            <item row="1" column="2">
             <widget class="QLineEdit" name="autoFocusEveryLineEdit">
@@ -267,8 +343,8 @@
              </property>
             </widget>
            </item>
-           <item row="0" column="0">
-            <widget class="QLabel" name="label_7">
+           <item row="3" column="0">
+            <widget class="QLabel" name="label_5">
              <property name="font">
               <font>
                <family>Segoe UI</family>
@@ -278,45 +354,12 @@
               </font>
              </property>
              <property name="text">
-              <string>Number of cuts</string>
+              <string>Exposure time (milliseconds)</string>
              </property>
             </widget>
            </item>
-           <item row="1" column="0">
-            <widget class="QLabel" name="label_2">
-             <property name="font">
-              <font>
-               <family>Segoe UI</family>
-               <pointsize>11</pointsize>
-               <weight>50</weight>
-               <bold>false</bold>
-              </font>
-             </property>
-             <property name="text">
-              <string>Autofocus every __ images (0 to not focus)</string>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="2">
-            <widget class="QLineEdit" name="skipImagingEveryLineEdit">
-             <property name="font">
-              <font>
-               <family>Segoe UI</family>
-               <pointsize>11</pointsize>
-               <weight>50</weight>
-               <bold>false</bold>
-              </font>
-             </property>
-             <property name="text">
-              <string>0</string>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="1">
-            <spacer name="horizontalSpacer_3">
+           <item row="3" column="1">
+            <spacer name="horizontalSpacer_4">
              <property name="orientation">
               <enum>Qt::Horizontal</enum>
              </property>
@@ -328,8 +371,8 @@
              </property>
             </spacer>
            </item>
-           <item row="2" column="0">
-            <widget class="QLabel" name="label">
+           <item row="3" column="2">
+            <widget class="QLineEdit" name="exposureTimeLineEdit">
              <property name="font">
               <font>
                <family>Segoe UI</family>
@@ -339,7 +382,10 @@
               </font>
              </property>
              <property name="text">
-              <string> Skip imaging every __ slices (0 to not skip)</string>
+              <string>200</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
              </property>
             </widget>
            </item>
@@ -355,8 +401,8 @@
            </sizepolicy>
           </property>
           <layout class="QGridLayout" name="gridLayout">
-           <item row="0" column="3">
-            <spacer name="horizontalSpacer_7">
+           <item row="5" column="3">
+            <spacer name="horizontalSpacer_9">
              <property name="orientation">
               <enum>Qt::Horizontal</enum>
              </property>
@@ -368,7 +414,20 @@
              </property>
             </spacer>
            </item>
-           <item row="8" column="2">
+           <item row="4" column="3">
+            <spacer name="horizontalSpacer_8">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item row="5" column="2">
             <widget class="QCheckBox" name="registerImageCheckbox">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -395,8 +454,8 @@
              </property>
             </widget>
            </item>
-           <item row="4" column="3">
-            <spacer name="horizontalSpacer_8">
+           <item row="0" column="3">
+            <spacer name="horizontalSpacer_7">
              <property name="orientation">
               <enum>Qt::Horizontal</enum>
              </property>
@@ -455,19 +514,6 @@
               <string>Trim the block (will not collect images)</string>
              </property>
             </widget>
-           </item>
-           <item row="8" column="3">
-            <spacer name="horizontalSpacer_9">
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>40</width>
-               <height>20</height>
-              </size>
-             </property>
-            </spacer>
            </item>
           </layout>
          </widget>
@@ -633,7 +679,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>474</x>
-     <y>119</y>
+     <y>127</y>
     </hint>
     <hint type="destinationlabel">
      <x>474</x>

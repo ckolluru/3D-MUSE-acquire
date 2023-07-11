@@ -20,8 +20,8 @@ class trimmingClass(QtCore.QThread):
 		self.progressMinimumSignal.emit(0)
 		self.progressMaximumSignal.emit(timepoints)
 
-		self.threadActive = True
-
+		self.threadActive = True				
+		
 		# Set up logging
 		logfile = storage_directory + '\\muse_application.log'
 		logging.basicConfig(filename = logfile, filemode = 'a', level = logging.DEBUG, format = '%(asctime)s - %(levelname)s: %(message)s', datefmt = '%m/%d/%Y %I:%M:%S %p')
@@ -47,7 +47,7 @@ class trimmingClass(QtCore.QThread):
 
 			self.statusBarSignal.emit('Trimming: End of section ' + str(i + 1) + ' out of ' + str(self.timepoints))
 			self.progressSignal.emit(i + 1)
-
+			
 			# Break out of the for loop if user clicks stop acquisition button
 			if not self.threadActive:
 				
