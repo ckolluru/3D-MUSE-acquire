@@ -3,20 +3,20 @@ from PyQt5.QtWidgets import QApplication, QMainWindow, QMessageBox, QFileDialog,
 from PyQt5 import uic
 import os
 from pycromanager import Studio, Core
-from stitch import *
 import pyfirmata
 import time
 import glob
 
 from acquisition_module import acquisitionClass
 from trimming_module import trimmingClass
+from stitching_module import *
 
 import logging
 
 class Window(QMainWindow):
 	def __init__(self):
 		super(Window, self).__init__()
-		uic.loadUi('mainwindow.ui', self)
+		uic.loadUi('ui files\mainwindow.ui', self)
 		self.show() 
 
 		self.board = None
@@ -249,7 +249,7 @@ class Window(QMainWindow):
 		# Create an instance of the dialog to open the .ui file
 		self.dialog = QDialog()
 		# Load the .ui file into the dialog
-		uic.loadUi("helpwindow.ui", self.dialog)
+		uic.loadUi("ui files\helpwindow.ui", self.dialog)
 		# Show the dialog
 		self.dialog.show()
 				
