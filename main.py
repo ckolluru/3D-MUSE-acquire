@@ -302,13 +302,8 @@ class Window(QMainWindow):
 		else:
 			# Hardcode these values in for now, get from UI as presets later
 			# Use them to configure micromanager appropriately
-			# self.PIXEL_SIZE = float(self.pixelSizeEdit.text())
 			# self.TILE_SIZE_X = int(self.imageSizeXEdit.text())
 			# self.TILE_SIZE_Y = int(self.imageSizeYEdit.text())
-
-			self.PIXEL_SIZE = float(0.9)
-			self.TILE_SIZE_X = int(4000)
-			self.TILE_SIZE_Y = int(3000)
 
 			# Set values from the UI
 			self.STORAGE_DIRECTORY = str(self.storageDirEdit.text())
@@ -385,6 +380,21 @@ class Window(QMainWindow):
 			logging.info('Found %s tiles', self.NUM_TILES)	
 			self.statusBar().showMessage('Found ' + str(num_tiles_x) + ' tiles in x and ' + str(num_tiles_y) + ' tiles in y')
 
+			# Setup MM Core				
+			if self.core is None:					
+				self.core = Core()
+
+			if str(self.objectiveComboBox.currentText()) == '4x':
+				self.core.set_config('Objective', 'Objective-A')
+				
+			if str(self.objectiveComboBox.currentText()) == '10x':
+				self.core.set_config('Objective', 'Objective-B')
+
+			self.PIXEL_SIZE = self.core.getPixelSizeUm()
+			_, _, self.TILE_SIZE_X, self.TILE_SIZE_Y = self.core.getROI()
+
+			print('Check this - Pixel size set %s, Tile size set to (cols, rows): %s %s', self.PIXEL_SIZE, self.TILE_SIZE_Y, self.TILE_SIZE_X)
+
 			# Identify the correct sorting of the tiles, used to arrange tiles before sending to the stitching module
 			self.SORTED_INDICES = None
 			self.stitcher = None
@@ -400,26 +410,16 @@ class Window(QMainWindow):
 				folder_created = self.stitcher.set_up_zarr_store_for_stitched_images(self.STITCHED_DIRECTORY, num_images, self.NUM_TILES, self.TILE_SIZE_X, self.TILE_SIZE_Y, num_tiles_x, num_tiles_y)
 			
 			if folder_created:
-				self.core = Core()
 				autoFocusEvery = int(self.autoFocusEveryLineEdit.text())				
 				skipEvery = int(self.skipEveryLineEdit.text())
 
 				logging.info('Skipping imaging every %s slices', skipEvery)
 				logging.info('Autofocus set to occur every %s images', autoFocusEvery)
-				logging.info('This will generate %s images', num_images)
-				
-				if self.core is None:					
-					self.core = Core()	
+				logging.info('This will generate %s images', num_images)	
 
 				self.core.set_property('Core', 'TimeoutMs', '25000')
 				self.core.set_exposure(int(self.exposureTimeLineEdit.text()))
 				self.core.set_config('Startup', 'Initialization')
-
-				if str(self.objectiveComboBox.currentText()) == '4x':
-					self.core.set_config('Objective', 'Objective-A')
-					
-				if str(self.objectiveComboBox.currentText()) == '10x':
-					self.core.set_config('Objective', 'Objective-B')
 
 				self.acquisitionThread = acquisitionClass(self.STORAGE_DIRECTORY, xyz_positions, num_cuts, num_images, time_interval_s, self.board, self.studio,
 														self.NUM_TILES, self.STITCHING_FLAG, self.SORTED_INDICES, self.stitcher,  self.TILE_SIZE_Y, self.TILE_SIZE_X, 
