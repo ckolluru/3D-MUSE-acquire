@@ -435,6 +435,7 @@ class Window(QMainWindow):
 		# TODO: Image registration with elastix
 
 if __name__ == "__main__":
+
 	app = QApplication([])
 	window = Window()
 	window.show()

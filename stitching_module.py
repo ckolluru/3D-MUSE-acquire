@@ -1,3 +1,5 @@
+print('Initializing 3D-MUSE-acquire, please wait..')
+
 import os
 import itk
 from tqdm import tqdm
