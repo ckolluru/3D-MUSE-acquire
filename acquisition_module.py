@@ -47,7 +47,7 @@ class acquisitionClass(QtCore.QThread):
 		# Indices that will keep track of index in image stack (image_index) and cut cycle (cut_index)
 		self.current_image_index = 0
 		self.current_cut_index = 0
-		self.old_image_index = 0
+		self.old_cut_index = 0
 
 		# Used to store focused positions at each tile
 		self.best_z_positions = np.zeros((self.NUM_TILES))
@@ -56,18 +56,19 @@ class acquisitionClass(QtCore.QThread):
 		self.threadActive = True
 
 	# Switch on the light source and open the shutter before snapping a picture
-	def post_hardware_hook_fn(self, event):
-
-		time.sleep(3)
+	def post_hardware_hook_fn(self, event):		
 
 		# Delete the events if the thread is no longer active (user clicked stop)
 		if not self.threadActive:
 			return None
+
+		time.sleep(3)
 		
 		# If slices need to be skipped, run additional sectioning cycles here
 		if self.skipEvery and self.current_cut_index != 0:
-
-			if self.current_image_index != self.old_image_index:
+			
+			logging.info('Post hardware hook function -  checking (current_cut_index, old_cut_index) - %s %s', self.current_cut_index, self.old_cut_index)
+			if self.current_cut_index != self.old_cut_index:
 				for i in range(self.skipEvery):
 
 					# Poll once every second to see if the cut signal is complete
@@ -81,17 +82,20 @@ class acquisitionClass(QtCore.QThread):
 					self.board.digital[9].write(1)
 
 					self.progressSignal.emit(int(self.current_cut_index))
-					self.statusBarSignal.emit('End of cutting section #' + str(int(self.current_cut_index)))
+					self.statusBarSignal.emit('Post hardware hook function - End of cutting section #' + str(int(self.current_cut_index)))
 					logging.info('Post hardware hook function - Skipped imaging %s cut', i)
 
 					if not self.threadActive:
 						break
 
-				self.old_image_index = self.current_image_index
+				self.old_cut_index = self.current_cut_index
+				logging.info('Post hardware hook function - Setting old_cut_index to current_cut_index %s', self.old_cut_index)
 
 		# Poll once every second to see if the cut signal is complete.
 		while not self.board.digital[12].read():
 			time.sleep(1)
+
+		logging.info('Post hardware hook function - received cut complete, imaging')
 
 		# Switch on the light source
 		self.board.digital[10].write(0)
@@ -113,7 +117,7 @@ class acquisitionClass(QtCore.QThread):
 				# Update best z positions
 				self.best_z_positions[int(event['axes']['position'])] = self.core.get_position()
 
-		logging.info('Returning from post hardware hook function %s', self.current_image_index)
+		logging.info('Post hardware hook function - returning, current_image_index %s', self.current_image_index)
 
 		# Return the event as is if there are no focus positions set (autofocusEvery was zero)
 		if self.best_z_positions[int(event['axes']['position'])] == 0:
@@ -138,6 +142,8 @@ class acquisitionClass(QtCore.QThread):
 
 			# Send a cutting signal
 			self.current_cut_index = self.current_cut_index + 1
+			logging.info('Image process function - Setting current_cut_index %s', self.current_cut_index)
+
 			self.board.digital[9].write(0)
 			time.sleep(3)
 			self.board.digital[9].write(1)
@@ -145,7 +151,7 @@ class acquisitionClass(QtCore.QThread):
 			# Get the current image index
 			self.current_image_index  = metadata['Axes']['time'] + 1
 			self.statusBarSignal.emit('End of imaging slice # ' + str(self.current_image_index))
-			logging.info('Image process function - End of imaging slice # ' + str(self.current_image_index))
+			logging.info('Image process function - current_image_index - End of imaging slice # ' + str(self.current_image_index))
 			self.progressSignal.emit(int(self.current_cut_index))
 
 			# Pass array for stitching
@@ -155,9 +161,9 @@ class acquisitionClass(QtCore.QThread):
 				self.tiles = [self.tiles[i] for i in self.SORTED_INDICES]
 
 				self.stitcher.stitch_tiles(self.tiles, self.TILE_CONFIG_PATH, self.PIXEL_SIZE, self.current_image_index - 1)
-				self.statusBarSignal.emit('Tile stitching complete for image slice # ' + str(self.current_image_index))
+				self.statusBarSignal.emit('Image process function - Tile stitching complete for image slice # ' + str(self.current_image_index))
 				
-				logging.info('Image process function - Tile stitching complete for image slice # ' + str(self.current_image_index))
+				logging.info('Image process function - current_image_index - Tile stitching complete for image slice # ' + str(self.current_image_index))
 
 			# Reset the list container
 			self.tiles = []
