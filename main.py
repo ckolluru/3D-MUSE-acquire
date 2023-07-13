@@ -390,10 +390,12 @@ class Window(QMainWindow):
 			if str(self.objectiveComboBox.currentText()) == '10x':
 				self.core.set_config('Objective', 'Objective-B')
 
-			self.PIXEL_SIZE = self.core.getPixelSizeUm()
-			_, _, self.TILE_SIZE_X, self.TILE_SIZE_Y = self.core.getROI()
+			self.PIXEL_SIZE = self.core.get_pixel_size_um()
+			roi = self.core.get_roi()
+			self.TILE_SIZE_X = roi.width
+			self.TILE_SIZE_Y = roi.height
 
-			print('Check this - Pixel size set %s, Tile size set to (cols, rows): %s %s', self.PIXEL_SIZE, self.TILE_SIZE_Y, self.TILE_SIZE_X)
+			print('Check this - Pixel size set %s, Tile size set to (rows, cols): %s %s', self.PIXEL_SIZE, self.TILE_SIZE_Y, self.TILE_SIZE_X)
 
 			# Identify the correct sorting of the tiles, used to arrange tiles before sending to the stitching module
 			self.SORTED_INDICES = None
