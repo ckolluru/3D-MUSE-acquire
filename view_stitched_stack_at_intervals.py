@@ -26,6 +26,9 @@ print('Imaging was set up for ' + str(muse_data.shape[0]) + ' slices.')
 for k in range(0, muse_data.shape[0], skip):
     image = np.squeeze(muse_data[k, :, :])
 
+    if np.sum(image) == 0:
+        print('Found blank images at slice ' + str(k) + '. Stopping.')
+
     image[image > vmax] = vmax
     image[image < vmin] = vmin
 
@@ -39,3 +42,5 @@ for k in range(0, muse_data.shape[0], skip):
     plt.show()
     plt.pause(1)
     plt.clf()
+
+print('Only found about ' + str(k) + 'images in the zarr folder. Actual image count may be different based on the skip value that was set.')
