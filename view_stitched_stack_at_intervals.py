@@ -28,6 +28,7 @@ for k in range(0, muse_data.shape[0], skip):
 
     if np.sum(image) == 0:
         print('Found blank images at slice ' + str(k) + '. Stopping.')
+        break
 
     image[image > vmax] = vmax
     image[image < vmin] = vmin
