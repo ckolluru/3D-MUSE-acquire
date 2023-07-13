@@ -7,7 +7,7 @@ import cv2
 plt.ion()
 
 # Inputs
-zarr_filename = r'C:\MUSE datasets\REVA\Polymerization Tests\P7\MUSE_stitched_acq_1.zarr'
+zarr_filename = r'C:\MUSE datasets\REVA\Polymerization Tests\P7\MUSE_stitched_acq_2.zarr'
 skip = 5
 
 gamma = 0.75
@@ -20,6 +20,8 @@ muse_data = zarr_file['muse\stitched']
 
 print('Dataset shape:')
 print(muse_data.shape)
+
+print('Imaging was set up for ' + str(muse_data.shape[0]) + ' slices.')
 
 for k in range(0, muse_data.shape[0], skip):
     image = np.squeeze(muse_data[k, :, :])
