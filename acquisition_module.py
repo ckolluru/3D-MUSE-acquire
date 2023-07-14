@@ -55,6 +55,11 @@ class acquisitionClass(QtCore.QThread):
 		# Flag to keep track of whether the user clicked on stop acquisition
 		self.threadActive = True
 
+	# Before any of the hardware (stages) state changes (moves)
+	def pre_hardware_hook_fn(self, event):
+		if not self.threadActive:
+			return None
+
 	# Switch on the light source and open the shutter before snapping a picture
 	def post_hardware_hook_fn(self, event):		
 
@@ -91,6 +96,9 @@ class acquisitionClass(QtCore.QThread):
 				self.old_cut_index = self.current_cut_index
 				logging.info('Post hardware hook function - Setting old_cut_index to current_cut_index %s', self.old_cut_index)
 
+		if not self.threadActive:
+			return None
+		
 		# Poll once every second to see if the cut signal is complete.
 		while not self.board.digital[12].read():
 			time.sleep(1)
@@ -119,6 +127,9 @@ class acquisitionClass(QtCore.QThread):
 
 		logging.info('Post hardware hook function - returning, current_image_index %s', self.current_image_index)
 
+		if not self.threadActive:
+			return None
+		
 		# Return the event as is if there are no focus positions set (autofocusEvery was zero)
 		if self.best_z_positions[int(event['axes']['position'])] == 0:
 			return event
