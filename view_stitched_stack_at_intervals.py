@@ -7,7 +7,7 @@ import cv2
 plt.ion()
 
 # Inputs
-zarr_filename = r'C:\MUSE datasets\REVA\Polymerization Tests\P7\MUSE_stitched_acq_2.zarr'
+zarr_filename = r'C:\MUSE datasets\REVA\Polymerization Tests\P1\MUSE_stitched_acq_3.zarr'
 skip = 5
 
 gamma = 0.75

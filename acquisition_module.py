@@ -64,6 +64,8 @@ class acquisitionClass(QtCore.QThread):
 		# Flag to keep track of whether the user clicked on stop acquisition
 		self.threadActive = True
 
+		self.last_cutting_start_time = time.time()
+
 	# Before any of the hardware (stages) state changes (moves)
 	def pre_hardware_hook_fn(self, event):
 		if not self.threadActive:
@@ -89,7 +91,12 @@ class acquisitionClass(QtCore.QThread):
 					while not self.board.digital[12].read():
 						time.sleep(1)
 
+						# If you don't get a cut complete signal within 25 seconds, try cutting again
+						if time.time() - self.last_cutting_start_time > 25:
+							break
+
 					# Send a cutting signal
+					self.last_cutting_start_time = time.time()
 					self.current_cut_index = self.current_cut_index + 1
 					self.board.digital[9].write(0)
 					time.sleep(3)
@@ -111,6 +118,10 @@ class acquisitionClass(QtCore.QThread):
 		# Poll once every second to see if the cut signal is complete.
 		while not self.board.digital[12].read():
 			time.sleep(1)
+
+			# If you don't get a cutting signal back, try cutting again
+			if time.time() - self.last_cutting_start_time > 25:
+				break
 
 		logging.info('Post hardware hook function - received cut complete, imaging')
 
@@ -178,6 +189,7 @@ class acquisitionClass(QtCore.QThread):
 			self.current_cut_index = self.current_cut_index + 1
 			logging.info('Image process function - Setting current_cut_index %s', self.current_cut_index)
 
+			self.last_cutting_start_time = time.time()
 			self.board.digital[9].write(0)
 			time.sleep(3)
 			self.board.digital[9].write(1)

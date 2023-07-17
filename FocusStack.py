@@ -60,18 +60,17 @@ def align_images(images):
     outimages = []
 
     if use_sift:
-        detector = cv2.xfeatures2d.SIFT_create()
+        detector = cv2.SIFT_create()
     else:
         detector = cv2.ORB_create(1000)
 
     #   We assume that image 0 is the "base" image and align everything to it
     print ("Detecting features of base image")
     outimages.append(images[0])
-    image1gray = cv2.cvtColor(images[0],cv2.COLOR_BGR2GRAY)
-    image_1_kp, image_1_desc = detector.detectAndCompute(image1gray, None)
+    image_1_kp, image_1_desc = detector.detectAndCompute(images[0], None)
 
     for i in range(1,len(images)):
-        print("Aligning image {}").format(i)
+        print("Aligning image ", i)
         image_i_kp, image_i_desc = detector.detectAndCompute(images[i], None)
 
         if use_sift:
@@ -118,11 +117,11 @@ def focus_stack(unimages):
     print ("Computing the laplacian of the blurred images")
     laps = []
     for i in range(len(images)):
-        print ("Lap {}").format(i)
-        laps.append(doLap(cv2.cvtColor(images[i],cv2.COLOR_BGR2GRAY)))
+        print ("Lap ", i)
+        laps.append(doLap(images[i]))
 
     laps = np.asarray(laps)
-    print ("Shape of array of laplacians = {}").format(laps.shape)
+    print ("Shape of array of laplacians = ", laps.shape)
 
     output = np.zeros(shape=images[0].shape, dtype=images[0].dtype)
 
