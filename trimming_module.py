@@ -37,6 +37,7 @@ class trimmingClass(QtCore.QThread):
 		for i in tqdm(range(self.timepoints)):
 
 			# Cutting signal
+			last_cutting_time = time.time()
 			self.board.digital[9].write(0)
 			time.sleep(3)
 			self.board.digital[9].write(1)
@@ -44,6 +45,9 @@ class trimmingClass(QtCore.QThread):
 			# Poll every second to see if cut complete signal is high
 			while (not self.board.digital[12].read()):
 				time.sleep(1)
+
+				if time.time() - last_cutting_time > 25:
+					break
 
 			self.statusBarSignal.emit('Trimming: End of section ' + str(i + 1) + ' out of ' + str(self.timepoints))
 			self.progressSignal.emit(i + 1)
