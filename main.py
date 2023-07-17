@@ -121,7 +121,6 @@ class Window(QMainWindow):
 			self.storageDirEdit.setEnabled(False)
 			self.numberCutsEdit.setEnabled(False)
 			self.trimBlockCheckbox.setEnabled(False)
-			self.registerImageCheckbox.setEnabled(False)
 			self.autoFocusEveryLineEdit.setEnabled(False)
 			self.homeStagesPushButton.setEnabled(False)
 			self.storageDirButton.setEnabled(False)
@@ -142,7 +141,6 @@ class Window(QMainWindow):
 			self.storageDirEdit.setEnabled(True)
 			self.numberCutsEdit.setEnabled(True)
 			self.trimBlockCheckbox.setEnabled(True)
-			self.registerImageCheckbox.setEnabled(True)
 			self.autoFocusEveryLineEdit.setEnabled(True)
 			self.homeStagesPushButton.setEnabled(True)
 			self.storageDirButton.setEnabled(True)
@@ -268,7 +266,6 @@ class Window(QMainWindow):
 
 
 		if self.board is None:
-			self.REGISTER_FLAG = False
 			msgBox = QMessageBox()
 			msgBox.setText("Arduino board is not initialized, press Initialize Arduino button first.")
 			msgBox.exec()
@@ -343,26 +340,8 @@ class Window(QMainWindow):
 			logging.info('XY positions are: %s', xy_positions)
 			logging.info('Z positions are: %s', z_positions)
 
-			# Stitching and registration are needed if there is more than one tile
+			# Stitching is needed if there is more than one tile
 			self.STITCHING_FLAG = (self.NUM_TILES != 1)
-			self.REGISTRATION_REQUIRED = (self.NUM_TILES != 1)
-
-			# If registration is suggested but not required, we will not register
-			self.REGISTRATION_SUGGESTED = self.registerImageCheckbox.isChecked()
-			
-			if self.REGISTRATION_REQUIRED and self.REGISTRATION_SUGGESTED:
-				self.REGISTER_FLAG = True
-			
-			elif self.REGISTRATION_SUGGESTED and not self.REGISTRATION_REQUIRED:
-				self.REGISTER_FLAG = False
-				msgBox = QMessageBox()
-				msgBox.setText("Since only one tile is acquired, registration is not required, skipping.")
-				msgBox.exec()
-
-			else:
-				self.REGISTER_FLAG = False
-			
-			self.statusBar().showMessage('Registration flag set to ' + str(self.REGISTER_FLAG))
 			
 			# Find number of tiles
 			num_tiles_x = len(np.unique(xy_positions[:,0]))
@@ -397,7 +376,8 @@ class Window(QMainWindow):
 			self.TILE_SIZE_X = roi.width
 			self.TILE_SIZE_Y = roi.height
 
-			print('Check this - Pixel size set %s, Tile size set to (rows, cols): %s %s', self.PIXEL_SIZE, self.TILE_SIZE_Y, self.TILE_SIZE_X)
+			print('Pixel size set %f, Tile size set to (rows, cols): %d %d', self.PIXEL_SIZE, self.TILE_SIZE_Y, self.TILE_SIZE_X)			
+			logging.info('Pixel size set %s, Tile size set to (rows, cols): %s %s', str(self.PIXEL_SIZE), str(self.TILE_SIZE_Y), str(self.TILE_SIZE_X))
 
 			# Identify the correct sorting of the tiles, used to arrange tiles before sending to the stitching module
 			self.SORTED_INDICES = None
@@ -426,7 +406,7 @@ class Window(QMainWindow):
 				self.core.set_config('Startup', 'Initialization')
 
 				logging.info('Set eposure time to %s', int(self.exposureTimeLineEdit.text()))
-				
+
 				self.acquisitionThread = acquisitionClass(self.STORAGE_DIRECTORY, xyz_positions, num_cuts, num_images, time_interval_s, self.board, self.studio,
 														self.NUM_TILES, self.STITCHING_FLAG, self.SORTED_INDICES, self.stitcher,  self.TILE_SIZE_Y, self.TILE_SIZE_X, 
 														self.PIXEL_SIZE, self.TILE_CONFIG_PATH, self.core, autoFocusEvery, skipEvery)
@@ -437,8 +417,6 @@ class Window(QMainWindow):
 				self.acquisitionThread.completeSignal.connect(self.acquisitionComplete)
 				self.acquisitionThread.statusBarSignal.connect(self.statusBarMessage)
 				self.acquisitionThread.start()
-
-		# TODO: Image registration with elastix
 
 if __name__ == "__main__":
 
