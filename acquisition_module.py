@@ -2,6 +2,7 @@ from PyQt5 import QtCore
 from pycromanager import Acquisition, multi_d_acquisition_events
 import time
 import numpy as np
+import FocusStack
 
 import logging
 
@@ -13,7 +14,7 @@ class acquisitionClass(QtCore.QThread):
 	completeSignal = QtCore.pyqtSignal(int) 
 	statusBarSignal = QtCore.pyqtSignal(str)
 	
-	def __init__(self, STORAGE_DIRECTORY, xyz_positions, num_cuts, num_images, time_interval_s, board, studio, NUM_TILES, STITCHING_FLAG, SORTED_INDICES, stitcher, TILE_SIZE_Y, TILE_SIZE_X, PIXEL_SIZE, TILE_CONFIG_PATH, core, autoFocusEvery, skipEvery):
+	def __init__(self, STORAGE_DIRECTORY, xyz_positions, num_cuts, num_images, time_interval_s, board, studio, NUM_TILES, STITCHING_FLAG, SORTED_INDICES, stitcher, TILE_SIZE_Y, TILE_SIZE_X, PIXEL_SIZE, TILE_CONFIG_PATH, core, autoFocusEvery, skipEvery, Z_STACK_STITCHING, z_start, z_stop, z_step):
 		
 		super(acquisitionClass, self).__init__(None)
 		self.STORAGE_DIRECTORY = STORAGE_DIRECTORY
@@ -39,6 +40,7 @@ class acquisitionClass(QtCore.QThread):
 
 		# List to store tile images, refreshed after each image slice
 		self.tiles = []
+		self.focus_stack_tile = []
 
 		# Set progress bar limits
 		self.progressMinimumSignal.emit(0)
@@ -48,6 +50,13 @@ class acquisitionClass(QtCore.QThread):
 		self.current_image_index = 0
 		self.current_cut_index = 0
 		self.old_cut_index = 0
+
+		# Z stack stitching
+		self.Z_STACK_STITCHING_FLAG = Z_STACK_STITCHING
+		self.z_start = z_start
+		self.z_stop = z_stop
+		self.z_step = z_step
+		self.num_focus_positions = len(range(z_start, z_stop, z_step))
 
 		# Used to store focused positions at each tile
 		self.best_z_positions = np.zeros((self.NUM_TILES))
@@ -142,8 +151,22 @@ class acquisitionClass(QtCore.QThread):
 	# After capturing an image, stitching if required, skip slices if specified
 	def image_process_fn(self, image, metadata):
 
-		# Accumulate individual tiles
-		self.tiles.append(np.reshape(image, (self.TILE_SIZE_Y, self.TILE_SIZE_X)))
+		# Accumulate individual tiles directy if not focus stitching
+		if not self.Z_STACK_STITCHING_FLAG:
+			self.tiles.append(np.reshape(image, (self.TILE_SIZE_Y, self.TILE_SIZE_X)))
+
+		# If focus stitching, then collect all focus images at a tile
+		else:
+			self.focus_stack_tile.append(np.reshape(image, (self.TILE_SIZE_Y, self.TILE_SIZE_X)))
+			
+			if metadata['axes']['z'] == self.num_focus_positions:
+
+				merged_image = FocusStack.focus_stack(self.focus_stack_tile)
+		
+				self.tiles.append(merged_image)
+
+				# Reset the list container
+				self.focus_stack_tile = []
 
 		# If you have all the tiles for this image slice
 		if len(self.tiles) == self.NUM_TILES:

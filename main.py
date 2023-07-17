@@ -361,6 +361,41 @@ class Window(QMainWindow):
 			logging.info('Found %s tiles', self.NUM_TILES)	
 			self.statusBar().showMessage('Found ' + str(num_tiles_x) + ' tiles in x and ' + str(num_tiles_y) + ' tiles in y')
 
+			self.Z_STACK_STITCHING = False
+			self.z_start = float(self.z_startLineEdit.text())
+			self.z_stop = float(self.z_stopLineEdit.text())
+			self.z_step = float(self.z_stepLineEdit.text())
+
+			if not (self.z_start == 0 and self.z_stop == 0 and self.z_step == 0):
+				self.Z_STACK_STITCHING = True
+
+			if self.z_start > 0:				
+				msgBox = QMessageBox()
+				msgBox.setText("Z Start value is greater than 0, which is invalid. It should be less than zero, please retry.")
+				msgBox.exec()
+
+				self.block_ui(False)
+				return None
+			
+			if self.z_stop < 0:				
+				msgBox = QMessageBox()
+				msgBox.setText("Z Stop value is less than 0, which is invalid. It should be greater than zero, please retry.")
+				msgBox.exec()
+
+				self.block_ui(False)
+				return None
+			
+			if self.z_step > abs(self.z_start) or self.z_step > abs(self.z_stop):
+				msgBox = QMessageBox()
+				msgBox.setText("Z Step value is greater than the absolute value of Z start and/or Z stop. It should be less than those values in absolute terms, please retry.")
+				msgBox.exec()
+
+				self.block_ui(False)
+				return None
+			
+			# Ensure z_step is always positive
+			self.z_step = abs(self.z_step)
+						
 			# Setup MM Core				
 			if self.core is None:					
 				self.core = Core()
@@ -409,7 +444,8 @@ class Window(QMainWindow):
 
 				self.acquisitionThread = acquisitionClass(self.STORAGE_DIRECTORY, xyz_positions, num_cuts, num_images, time_interval_s, self.board, self.studio,
 														self.NUM_TILES, self.STITCHING_FLAG, self.SORTED_INDICES, self.stitcher,  self.TILE_SIZE_Y, self.TILE_SIZE_X, 
-														self.PIXEL_SIZE, self.TILE_CONFIG_PATH, self.core, autoFocusEvery, skipEvery)
+														self.PIXEL_SIZE, self.TILE_CONFIG_PATH, self.core, autoFocusEvery, skipEvery, self.Z_STACK_STITCHING, self.z_start,
+														self.z_stop, self.z_step)
 				
 				self.acquisitionThread.progressSignal.connect(self.progressUpdate)
 				self.acquisitionThread.progressMinimumSignal.connect(self.progressMinimum)
