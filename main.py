@@ -127,6 +127,7 @@ class Window(QMainWindow):
 			self.exposureTimeLineEdit.setEnabled(False)
 			self.skipEveryLineEdit.setEnabled(False)
 			self.objectiveComboBox.setEnabled(False)
+			self.widget.setEnabled(False)
 			self.startAcquisitionButton.setText('Stop acquisition')
 			self.startAcquisitionButton.released.connect(self.stop_run)
 
@@ -147,6 +148,7 @@ class Window(QMainWindow):
 			self.exposureTimeLineEdit.setEnabled(True)
 			self.skipEveryLineEdit.setEnabled(True)
 			self.objectiveComboBox.setEnabled(True)
+			self.widget.setEnabled(True)
 			self.startAcquisitionButton.setText('Start acquisition')
 			self.startAcquisitionButton.released.connect(self.run_acquisition)
 

@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>950</width>
+    <width>1000</width>
     <height>700</height>
    </rect>
   </property>
@@ -18,7 +18,7 @@
   </property>
   <property name="minimumSize">
    <size>
-    <width>950</width>
+    <width>1000</width>
     <height>700</height>
    </size>
   </property>
@@ -46,7 +46,7 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>930</width>
+         <width>980</width>
          <height>639</height>
         </rect>
        </property>
@@ -618,7 +618,7 @@
               </font>
              </property>
              <property name="text">
-              <string>(Use for 10x objective only, distances in microns, start &lt; 0 and stop &gt; 0)</string>
+              <string>(Use for 10x objective only, distances in microns, start &lt; 0 and stop &gt; 0), int only</string>
              </property>
             </widget>
            </item>
@@ -773,7 +773,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>950</width>
+     <width>1000</width>
      <height>21</height>
     </rect>
    </property>
