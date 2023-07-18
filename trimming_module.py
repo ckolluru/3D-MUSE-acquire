@@ -46,7 +46,7 @@ class trimmingClass(QtCore.QThread):
 			while (not self.board.digital[12].read()):
 				time.sleep(1)
 
-				if time.time() - last_cutting_time > 25:
+				if time.time() - last_cutting_time > 18:
 					break
 
 			self.statusBarSignal.emit('Trimming: End of section ' + str(i + 1) + ' out of ' + str(self.timepoints))

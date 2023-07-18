@@ -7,14 +7,15 @@ import cv2
 plt.ion()
 
 # Inputs
-zarr_filename = r'C:\MUSE datasets\REVA\Polymerization Tests\P1\MUSE_stitched_acq_3.zarr'
-skip = 5
+zarr_filename = r'C:\MUSE datasets\REVA\Polymerization Tests\P7\MUSE_stitched_acq_2.zarr'
+skip = 100
 
 gamma = 0.75
 vmin = 0
-vmax = 2500
+vmax = 3000
 
 # Visualization
+# S1 - muse, S2 - muse, S3 - muse\stitched
 zarr_file = zarr.open(zarr_filename)
 muse_data = zarr_file['muse\stitched']
 
@@ -44,4 +45,4 @@ for k in range(0, muse_data.shape[0], skip):
     plt.pause(1)
     plt.clf()
 
-print('Only found about ' + str(k) + 'images in the zarr folder. Actual image count may be different based on the skip value that was set.')
+print('Only found about ' + str(k) + ' images in the zarr folder. Actual image count may be different based on the skip value that was set.')

@@ -91,8 +91,8 @@ class acquisitionClass(QtCore.QThread):
 					while not self.board.digital[12].read():
 						time.sleep(1)
 
-						# If you don't get a cut complete signal within 25 seconds, try cutting again
-						if time.time() - self.last_cutting_start_time > 25:
+						# If you don't get a cut complete signal within 18 seconds, try cutting again
+						if time.time() - self.last_cutting_start_time > 18:
 							break
 
 					# Send a cutting signal
@@ -120,7 +120,7 @@ class acquisitionClass(QtCore.QThread):
 			time.sleep(1)
 
 			# If you don't get a cutting signal back, try cutting again
-			if time.time() - self.last_cutting_start_time > 25:
+			if time.time() - self.last_cutting_start_time > 18:
 				break
 
 		logging.info('Post hardware hook function - received cut complete, imaging')
