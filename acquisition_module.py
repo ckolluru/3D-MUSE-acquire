@@ -56,7 +56,10 @@ class acquisitionClass(QtCore.QThread):
 		self.z_start = z_start
 		self.z_stop = z_stop
 		self.z_step = z_step
-		self.num_focus_positions = len(range(int(z_start), int(z_stop), int(z_step)))
+		if self.Z_STACK_STITCHING_FLAG:
+			self.num_focus_positions = len(range(int(z_start), int(z_stop), int(z_step)))
+		else:
+			self.num_focus_positions = 0
 
 		# Used to store focused positions at each tile
 		self.best_z_positions = np.zeros((self.NUM_TILES))

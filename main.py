@@ -262,10 +262,11 @@ class Window(QMainWindow):
 	# Run the acquisition    
 	def run_acquisition(self):
 
+		self.STORAGE_DIRECTORY = str(self.storageDirEdit.text())
+
 		# Set up logging
 		logfile = str(self.storageDirEdit.text()) + '\\muse_application.log'
 		logging.basicConfig(filename = logfile, filemode = 'a', level = logging.DEBUG, format = '%(asctime)s - %(levelname)s: %(message)s', datefmt = '%m/%d/%Y %I:%M:%S %p')
-
 
 		if self.board is None:
 			msgBox = QMessageBox()
@@ -288,7 +289,7 @@ class Window(QMainWindow):
 			num_images = num_cuts
 
 		# If only trimming and not imaging
-		if self.TRIMMING_FLAG:
+		if self.TRIMMING_FLAG:			
 			logging.info('----TRIMMING CYCLE----')
 			logging.info('Trimming set to %s cuts', num_cuts)
 			self.trimmingThread = trimmingClass(num_cuts, self.board, str(self.storageDirEdit.text()))
@@ -394,6 +395,15 @@ class Window(QMainWindow):
 
 				self.block_ui(False)
 				return None
+			
+			if self.Z_STACK_STITCHING:
+				if self.z_step == 0:
+					msgBox = QMessageBox()
+					msgBox.setText("Z Step cannot be zero. Please retry.")
+					msgBox.exec()
+
+					self.block_ui(False)
+					return None				
 			
 			# Ensure z_step is always positive
 			self.z_step = abs(self.z_step)
