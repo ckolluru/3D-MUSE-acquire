@@ -6,7 +6,7 @@ import focus_stacking_module
 
 import logging
 
-class acquisitionClass(QtCore.QThread):
+class imagingClass(QtCore.QThread):
 	
 	progressSignal = QtCore.pyqtSignal(int)
 	progressMinimumSignal = QtCore.pyqtSignal(int)
@@ -16,7 +16,7 @@ class acquisitionClass(QtCore.QThread):
 	
 	def __init__(self, STORAGE_DIRECTORY, xyz_positions, num_cuts, num_images, time_interval_s, board, studio, NUM_TILES, STITCHING_FLAG, SORTED_INDICES, stitcher, TILE_SIZE_Y, TILE_SIZE_X, PIXEL_SIZE, TILE_CONFIG_PATH, core, autoFocusEvery, skipEvery, Z_STACK_STITCHING, z_start, z_stop, z_step):
 		
-		super(acquisitionClass, self).__init__(None)
+		super(imagingClass, self).__init__(None)
 		self.STORAGE_DIRECTORY = STORAGE_DIRECTORY
 		self.xyz_positions = xyz_positions
 		self.num_cuts = num_cuts

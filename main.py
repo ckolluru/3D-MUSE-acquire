@@ -9,7 +9,7 @@ import pyfirmata
 import time
 import glob
 
-from acquisition_module import acquisitionClass
+from acquisition_module import imagingClass
 from trimming_module import trimmingClass
 from stitching_module import *
 
@@ -454,7 +454,7 @@ class Window(QMainWindow):
 
 				logging.info('Set eposure time to %s', int(self.exposureTimeLineEdit.text()))
 
-				self.acquisitionThread = acquisitionClass(self.STORAGE_DIRECTORY, xyz_positions, num_cuts, num_images, time_interval_s, self.board, self.studio,
+				self.acquisitionThread = imagingClass(self.STORAGE_DIRECTORY, xyz_positions, num_cuts, num_images, time_interval_s, self.board, self.studio,
 														self.NUM_TILES, self.STITCHING_FLAG, self.SORTED_INDICES, self.stitcher,  self.TILE_SIZE_Y, self.TILE_SIZE_X, 
 														self.PIXEL_SIZE, self.TILE_CONFIG_PATH, self.core, autoFocusEvery, skipEvery, self.Z_STACK_STITCHING, self.z_start,
 														self.z_stop, self.z_step)
