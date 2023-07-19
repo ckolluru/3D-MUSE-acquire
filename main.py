@@ -1,20 +1,24 @@
+print('Initializing 3D-MUSE-acquire, please wait..')
+
 import sys
 from PyQt5.QtWidgets import QApplication, QMainWindow, QMessageBox, QFileDialog, QDialog
 from PyQt5 import uic
 import os
 from pycromanager import Studio, Core
-from stitch import *
 import pyfirmata
 import time
 import glob
 
 from acquisition_module import acquisitionClass
 from trimming_module import trimmingClass
+from stitching_module import *
+
+import logging
 
 class Window(QMainWindow):
 	def __init__(self):
 		super(Window, self).__init__()
-		uic.loadUi('mainwindow.ui', self)
+		uic.loadUi('ui files\mainwindow.ui', self)
 		self.show() 
 
 		self.board = None
@@ -24,6 +28,27 @@ class Window(QMainWindow):
 
 		self.trimmingThread = None
 		self.acquisitionThread = None
+		
+		self.core = None
+
+	# Home stages
+	def home_stages(self):
+
+		try:
+			self.core = Core()	
+			self.core.set_property('Core', 'TimeoutMs', '25000')	
+			
+			self.block_ui(True)
+			self.core.home("XYStage")
+			self.core.home("Stage")
+			self.block_ui(False)
+
+			self.homeStagesPushButton.setEnabled(False)
+
+		except:
+			msgBox = QMessageBox()
+			msgBox.setText("Did not find MicroManager to be open, ensure that it is open.")
+			msgBox.exec()
 
 	# Get XYZ positions from Micromanager
 	def get_xyz_positions(self):
@@ -96,19 +121,43 @@ class Window(QMainWindow):
 			self.storageDirEdit.setEnabled(False)
 			self.numberCutsEdit.setEnabled(False)
 			self.trimBlockCheckbox.setEnabled(False)
-			self.registerImageCheckbox.setEnabled(False)
-			self.autofocusCheckbox.setEnabled(False)
+			self.autoFocusEveryLineEdit.setEnabled(False)
+			self.homeStagesPushButton.setEnabled(False)
+			self.storageDirButton.setEnabled(False)
+			self.exposureTimeLineEdit.setEnabled(False)
+			self.skipEveryLineEdit.setEnabled(False)
+			self.objectiveComboBox.setEnabled(False)
+			self.widget.setEnabled(False)
 			self.startAcquisitionButton.setText('Stop acquisition')
 			self.startAcquisitionButton.released.connect(self.stop_run)
+
+			self.label_1.setEnabled(False)
+			self.label_2.setEnabled(False)
+			self.label_3.setEnabled(False)
+			self.label_4.setEnabled(False)
+			self.label_5.setEnabled(False)
+			self.label.setEnabled(False)
 
 		else:
 			self.storageDirEdit.setEnabled(True)
 			self.numberCutsEdit.setEnabled(True)
 			self.trimBlockCheckbox.setEnabled(True)
-			self.registerImageCheckbox.setEnabled(True)
-			self.autofocusCheckbox.setEnabled(True)
+			self.autoFocusEveryLineEdit.setEnabled(True)
+			self.homeStagesPushButton.setEnabled(True)
+			self.storageDirButton.setEnabled(True)
+			self.exposureTimeLineEdit.setEnabled(True)
+			self.skipEveryLineEdit.setEnabled(True)
+			self.objectiveComboBox.setEnabled(True)
+			self.widget.setEnabled(True)
 			self.startAcquisitionButton.setText('Start acquisition')
 			self.startAcquisitionButton.released.connect(self.run_acquisition)
+
+			self.label_1.setEnabled(True)
+			self.label_2.setEnabled(True)
+			self.label_3.setEnabled(True)
+			self.label_4.setEnabled(True)
+			self.label_5.setEnabled(True)
+			self.label.setEnabled(True)
 
 	# Initialize the arduino board
 	def initialize_arduino(self):
@@ -206,15 +255,20 @@ class Window(QMainWindow):
 		# Create an instance of the dialog to open the .ui file
 		self.dialog = QDialog()
 		# Load the .ui file into the dialog
-		uic.loadUi("helpwindow.ui", self.dialog)
+		uic.loadUi("ui files\helpwindow.ui", self.dialog)
 		# Show the dialog
 		self.dialog.show()
 				
 	# Run the acquisition    
 	def run_acquisition(self):
 
+		self.STORAGE_DIRECTORY = str(self.storageDirEdit.text())
+
+		# Set up logging
+		logfile = str(self.storageDirEdit.text()) + '\\muse_application.log'
+		logging.basicConfig(filename = logfile, filemode = 'a', level = logging.DEBUG, format = '%(asctime)s - %(levelname)s: %(message)s', datefmt = '%m/%d/%Y %I:%M:%S %p')
+
 		if self.board is None:
-			self.REGISTER_FLAG = False
 			msgBox = QMessageBox()
 			msgBox.setText("Arduino board is not initialized, press Initialize Arduino button first.")
 			msgBox.exec()
@@ -224,14 +278,21 @@ class Window(QMainWindow):
 		self.block_ui(True)
 		
 		# Number of cuts, trimming flag will not image
-		num_time_points = int(self.numberCutsEdit.text())
+		num_cuts = int(self.numberCutsEdit.text())
 		self.progressBar.setMinimum(0)
-		self.progressBar.setMaximum(num_time_points)
+		self.progressBar.setMaximum(num_cuts)
 		self.TRIMMING_FLAG = self.trimBlockCheckbox.isChecked()
 
+		if int(self.skipEveryLineEdit.text()):
+			num_images = len(range(0, num_cuts, int(self.skipEveryLineEdit.text())+1))
+		else:
+			num_images = num_cuts
+
 		# If only trimming and not imaging
-		if self.TRIMMING_FLAG:
-			self.trimmingThread = trimmingClass(num_time_points, self.board)
+		if self.TRIMMING_FLAG:			
+			logging.info('----TRIMMING CYCLE----')
+			logging.info('Trimming set to %s cuts', num_cuts)
+			self.trimmingThread = trimmingClass(num_cuts, self.board, str(self.storageDirEdit.text()))
 			self.trimmingThread.progressSignal.connect(self.progressUpdate)
 			self.trimmingThread.progressMinimumSignal.connect(self.progressMinimum)
 			self.trimmingThread.progressMaximumSignal.connect(self.progressMaximum)
@@ -242,13 +303,9 @@ class Window(QMainWindow):
 		# Imaging
 		else:
 			# Hardcode these values in for now, get from UI as presets later
-			# self.PIXEL_SIZE = float(self.pixelSizeEdit.text())
+			# Use them to configure micromanager appropriately
 			# self.TILE_SIZE_X = int(self.imageSizeXEdit.text())
 			# self.TILE_SIZE_Y = int(self.imageSizeYEdit.text())
-
-			self.PIXEL_SIZE = float(0.9)
-			self.TILE_SIZE_X = int(4000)
-			self.TILE_SIZE_Y = int(3000)
 
 			# Set values from the UI
 			self.STORAGE_DIRECTORY = str(self.storageDirEdit.text())
@@ -257,19 +314,11 @@ class Window(QMainWindow):
 
 			self.STITCHED_DIRECTORY = self.STORAGE_DIRECTORY + r'\\MUSE_stitched_acq_' + str(len(prev_acqs) + 1) + '.zarr'
 
-			# Create if directories exist, return if you don't want to overwrite
-			if os.path.exists(self.STITCHED_DIRECTORY):
-				msgBox = QMessageBox()
-				msgBox.setText("Found a directory with the expected stitched folder name in the provided storage directory. Overwrite? If No is selected, acquisition will not start.")
-				msgBox.setStandardButtons(QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No)
-				x = msgBox.exec()
-
-				if x == QMessageBox.StandardButton.No:
-					self.block_ui(False)
-					return None
-
 			os.makedirs(self.STORAGE_DIRECTORY, exist_ok=True)
 			os.makedirs(self.STITCHED_DIRECTORY, exist_ok=True)
+
+			logging.info('---- ACQUISITION CYCLE ' + str(len(prev_acqs) + 1) + '----')
+			logging.info('Imaging set to % s cuts', num_cuts)
 
 			# Get XYZ positions for the tiles from MDA window, calculate number of tiles
 			xy_positions, z_positions = self.get_xyz_positions()
@@ -283,7 +332,7 @@ class Window(QMainWindow):
 			xyz_positions = np.hstack((xy_positions, np.expand_dims(z_positions, axis=1)))
 			self.NUM_TILES = xy_positions.shape[0]
 			self.TILE_CONFIG_PATH = self.STORAGE_DIRECTORY + r'\\TileConfiguration_acq_' + str(len(prev_acqs) + 1) + '.txt'
-			self.statusBar().showMessage('Received XYZ positions from Micromanager')
+			logging.info('Received XYZ positions from Micromanager')
 
 			print('XY positions')
 			print(xy_positions)
@@ -291,26 +340,11 @@ class Window(QMainWindow):
 			print('Z positions')
 			print(z_positions)
 
-			# Stitching and registration are needed if there is more than one tile
+			logging.info('XY positions are: %s', xy_positions)
+			logging.info('Z positions are: %s', z_positions)
+
+			# Stitching is needed if there is more than one tile
 			self.STITCHING_FLAG = (self.NUM_TILES != 1)
-			self.REGISTRATION_REQUIRED = (self.NUM_TILES != 1)
-
-			# If registration is suggested but not required, we will not register
-			self.REGISTRATION_SUGGESTED = self.registerImageCheckbox.isChecked()
-			
-			if self.REGISTRATION_REQUIRED and self.REGISTRATION_SUGGESTED:
-				self.REGISTER_FLAG = True
-			
-			elif self.REGISTRATION_SUGGESTED and not self.REGISTRATION_REQUIRED:
-				self.REGISTER_FLAG = False
-				msgBox = QMessageBox()
-				msgBox.setText("Since only one tile is acquired, registration is not required, skipping.")
-				msgBox.exec()
-
-			else:
-				self.REGISTER_FLAG = False
-			
-			self.statusBar().showMessage('Registration flag set to ' + str(self.REGISTER_FLAG))
 			
 			# Find number of tiles
 			num_tiles_x = len(np.unique(xy_positions[:,0]))
@@ -327,7 +361,70 @@ class Window(QMainWindow):
 			if self.NUM_TILES != (num_tiles_x * num_tiles_y):
 				raise ValueError('Expected tile positions to be on a uniform grid')
 			
+			logging.info('Found %s tiles', self.NUM_TILES)	
 			self.statusBar().showMessage('Found ' + str(num_tiles_x) + ' tiles in x and ' + str(num_tiles_y) + ' tiles in y')
+
+			self.Z_STACK_STITCHING = False
+			self.z_start = float(self.z_startLineEdit.text())
+			self.z_stop = float(self.z_stopLineEdit.text())
+			self.z_step = float(self.z_stepLineEdit.text())
+
+			if not (self.z_start == 0 and self.z_stop == 0 and self.z_step == 0):
+				self.Z_STACK_STITCHING = True
+
+			if self.z_start > 0:				
+				msgBox = QMessageBox()
+				msgBox.setText("Z Start value is greater than 0, which is invalid. It should be less than zero, please retry.")
+				msgBox.exec()
+
+				self.block_ui(False)
+				return None
+			
+			if self.z_stop < 0:				
+				msgBox = QMessageBox()
+				msgBox.setText("Z Stop value is less than 0, which is invalid. It should be greater than zero, please retry.")
+				msgBox.exec()
+
+				self.block_ui(False)
+				return None
+			
+			if self.z_step > abs(self.z_start) or self.z_step > abs(self.z_stop):
+				msgBox = QMessageBox()
+				msgBox.setText("Z Step value is greater than the absolute value of Z start and/or Z stop. It should be less than those values in absolute terms, please retry.")
+				msgBox.exec()
+
+				self.block_ui(False)
+				return None
+			
+			if self.Z_STACK_STITCHING:
+				if self.z_step == 0:
+					msgBox = QMessageBox()
+					msgBox.setText("Z Step cannot be zero. Please retry.")
+					msgBox.exec()
+
+					self.block_ui(False)
+					return None				
+			
+			# Ensure z_step is always positive
+			self.z_step = abs(self.z_step)
+						
+			# Setup MM Core				
+			if self.core is None:					
+				self.core = Core()
+
+			if str(self.objectiveComboBox.currentText()) == '4x':
+				self.core.set_config('Objective', 'Objective-A')
+				
+			if str(self.objectiveComboBox.currentText()) == '10x':
+				self.core.set_config('Objective', 'Objective-B')
+
+			self.PIXEL_SIZE = self.core.get_pixel_size_um()
+			roi = self.core.get_roi()
+			self.TILE_SIZE_X = roi.width
+			self.TILE_SIZE_Y = roi.height
+
+			print('Pixel size set %f, Tile size set to (rows, cols): %d %d', self.PIXEL_SIZE, self.TILE_SIZE_Y, self.TILE_SIZE_X)			
+			logging.info('Pixel size set %s, Tile size set to (rows, cols): %s %s', str(self.PIXEL_SIZE), str(self.TILE_SIZE_Y), str(self.TILE_SIZE_X))
 
 			# Identify the correct sorting of the tiles, used to arrange tiles before sending to the stitching module
 			self.SORTED_INDICES = None
@@ -341,15 +438,26 @@ class Window(QMainWindow):
 			folder_created = True
 
 			if self.STITCHING_FLAG:
-				folder_created = self.stitcher.set_up_zarr_store_for_stitched_images(self.STITCHED_DIRECTORY, num_time_points, self.NUM_TILES, self.TILE_SIZE_X, self.TILE_SIZE_Y, num_tiles_x, num_tiles_y)
+				folder_created = self.stitcher.set_up_zarr_store_for_stitched_images(self.STITCHED_DIRECTORY, num_images, self.NUM_TILES, self.TILE_SIZE_X, self.TILE_SIZE_Y, num_tiles_x, num_tiles_y)
 			
 			if folder_created:
-				self.core = Core()
-				autoFocus = self.autofocusCheckbox.isChecked()
+				autoFocusEvery = int(self.autoFocusEveryLineEdit.text())				
+				skipEvery = int(self.skipEveryLineEdit.text())
 
-				self.acquisitionThread = acquisitionClass(self.STORAGE_DIRECTORY, xyz_positions, num_time_points, time_interval_s, self.board, autoFocus, self.studio,
+				logging.info('Skipping imaging every %s slices', skipEvery)
+				logging.info('Autofocus set to occur every %s images', autoFocusEvery)
+				logging.info('This will generate %s images', num_images)	
+
+				self.core.set_property('Core', 'TimeoutMs', '25000')
+				self.core.set_exposure(int(self.exposureTimeLineEdit.text()))
+				self.core.set_config('Startup', 'Initialization')
+
+				logging.info('Set eposure time to %s', int(self.exposureTimeLineEdit.text()))
+
+				self.acquisitionThread = acquisitionClass(self.STORAGE_DIRECTORY, xyz_positions, num_cuts, num_images, time_interval_s, self.board, self.studio,
 														self.NUM_TILES, self.STITCHING_FLAG, self.SORTED_INDICES, self.stitcher,  self.TILE_SIZE_Y, self.TILE_SIZE_X, 
-														self.PIXEL_SIZE, self.TILE_CONFIG_PATH, self.core)
+														self.PIXEL_SIZE, self.TILE_CONFIG_PATH, self.core, autoFocusEvery, skipEvery, self.Z_STACK_STITCHING, self.z_start,
+														self.z_stop, self.z_step)
 				
 				self.acquisitionThread.progressSignal.connect(self.progressUpdate)
 				self.acquisitionThread.progressMinimumSignal.connect(self.progressMinimum)
@@ -358,9 +466,8 @@ class Window(QMainWindow):
 				self.acquisitionThread.statusBarSignal.connect(self.statusBarMessage)
 				self.acquisitionThread.start()
 
-		# TODO: Image registration with elastix
-
 if __name__ == "__main__":
+
 	app = QApplication([])
 	window = Window()
 	window.show()
