@@ -448,7 +448,7 @@ class Window(QMainWindow):
 				logging.info('Autofocus set to occur every %s images', autoFocusEvery)
 				logging.info('This will generate %s images', num_images)	
 
-				self.core.set_property('Core', 'TimeoutMs', '25000')
+				self.core.set_property('Core', 'TimeoutMs', '30000')
 				self.core.set_exposure(int(self.exposureTimeLineEdit.text()))
 				self.core.set_config('Startup', 'Initialization')
 

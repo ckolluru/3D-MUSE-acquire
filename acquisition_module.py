@@ -2,7 +2,7 @@ from PyQt5 import QtCore
 from pycromanager import Acquisition, multi_d_acquisition_events
 import time
 import numpy as np
-import FocusStack
+import focus_stacking_module
 
 import logging
 
@@ -175,7 +175,7 @@ class acquisitionClass(QtCore.QThread):
 			
 			if metadata['axes']['z'] == self.num_focus_positions:
 
-				merged_image = FocusStack.focus_stack(self.focus_stack_tile)
+				merged_image = focus_stacking_module.focus_stack(self.focus_stack_tile)
 		
 				self.tiles.append(merged_image)
 
