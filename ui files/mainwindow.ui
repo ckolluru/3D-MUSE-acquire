@@ -159,7 +159,7 @@
               <enum>Qt::LeftToRight</enum>
              </property>
              <property name="text">
-              <string>C:/Users/MUSE/Desktop/Test</string>
+              <string>C:/Users/MUSE/Desktop/SR001</string>
              </property>
              <property name="alignment">
               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -193,8 +193,8 @@
            </sizepolicy>
           </property>
           <layout class="QGridLayout" name="gridLayout_2">
-           <item row="2" column="1">
-            <spacer name="horizontalSpacer_3">
+           <item row="4" column="1">
+            <spacer name="horizontalSpacer_6">
              <property name="orientation">
               <enum>Qt::Horizontal</enum>
              </property>
@@ -206,21 +206,33 @@
              </property>
             </spacer>
            </item>
-           <item row="0" column="1">
-            <spacer name="horizontalSpacer_5">
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
+           <item row="4" column="2">
+            <widget class="QComboBox" name="objectiveComboBox">
+             <property name="font">
+              <font>
+               <family>Segoe UI</family>
+               <pointsize>11</pointsize>
+               <weight>50</weight>
+               <bold>false</bold>
+              </font>
              </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>377</width>
-               <height>20</height>
-              </size>
+             <property name="layoutDirection">
+              <enum>Qt::RightToLeft</enum>
              </property>
-            </spacer>
+             <item>
+              <property name="text">
+               <string>4x</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>10x</string>
+              </property>
+             </item>
+            </widget>
            </item>
-           <item row="1" column="0">
-            <widget class="QLabel" name="label_3">
+           <item row="1" column="2">
+            <widget class="QLineEdit" name="autoFocusEveryLineEdit">
              <property name="font">
               <font>
                <family>Segoe UI</family>
@@ -230,7 +242,40 @@
               </font>
              </property>
              <property name="text">
-              <string>Autofocus every __ slices (0 to not autofocus)</string>
+              <string>5</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="2">
+            <widget class="QLineEdit" name="numberCutsEdit">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>575</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="font">
+              <font>
+               <family>Segoe UI</family>
+               <pointsize>11</pointsize>
+               <weight>50</weight>
+               <bold>false</bold>
+              </font>
+             </property>
+             <property name="text">
+              <string>10</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
              </property>
             </widget>
            </item>
@@ -249,38 +294,18 @@
              </property>
             </widget>
            </item>
-           <item row="2" column="2">
-            <widget class="QLineEdit" name="skipEveryLineEdit">
-             <property name="font">
-              <font>
-               <family>Segoe UI</family>
-               <pointsize>11</pointsize>
-               <weight>50</weight>
-               <bold>false</bold>
-              </font>
+           <item row="0" column="1">
+            <spacer name="horizontalSpacer_5">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
              </property>
-             <property name="text">
-              <string>0</string>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>377</width>
+               <height>20</height>
+              </size>
              </property>
-             <property name="alignment">
-              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-             </property>
-            </widget>
-           </item>
-           <item row="3" column="0">
-            <widget class="QLabel" name="label_5">
-             <property name="font">
-              <font>
-               <family>Segoe UI</family>
-               <pointsize>11</pointsize>
-               <weight>50</weight>
-               <bold>false</bold>
-              </font>
-             </property>
-             <property name="text">
-              <string>Exposure time (milliseconds)</string>
-             </property>
-            </widget>
+            </spacer>
            </item>
            <item row="1" column="1">
             <spacer name="horizontalSpacer">
@@ -323,20 +348,8 @@
              </property>
             </widget>
            </item>
-           <item row="0" column="2">
-            <widget class="QLineEdit" name="numberCutsEdit">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="minimumSize">
-              <size>
-               <width>575</width>
-               <height>0</height>
-              </size>
-             </property>
+           <item row="3" column="0">
+            <widget class="QLabel" name="label_5">
              <property name="font">
               <font>
                <family>Segoe UI</family>
@@ -346,28 +359,7 @@
               </font>
              </property>
              <property name="text">
-              <string>10</string>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="2">
-            <widget class="QLineEdit" name="autoFocusEveryLineEdit">
-             <property name="font">
-              <font>
-               <family>Segoe UI</family>
-               <pointsize>11</pointsize>
-               <weight>50</weight>
-               <bold>false</bold>
-              </font>
-             </property>
-             <property name="text">
-              <string>5</string>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              <string>Exposure time (milliseconds)</string>
              </property>
             </widget>
            </item>
@@ -404,8 +396,41 @@
              </property>
             </widget>
            </item>
-           <item row="4" column="1">
-            <spacer name="horizontalSpacer_6">
+           <item row="2" column="2">
+            <widget class="QLineEdit" name="skipEveryLineEdit">
+             <property name="font">
+              <font>
+               <family>Segoe UI</family>
+               <pointsize>11</pointsize>
+               <weight>50</weight>
+               <bold>false</bold>
+              </font>
+             </property>
+             <property name="text">
+              <string>0</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QLabel" name="label_3">
+             <property name="font">
+              <font>
+               <family>Segoe UI</family>
+               <pointsize>11</pointsize>
+               <weight>50</weight>
+               <bold>false</bold>
+              </font>
+             </property>
+             <property name="text">
+              <string>Autofocus every __ images (0 to not autofocus)</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="1">
+            <spacer name="horizontalSpacer_3">
              <property name="orientation">
               <enum>Qt::Horizontal</enum>
              </property>
@@ -416,31 +441,6 @@
               </size>
              </property>
             </spacer>
-           </item>
-           <item row="4" column="2">
-            <widget class="QComboBox" name="objectiveComboBox">
-             <property name="font">
-              <font>
-               <family>Segoe UI</family>
-               <pointsize>11</pointsize>
-               <weight>50</weight>
-               <bold>false</bold>
-              </font>
-             </property>
-             <property name="layoutDirection">
-              <enum>Qt::RightToLeft</enum>
-             </property>
-             <item>
-              <property name="text">
-               <string>4x</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>10x</string>
-              </property>
-             </item>
-            </widget>
            </item>
           </layout>
          </widget>

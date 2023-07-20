@@ -482,7 +482,7 @@ class Window(QMainWindow):
 			if self.STITCHING_FLAG:
 				self.stitcher = Stitcher()
 
-				# Hardcode in the max positions for X and Y stages, change if stages are changed
+				# Hardcoded in the max positions for X and Y stages, change if stages are changed (in microns)
 				x_stage_max = 25400
 				y_stage_max = 20000
 
