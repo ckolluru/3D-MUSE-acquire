@@ -1,3 +1,4 @@
+# TODO - In progress - taken from github focus-stacker by Charles McGuinness
 """
 
 Simple Focus Stacker

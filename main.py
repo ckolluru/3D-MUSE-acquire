@@ -496,6 +496,19 @@ class Window(QMainWindow):
 			# Get number of images to collect based on the skip images value
 			num_images = len(range(0, num_cuts, int(self.skipEveryLineEdit.text())+1))
 
+			# Get values of autofocus every __ images, and skip every __ slices
+			autoFocusEvery = int(self.autoFocusEveryLineEdit.text())				
+			skipEvery = int(self.skipEveryLineEdit.text())
+
+			# Log this info to the log file
+			logging.info('Skipping imaging every %s slices', skipEvery)
+			logging.info('Autofocus set to occur every %s images', autoFocusEvery)
+			logging.info('This will generate %s images', num_images)	
+
+			# Calculate actual section thickness in the image stack
+			# Hardcoded as one section on the microtome is 3 microns
+			z_thickness = 3 * (skipEvery + 1)
+
 			# Set folder name for the stitched directory based on the next acquisition number
 			# All acquisitions get a stitched directory, it will be empty if only a single tile was set up
 			self.STITCHED_DIRECTORY = self.STORAGE_DIRECTORY + r'\\MUSE_stitched_acq_' + str(len(prev_acqs) + 1) + '.zarr'
@@ -506,17 +519,8 @@ class Window(QMainWindow):
 
 			# Set up the zarr storage with the stitched image size, chunk size specifications etc.
 			if self.STITCHING_FLAG:
-				self.stitcher.set_up_zarr_store_for_stitched_images(self.STITCHED_DIRECTORY, num_images, self.NUM_TILES, self.TILE_SIZE_X, self.TILE_SIZE_Y, num_tiles_x, num_tiles_y)
+				self.stitcher.set_up_zarr_store_for_stitched_images(self.STITCHED_DIRECTORY, num_images, self.NUM_TILES, self.TILE_SIZE_X, self.TILE_SIZE_Y, num_tiles_x, num_tiles_y, z_thickness)
 			
-			# Get values of autofocus every __ images, and skip every __ slices
-			autoFocusEvery = int(self.autoFocusEveryLineEdit.text())				
-			skipEvery = int(self.skipEveryLineEdit.text())
-
-			# Log this info to the log file
-			logging.info('Skipping imaging every %s slices', skipEvery)
-			logging.info('Autofocus set to occur every %s images', autoFocusEvery)
-			logging.info('This will generate %s images', num_images)	
-
 			# Set exposure time and startup group and stage move timeout value
 			self.core.set_exposure(int(self.exposureTimeLineEdit.text()))
 			self.core.set_config('Startup', 'Initialization')

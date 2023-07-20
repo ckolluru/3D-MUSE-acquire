@@ -22,7 +22,8 @@ matplotlib
 scikit-image
 ```
 
-- Go to ```bin\``` folder and run the script
+- Go to ```bin\``` folder and run the batch script
+- It will start a command window, do not close that at any time when using the application
 
 Getting help
 ------------
