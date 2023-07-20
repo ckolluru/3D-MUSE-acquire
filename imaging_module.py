@@ -2,7 +2,10 @@ from PyQt5 import QtCore
 from pycromanager import Acquisition, multi_d_acquisition_events
 import time
 import numpy as np
+
+# TODO - choose one or better eventually
 import focus_stacking_module
+import focus_stacking_module_2
 
 import logging
 
@@ -66,6 +69,8 @@ class imagingClass(QtCore.QThread):
 			self.z_start = int(z_start)
 			self.z_stop = int(z_stop)
 			self.z_step = int(z_step)
+
+			self.focusstacker = focus_stacking_module_2.FocusStacker()
 
 		else:
 			self.num_focus_positions = 0
@@ -209,7 +214,13 @@ class imagingClass(QtCore.QThread):
 				self.focus_stacking_in_progress = True
 
 				# Perform focus stacking
-				merged_image = focus_stacking_module.focus_stack(self.focus_stack_tile)
+				# Needs a 3 channel uint8 dataset to work
+				# Probably want to quickly normalize data between 1 and 99 percentile to 0-255
+				# numpy repeat across third axis
+				# get best focus index for each pixel
+				# recon image at 16 bit pixelstar
+				merged_image = self.focusstacker.focus_stack(self.focus_stack_tile)
+				#merged_image = focus_stacking_module.focus_stack(self.focus_stack_tile)
 		
 				# Append the merged image into the tiles container
 				self.tiles.append(merged_image)
