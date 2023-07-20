@@ -18,11 +18,6 @@ DEBUG = False
 # SIFT generally produces better results, but it is not FOSS (OpenCV 4.X does not support it).
 USE_SIFT = False if cv2.__version__ > "3.4.2" else True
 
-logger = logging.getLogger(__name__)
-logging.basicConfig()
-logger.setLevel(logging.INFO)
-
-
 class FocusStacker(object):
     def __init__(
         self, laplacian_kernel_size: int = 5, gaussian_blur_kernel_size: int = 5,
@@ -68,7 +63,6 @@ class FocusStacker(object):
 
             return homography
 
-        logger.info("aligning images")
         aligned_imgs = []
 
         detector = cv2.xfeatures2d.SIFT_create() if USE_SIFT else cv2.ORB_create(1000)
@@ -127,7 +121,6 @@ class FocusStacker(object):
         Args:
             images: image data
         """
-        logger.info("Computing the laplacian of the blurred images")
         laplacians = []
         for image in images:
             gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
@@ -141,7 +134,6 @@ class FocusStacker(object):
             )
             laplacians.append(laplacian_gradient)
         laplacians = np.asarray(laplacians)
-        logger.debug(f"Shape of array of laplacian gradient: {laplacians.shape}")
         return laplacians
 
     @staticmethod
@@ -167,7 +159,6 @@ class FocusStacker(object):
             np.array image data of focus stacked image, size of orignal image
 
         """
-        logger.info("Using laplacian gradient to find regions of focus, and stack.")
         output = np.zeros(shape=images[0].shape, dtype=images[0].dtype)
         abs_laplacian = np.absolute(laplacian_gradient)
         maxima = abs_laplacian.max(axis=0)

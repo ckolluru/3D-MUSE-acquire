@@ -101,6 +101,8 @@ class imagingClass(QtCore.QThread):
 		# Return none for the event if thread is no longer active
 		if not self.threadActive:
 			return None
+		
+		return event
 
 	# Switch on the light source before snapping a picture
 	# Blocking call
@@ -278,7 +280,7 @@ class imagingClass(QtCore.QThread):
 		with Acquisition(directory=self.STORAGE_DIRECTORY, name='MUSE_acq', image_process_fn=self.image_process_fn, post_hardware_hook_fn=self.post_hardware_hook_fn, pre_hardware_hook_fn=self.pre_hardware_hook_fn) as acq:
 			
 			# Set up the event list, xyz positions, number of images to collect (timepoints) and time interval (will be ignored because we wait in our hook functions)
-			events = multi_d_acquisition_events(xyz_positions=self.xyz_positions,  num_time_points=self.num_images, time_interval_s=self.time_interval_s, z_start = self.z_start, z_stop = self.z_stop, z_step = self.z_step)
+			events = multi_d_acquisition_events(xyz_positions=self.xyz_positions,  num_time_points=self.num_images, time_interval_s=self.time_interval_s, z_start = self.z_start, z_step = self.z_step, z_end=self.z_stop)
 
 			for event in events:	
 				acq.acquire(event)

@@ -22,10 +22,6 @@ class trimmingClass(QtCore.QThread):
 		self.board = board
 		self.timepoints = timepoints
 
-		# Set up logging
-		logfile = storage_directory + '\\muse_application.log'
-		logging.basicConfig(filename = logfile, filemode = 'a', level = logging.DEBUG, format = '%(asctime)s - %(levelname)s: %(message)s', datefmt = '%m/%d/%Y %I:%M:%S %p')
-
 		# Set up the progress bar minimum and maximum
 		self.progressMinimumSignal.emit(0)
 		self.progressMaximumSignal.emit(timepoints)
