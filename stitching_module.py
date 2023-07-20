@@ -18,7 +18,7 @@ class Stitcher():
         self.Y_SHAPE_ZARR = None
         self.X_SHAPE_ZARR = None
 
-    def convert_xy_positions_to_tile_configuration(self, xy_positions, pixel_size, tile_config_path, x_stage_max=25000, y_stage_max=20000):
+    def convert_xy_positions_to_tile_configuration(self, xy_positions, pixel_size, tile_config_path, x_stage_max=25400, y_stage_max=20000):
 
         # Convert to image indices
         xy_positions = np.round(xy_positions / pixel_size)
@@ -71,13 +71,10 @@ class Stitcher():
         self.X_SHAPE_ZARR = int(tile_size_x * num_tiles_x * 1.05)
 
         # Create new zarr folder
-
         store = zarr.DirectoryStore(stitched_directory, dimension_separator='/')
         root = zarr.group(store=store, overwrite=True)
         muse = root.create_group('muse')
         self.DS = muse.zeros('stitched', shape=(num_time_points, self.Y_SHAPE_ZARR, self.X_SHAPE_ZARR), chunks=(16, self.Y_SHAPE_ZARR, self.X_SHAPE_ZARR), dtype="i2" )
-
-        return True
 
     # Pad the arrays
     def pad_array(self, a):
