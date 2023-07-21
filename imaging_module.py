@@ -88,6 +88,11 @@ class imagingClass(QtCore.QThread):
 		# Flag to keep track of whether the user clicked on stop acquisition
 		self.threadActive = True
 
+		# Debugging - used to check how long it has been since a cut signal was sent
+		# Using it to break out of waiting for the cut complete to be set right now
+		# Should not be required in the future
+		self.last_cutting_time = time.time()
+
 	# If user clicked on stop acquisition
 	def stop(self):
 		# Set the thread active bool to False
@@ -132,7 +137,13 @@ class imagingClass(QtCore.QThread):
 					while not self.board.digital[12].read():
 						time.sleep(1)
 
+						# If you don't get cut complete signal from the microtome in 18 seconds, assume cut was complete
+						# Do not want to get stuck in an infinite loop
+						if time.time() - self.last_cutting_time > 18:
+							break
+
 					# Send a cutting signal, increment cut index
+					self.last_cutting_time = time.time()
 					self.current_cut_index = self.current_cut_index + 1
 					self.board.digital[9].write(0)
 					time.sleep(3)
@@ -158,6 +169,11 @@ class imagingClass(QtCore.QThread):
 		# Poll once every second to see if the cut signal is complete.
 		while not self.board.digital[12].read():
 			time.sleep(1)
+
+			# If you don't get cut complete signal from the microtome in 18 seconds, assume cut was complete
+			# Do not want to get stuck in an infinite loop
+			if time.time() - self.last_cutting_time > 18:
+				break
 
 		logging.info('Post hardware hook function - received cut complete, imaging')
 
@@ -239,7 +255,8 @@ class imagingClass(QtCore.QThread):
 			# Switch off the light source
 			self.board.digital[10].write(1)
 
-			# Send a cutting signal
+			# Send a cutting signal			
+			self.last_cutting_time = time.time()
 			self.current_cut_index = self.current_cut_index + 1
 			logging.info('Image process function - Setting current_cut_index %s', self.current_cut_index)
 
