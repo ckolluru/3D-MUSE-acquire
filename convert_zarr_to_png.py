@@ -7,22 +7,20 @@ from PIL import Image
 import os
 
 # Inputs, if saveEvery is 1, all images are saved
-acq_cycle = 1
-zarr_filename = r'E:\P8\MUSE_stitched_acq_' + str(acq_cycle) + '.zarr'
+acq_cycle = 3
+zarr_filename = r'E:\P1\MUSE_stitched_acq_' + str(acq_cycle) + '.zarr'
 saveEvery = 1
 
 # Output folder
-output_folder = r'E:\P8\PNG images acq ' + str(acq_cycle) 
+output_folder = r'E:\P1\PNG images acq ' + str(acq_cycle) 
 
-# Window, gamma contrast adjustments
+# Gamma contrast adjustments, the structures we are intersted in (fibers) are dark
+# Gamma helps increase their brightness
 gamma = 0.75
-vmin = 0
-vmax = 2500
 
 # ---------
 # Algorithm
 # ---------
-
 # Make the output directory if needed
 os.makedirs(output_folder, exist_ok=True)
 
@@ -32,6 +30,17 @@ muse_data = zarr_file['muse/stitched']
 
 print('Dataset shape:')
 print(muse_data.shape)
+
+# Calculate minimum and maximum limits, minimum is always zero, max is 99.999 percentile
+try:
+    sample_image = np.squeeze(muse_data[0, :, :])
+except:
+    sample_image = np.squeeze(muse_data[0,:,:])
+
+vmin = 0
+vmax = np.percentile(sample_image, 99.999)
+
+print('Considering ' + str(vmin) + ' ' + str(vmax) + ' as the minimum and maximum intensity limits, the final pngs will be rescaled to 0-255 in this min-max range.')
 
 # Loop through the slices
 for k in tqdm(range(0, muse_data.shape[0], saveEvery)):
