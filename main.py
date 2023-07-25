@@ -13,7 +13,15 @@ from trimming_module import trimmingClass
 from stitching_module import *
 
 import logging
+import time
 
+HelpDialog = uic.loadUiType("ui files\helpwindow.ui")[0]
+
+class HelpDialogClass(QDialog, HelpDialog):
+    def __init__(self, parent=None):
+        QDialog.__init__(self, parent)
+        self.setupUi(self)
+	
 # Class derived from QMainWindow, loads the UI and handles UI requests
 class Window(QMainWindow):
 	def __init__(self):
@@ -277,13 +285,10 @@ class Window(QMainWindow):
 	def open_instructions(self):
 
 		# Create an instance of the dialog to open the .ui file
-		dialog = QDialog()
+		dialog = HelpDialogClass()
 
-		# Load the .ui file into the dialog
-		uic.loadUi("ui files\helpwindow.ui", dialog)
-
-		# Show the dialog
-		dialog.show()
+		# Run the dialog box
+		dialog.exec_()
 				
 	# Run the acquisition (callback from UI start acquisition button press)
 	def run_acquisition(self):
