@@ -53,10 +53,14 @@ class Window(QMainWindow):
 
 		try:
 			# Get the core
-			self.core = Core()	
+			if self.core is None:
+				self.core = Core()	
 
 			# Change the stage timeout to a large value since it may take many seconds to move the stages to zero position
-			self.core.set_property('Core', 'TimeoutMs', '40000')	
+			self.core.set_property('Core', 'TimeoutMs', '40000')
+
+			# Set the startup property to initialization
+			self.core.set_config('Startup', 'Initialization')	
 			
 			# Block UI interaction (disable the buttons, line edit items etc.)
 			self.block_ui(True)
@@ -76,6 +80,21 @@ class Window(QMainWindow):
 			msgBox = QMessageBox()
 			msgBox.setText("Did not find MicroManager to be open, ensure that it is open.")
 			msgBox.exec()
+
+	# Change exposure time
+	def change_exposure_time(self):
+
+		if self.core is None:
+			self.core = Core()
+			
+			# Set the timeout
+			self.core.set_property('Core', 'TimeoutMs', '40000')
+
+			# Set the startup property to initialization
+			self.core.set_config('Startup', 'Initialization')		
+
+		# Set exposure time
+		self.core.set_exposure(int(self.exposureTimeLineEdit.text()))
 
 	# Get XYZ positions from Micromanager Multi-D acquisition window
 	def get_xyz_positions(self):
