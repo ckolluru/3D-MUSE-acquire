@@ -7,12 +7,12 @@ from PIL import Image
 import os
 
 # Inputs - this will work if only a single tile was collected (only NDTiffStacks are available)
-acq_cycle = 2
-ndtiff_folder = r'E:\P7\MUSE_acq_' + str(acq_cycle)
+acq_cycle = 3
+ndtiff_folder = r'D:\chaitanya\MUSE datasets SPIE\S4\MUSE_acq_' + str(acq_cycle)
 saveEvery = 1
 
 # Outputs - directory with individual png files
-output_folder = r'E:\P7\PNG images acq ' + str(acq_cycle) 
+output_folder = r'D:\chaitanya\MUSE datasets SPIE\S4\PNG images acq ' + str(acq_cycle) 
 
 # Image contrast brightness adjustments
 gamma = 0.75
