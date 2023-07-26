@@ -9,17 +9,13 @@ import os
 # Inputs - this will work if only a single tile was collected (only NDTiffStacks are available)
 acq_cycle = 2
 ndtiff_folder = r'E:\P7\MUSE_acq_' + str(acq_cycle)
+saveEvery = 1
 
 # Outputs - directory with individual png files
 output_folder = r'E:\P7\PNG images acq ' + str(acq_cycle) 
 
-# Skip images (1 for do not skip)
-saveEvery = 25
-
 # Image contrast brightness adjustments
 gamma = 0.75
-vmin = 0
-vmax = 2500
 
 # ---------
 # Algorithm
@@ -33,6 +29,13 @@ dask_array = data.as_array()
 
 print('Dataset shape:')
 print(dask_array.shape)
+
+sample_image = np.squeeze(np.array(dask_array[:,0,:,:,:]))
+
+vmin = np.percentile(sample_image, 0.01)
+vmax = np.percentile(sample_image, 99.99)
+
+print('Considering ' + str(vmin) + ' ' + str(vmax) + ' as the minimum and maximum intensity limits, the final pngs will be rescaled to 0-255 in this min-max range.')
 
 # Loop through the slices
 for k in tqdm(range(0, dask_array.shape[1], saveEvery)):

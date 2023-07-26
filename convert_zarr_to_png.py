@@ -8,11 +8,11 @@ import os
 
 # Inputs, if saveEvery is 1, all images are saved
 acq_cycle = 3
-zarr_filename = r'E:\P1\MUSE_stitched_acq_' + str(acq_cycle) + '.zarr'
+zarr_filename = r'D:\chaitanya\MUSE datasets SPIE\P1\MUSE_stitched_acq_' + str(acq_cycle) + '.zarr'
 saveEvery = 1
 
 # Output folder
-output_folder = r'E:\P1\PNG images acq ' + str(acq_cycle) 
+output_folder = r'D:\chaitanya\MUSE datasets SPIE\P1\PNG images acq ' + str(acq_cycle) 
 
 # Gamma contrast adjustments, the structures we are intersted in (fibers) are dark
 # Gamma helps increase their brightness
@@ -31,14 +31,11 @@ muse_data = zarr_file['muse/stitched']
 print('Dataset shape:')
 print(muse_data.shape)
 
-# Calculate minimum and maximum limits, minimum is always zero, max is 99.999 percentile
-try:
-    sample_image = np.squeeze(muse_data[0, :, :])
-except:
-    sample_image = np.squeeze(muse_data[0,:,:])
+# Calculate minimum and maximum limits, min and max is 1%  percentile
+sample_image = np.squeeze(muse_data[0, :, :])
 
-vmin = 0
-vmax = np.percentile(sample_image, 99.999)
+vmin = np.percentile(sample_image, 0.01)
+vmax = np.percentile(sample_image, 99.99)
 
 print('Considering ' + str(vmin) + ' ' + str(vmax) + ' as the minimum and maximum intensity limits, the final pngs will be rescaled to 0-255 in this min-max range.')
 
