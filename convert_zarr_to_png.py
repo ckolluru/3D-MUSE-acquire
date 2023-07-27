@@ -7,12 +7,12 @@ from PIL import Image
 import os
 
 # Inputs, if saveEvery is 1, all images are saved
-acq_cycle = 3
-zarr_filename = r'D:\chaitanya\MUSE datasets SPIE\P1\MUSE_stitched_acq_' + str(acq_cycle) + '.zarr'
+acq_cycle = 4
+zarr_filename = r'F:\P11\MUSE_stitched_acq_' + str(acq_cycle) + '.zarr'
 saveEvery = 1
 
 # Output folder
-output_folder = r'D:\chaitanya\MUSE datasets SPIE\P1\PNG images acq ' + str(acq_cycle) 
+output_folder = r'F:\P11\PNG images acq ' + str(acq_cycle) 
 
 # Gamma contrast adjustments, the structures we are intersted in (fibers) are dark
 # Gamma helps increase their brightness
@@ -26,7 +26,7 @@ os.makedirs(output_folder, exist_ok=True)
 
 # Pull array from the zarr dataset
 zarr_file = zarr.open(zarr_filename)
-muse_data = zarr_file['muse/stitched']
+muse_data = zarr_file['muse\stitched']
 
 print('Dataset shape:')
 print(muse_data.shape)

@@ -7,7 +7,7 @@ from PIL import Image
 import os
 
 # Inputs - this will work if only a single tile was collected (only NDTiffStacks are available)
-acq_cycle = 3
+acq_cycle = 2
 ndtiff_folder = r'D:\chaitanya\MUSE datasets SPIE\S4\MUSE_acq_' + str(acq_cycle)
 saveEvery = 1
 
