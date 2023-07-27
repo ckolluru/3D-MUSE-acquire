@@ -119,7 +119,7 @@
               </font>
              </property>
              <property name="text">
-              <string>Important: Ensure that the tile list remains the same for the entire MUSE block. Tiles need to be set with overlap of 20 percent. Set tiles in a generous manner, so that the nerve is still visible in the tiles when you go further into the block.</string>
+              <string>Important: Ensure that the tile list remains the same for the entire MUSE block. Tiles need to be set with overlap of 20 percent (not um). Set tiles in a generous manner, so that the nerve is still visible in the tiles when you go further into the block.</string>
              </property>
              <property name="alignment">
               <set>Qt::AlignCenter</set>
@@ -404,7 +404,7 @@
               </font>
              </property>
              <property name="text">
-              <string>Exposure time (milliseconds)</string>
+              <string>Exposure time (milliseconds, hit return key to change)</string>
              </property>
             </widget>
            </item>
@@ -940,6 +940,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>exposureTimeLineEdit</sender>
+   <signal>returnPressed()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>change_exposure_time()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>684</x>
+     <y>446</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>499</x>
+     <y>424</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>run_acquisition()</slot>
@@ -948,5 +964,6 @@
   <slot>open_storage_dir()</slot>
   <slot>open_instructions()</slot>
   <slot>home_stages()</slot>
+  <slot>change_exposure_time()</slot>
  </slots>
 </ui>
