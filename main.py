@@ -57,7 +57,7 @@ class Window(QMainWindow):
 				self.core = Core()	
 
 			# Change the stage timeout to a large value since it may take many seconds to move the stages to zero position
-			self.core.set_property('Core', 'TimeoutMs', '40000')
+			self.core.set_property('Core', 'TimeoutMs', '90000')
 
 			# Set the startup property to initialization
 			self.core.set_config('Startup', 'Initialization')	
@@ -88,7 +88,7 @@ class Window(QMainWindow):
 			self.core = Core()
 			
 			# Set the timeout
-			self.core.set_property('Core', 'TimeoutMs', '40000')
+			self.core.set_property('Core', 'TimeoutMs', '90000')
 
 			# Set the startup property to initialization
 			self.core.set_config('Startup', 'Initialization')		
@@ -548,7 +548,7 @@ class Window(QMainWindow):
 			# Set exposure time and startup group and stage move timeout value
 			self.core.set_exposure(int(self.exposureTimeLineEdit.text()))
 			self.core.set_config('Startup', 'Initialization')
-			self.core.set_property('Core', 'TimeoutMs', '40000')
+			self.core.set_property('Core', 'TimeoutMs', '90000')
 
 			# Log the exposure time info
 			logging.info('Set eposure time to %s', int(self.exposureTimeLineEdit.text()))
