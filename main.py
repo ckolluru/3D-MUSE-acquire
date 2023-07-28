@@ -60,7 +60,10 @@ class Window(QMainWindow):
 			self.core.set_property('Core', 'TimeoutMs', '90000')
 
 			# Set the startup property to initialization
-			self.core.set_config('Startup', 'Initialization')	
+			self.core.set_config('Startup', 'Initialization')
+
+			# Set the exposure time
+			self.core.set_exposure(int(self.exposureTimeLineEdit.text()))	
 			
 			# Block UI interaction (disable the buttons, line edit items etc.)
 			self.block_ui(True)
@@ -91,7 +94,7 @@ class Window(QMainWindow):
 			self.core.set_property('Core', 'TimeoutMs', '90000')
 
 			# Set the startup property to initialization
-			self.core.set_config('Startup', 'Initialization')		
+			self.core.set_config('Startup', 'Initialization')	
 
 		# Set exposure time
 		self.core.set_exposure(int(self.exposureTimeLineEdit.text()))
