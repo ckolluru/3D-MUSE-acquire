@@ -88,8 +88,15 @@ class Stitcher():
         store = zarr.DirectoryStore(stitched_directory, dimension_separator='/')
         root = zarr.group(store=store, overwrite=True)
         muse = root.create_group('muse')
-        self.DS = muse.zeros('stitched', shape=(num_time_points, self.Y_SHAPE_ZARR, self.X_SHAPE_ZARR), chunks=(16, self.Y_SHAPE_ZARR, self.X_SHAPE_ZARR), dtype="i2" )
 
+        # Try a large chunk size (16 slices). If it raises an exception that Zarr cannot compress it, go for a smaller chunk size
+        # Smaller chunk size is needed if you do beyond 2x2 tiles
+        # See https://github.com/zarr-developers/zarr-python/issues/487
+        try:
+            self.DS = muse.zeros('stitched', shape=(num_time_points, self.Y_SHAPE_ZARR, self.X_SHAPE_ZARR), chunks=(16, self.Y_SHAPE_ZARR, self.X_SHAPE_ZARR), dtype="i2" )
+        except:
+            self.DS = muse.zeros('stitched', shape=(num_time_points, self.Y_SHAPE_ZARR, self.X_SHAPE_ZARR), chunks=(4, self.Y_SHAPE_ZARR, self.X_SHAPE_ZARR), dtype="i2" )
+ 
         # This zattrs file is needed to view the Zarr dataset in a tool like BigDataViewer in Fiji
         shutil.copy('example.zattrs', stitched_directory + '\\.zattrs')
         
