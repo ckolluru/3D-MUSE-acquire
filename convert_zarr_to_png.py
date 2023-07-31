@@ -7,12 +7,12 @@ from PIL import Image
 import os
 
 # Inputs, if saveEvery is 1, all images are saved
-acq_cycle = 4
-zarr_filename = r'F:\P11\MUSE_stitched_acq_' + str(acq_cycle) + '.zarr'
-saveEvery = 1
+acq_cycle = 1
+zarr_filename = r'C:\MUSE datasets\REVA\Polymerization Tests\S7\MUSE_stitched_acq_' + str(acq_cycle) + '.zarr'
+saveEvery = 25
 
 # Output folder
-output_folder = r'F:\P11\PNG images acq ' + str(acq_cycle) 
+output_folder = r'C:\MUSE datasets\REVA\Polymerization Tests\S7\PNG images acq ' + str(acq_cycle) 
 
 # Gamma contrast adjustments, the structures we are intersted in (fibers) are dark
 # Gamma helps increase their brightness
