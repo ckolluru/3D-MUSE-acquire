@@ -23,9 +23,9 @@
       <property name="geometry">
        <rect>
         <x>0</x>
-        <y>0</y>
+        <y>-2040</y>
         <width>878</width>
-        <height>2834</height>
+        <height>2886</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -126,7 +126,7 @@
           </font>
          </property>
          <property name="text">
-          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Stopping and restarting imaging&lt;/span&gt;&lt;/p&gt;&lt;p&gt;For trimming and acquisition cycle, the stop acquisition button will work to stop the session. It will be noted in the log file as to how many cuts were taken.&lt;/p&gt;&lt;p&gt;If there is an error in the program, this software may shut down. You can relaunch the software and try running again.&lt;/p&gt;&lt;p&gt;If the block was being imaged when this software crashes, the acquisition window displaying the images in MicroManager may say &amp;quot;(Running)&amp;quot; in the top left bar of the acquisition window. In tha case, Micromanager would need to be closed and restarted. You will need to set the tile positions again in the Multi D acquisition window. It is easy to load in the position file again if you saved it earlier.&lt;/p&gt;&lt;p&gt;There is no &amp;quot;pause&amp;quot; option in the software. You stop and start acquisition as desired.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Stopping and restarting imaging&lt;/span&gt;&lt;/p&gt;&lt;p&gt;For trimming and acquisition cycle, the stop acquisition button will work to stop the session. It will be noted in the log file as to how many cuts were taken.&lt;/p&gt;&lt;p&gt;If there is an error in the program, this software may shut down. You can relaunch the software and try running again.&lt;/p&gt;&lt;p&gt;If the block was being imaged when this software crashes, the acquisition window displaying the images in MicroManager may say &amp;quot;(Running)&amp;quot; in the top left bar of the acquisition window. In tha case, Micromanager would need to be closed and restarted. You will need to set the tile positions again in the Multi D acquisition window. It is easy to load in the position file again if you saved it earlier.&lt;/p&gt;&lt;p&gt;There is no &amp;quot;pause&amp;quot; option in the software. You stop and start acquisition as desired.&lt;/p&gt;&lt;p&gt;To shutdown, switch off microtome, cover the knife guard. Switch off power supply to xyz stages and light source. Disconnect the arduino and camera cables. Close this software and turn off PC.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
          <property name="wordWrap">
           <bool>true</bool>
