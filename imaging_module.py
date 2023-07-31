@@ -99,6 +99,27 @@ class imagingClass(QtCore.QThread):
 		self.threadActive = False
 		self.wait()
 
+	# Setup the autofocus parameters
+	def setup_autofocus_params(self):
+		   
+		# Autofocusing method
+		afm = self.studio.get_autofocus_manager()
+		afm.set_autofocus_method_by_name("JAF(TB)")  
+
+		# Autofocusing parameters
+		afm_method = afm.get_autofocus_method()
+		afm_method.set_property_value("Threshold", "0.1")  
+		afm_method.set_property_value("1st step size", "3")
+		afm_method.set_property_value("1st setp number", "1")
+		afm_method.set_property_value("2nd step size", "0.3")
+		afm_method.set_property_value("2nd step number", "2")
+		afm_method.set_property_value("Threshold", "0.1")
+		afm_method.set_property_value("Crop ratio", "0.5")
+
+		# Apply these settings
+		afm_method.apply_settings()
+		afm_method.save_settings()
+
 	# Called before any of the hardware (stages) state changes (moves)
 	# Hook functions are blocking, so if there is a sleep here, it will wait before going to the next event
 	def pre_hardware_hook_fn(self, event):
@@ -290,8 +311,11 @@ class imagingClass(QtCore.QThread):
 
 		return image, metadata
 
-	# Calld when thread.start() is called
+	# Called when thread.start() is called
 	def run(self):
+
+		# Set up the autofocusing parameters first
+		self.setup_autofocus_params()
 
 		# Set up the acquisition parameters, add function callbacks
 		with Acquisition(directory=self.STORAGE_DIRECTORY, name='MUSE_acq', image_process_fn=self.image_process_fn, post_hardware_hook_fn=self.post_hardware_hook_fn, pre_hardware_hook_fn=self.pre_hardware_hook_fn) as acq:
