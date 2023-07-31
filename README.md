@@ -25,6 +25,13 @@ scikit-image
 - Go to ```bin\``` folder and run the batch script
 - It will start a command window, do not close that at any time when using the application
 
+Software screenshot
+------------
+
+<p align="center">
+  <img src="bin/Software screenshot.PNG" alt="3D-MUSE-acquire software"/>
+</p>
+
 Getting help
 ------------
 
