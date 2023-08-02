@@ -99,6 +99,25 @@ class Window(QMainWindow):
 		# Set exposure time
 		self.core.set_exposure(int(self.exposureTimeLineEdit.text()))
 
+	# Change objective magnification
+	def change_objective_magnification(self,str):
+
+		if self.core is None:
+			self.core = Core()
+			
+			# Set the timeout
+			self.core.set_property('Core', 'TimeoutMs', '90000')
+
+			# Set the startup property to initialization
+			self.core.set_config('Startup', 'Initialization')	
+
+		# Set the correct magnification
+		if str == '4x':
+			self.core.set_config('Objective', 'Objective-A')
+
+		if str == '10x':
+			self.core.set_config('Objective', 'Objective-B')
+	
 	# Get XYZ positions from Micromanager Multi-D acquisition window
 	def get_xyz_positions(self):
 

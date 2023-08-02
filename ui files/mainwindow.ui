@@ -956,6 +956,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>objectiveComboBox</sender>
+   <signal>currentTextChanged(QString)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>change_objective_magnification()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>684</x>
+     <y>478</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>499</x>
+     <y>424</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>run_acquisition()</slot>
@@ -965,5 +981,6 @@
   <slot>open_instructions()</slot>
   <slot>home_stages()</slot>
   <slot>change_exposure_time()</slot>
+  <slot>change_objective_magnification()</slot>
  </slots>
 </ui>
