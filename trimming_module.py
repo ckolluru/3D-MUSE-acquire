@@ -53,7 +53,7 @@ class trimmingClass(QtCore.QThread):
 
 				# If you don't get cut complete signal from the microtome in 18 seconds, assume cut was complete
 				# Do not want to get stuck in an infinite loop
-				if time.time() - last_cutting_time > 18:
+				if time.time() - last_cutting_time > 25:
 					break
 
 			# Update status bar and progress bar

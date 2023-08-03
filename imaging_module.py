@@ -160,7 +160,7 @@ class imagingClass(QtCore.QThread):
 
 						# If you don't get cut complete signal from the microtome in 18 seconds, assume cut was complete
 						# Do not want to get stuck in an infinite loop
-						if time.time() - self.last_cutting_time > 18:
+						if time.time() - self.last_cutting_time > 25:
 							break
 
 					# Send a cutting signal, increment cut index
@@ -193,7 +193,7 @@ class imagingClass(QtCore.QThread):
 
 			# If you don't get cut complete signal from the microtome in 18 seconds, assume cut was complete
 			# Do not want to get stuck in an infinite loop
-			if time.time() - self.last_cutting_time > 18:
+			if time.time() - self.last_cutting_time > 25:
 				break
 
 		logging.info('Post hardware hook function - received cut complete, imaging')
