@@ -29,17 +29,16 @@ Open Visual Studio Code
 
 Click on the extensions button on the left, search for python, and install the extension. This is not a python interpreter, this just allows visual studio to format and display python code properly. The python interpreter is installed on the system using the steps mentioned above (from Microsoft Store).  
 
-Set the default terminal profile. Press Ctrl + Shift + P. Search for Terminal: Select Default Profile. Select the command line.
+Set the default terminal profile. Press Ctrl + Shift + P. Search for Terminal: Select Default Profile. Select the command line.  
 
 Now go to File > Open Folder. Select the folder with this code that was unzipped. You should see all the files in the explorer tab on the left. Open main.py file and pin it.  
 
-Now on the menu bar, select terminal > new terminal. In the terminal window, run the pip install command below. The requirements.txt file has a list of all python libraries that the software depends on.
+Now on the menu bar, select terminal > new terminal. In the terminal window, run the pip install command below. The requirements.txt file has a list of all python libraries that the software depends on.  
 ```
 pip install -r requirements.txt
 ```
 
-If you are not setting up Git and Visual Studio Code, open command prompt. Navigate to the folder containing this code.  
-Run the same pip install command.
+If you are not setting up Git and Visual Studio Code, open command prompt. Navigate to the folder containing this code. Run the same pip install command.
 ```
 pip install -r requirements.txt
 ```
