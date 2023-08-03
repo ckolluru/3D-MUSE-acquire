@@ -97,6 +97,19 @@ In main.py, go to the ```initialize_arduino()``` function. Change the line as ne
 ```
 self.board = pyfirmata.Arduino(str("COM5"))
 ```
+Other hardcoded items in the code
+------------
+
+Assume that sectioning is always at 3 microns. If not, change this line
+```
+z_thickness = 3 * (skipEvery + 1)
+````
+
+Assume that the limits for the X and Y stages are fixed. If this changes, change these lines in main.py
+```
+x_stage_max = 25400
+y_stage_max = 20000
+```
 
 Running the software
 ------------
