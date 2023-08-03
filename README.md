@@ -74,7 +74,7 @@ Click OK on the warning window where it says devices will move<br><br>
 Give a suitable name in the pixel config editor (say 4x), enter pixel size (um), and click on the calculate button.   
 The 3x3 affine transform will be updated based on the pixel size.  
 Select the DObjective-Label for the use in group checkbox.  
-The python code assumes that the 4x is objective-A, 10x is objective-B, 2x is objective-C
+The python code assumes that the 4x is objective-A, 10x is objective-B, 2x is objective-C.  
 Select the current property value appropriately from the dropdown in DObjective-Label row<br><br>
 ![Pixel size cal 2](docs/pixel_size_2.png)
 
