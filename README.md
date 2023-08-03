@@ -12,23 +12,34 @@ MMSetup_64bit_2.0.1_20230530.exe
 Install python 3.11 from Microsoft Store  
 https://www.microsoft.com/store/productid/9NRWMJP3717K?ocid=pdpshare
 
-Install Visual Studio Code  
-https://code.visualstudio.com/
-
 Download a zip of this repository  
 https://github.com/ckolluru/3D-MUSE-acquire/archive/refs/heads/master.zip
 
 Unzip the contents of this zip file and move it to a suitable folder location.    
 
+For simply running the software, Visual Studio code is not required. If you want to set up a development environment and make changes to the code, then you need Visual Studio Code  and Git.   
+
+Install Visual Studio Code   
+https://code.visualstudio.com/
+
+Install Git   
+https://git-scm.com/download/win
+
 Open Visual Studio Code  
 
-Click on the extensions button on the left, search for python, and install the extension. This is not a python interpreter, this just allows visual studio to format and display python code properly. The python interpreter is installed above from the Microsoft Store.  
+Click on the extensions button on the left, search for python, and install the extension. This is not a python interpreter, this just allows visual studio to format and display python code properly. The python interpreter is installed on the system using the steps mentioned above (from Microsoft Store).  
 
 Set the default terminal profile. Press Ctrl + Shift + P. Search for Terminal: Select Default Profile. Select the command line.
 
 Now go to File > Open Folder. Select the folder with this code that was unzipped. You should see all the files in the explorer tab on the left. Open main.py file and pin it.  
 
 Now on the menu bar, select terminal > new terminal. In the terminal window, run the pip install command below. The requirements.txt file has a list of all python libraries that the software depends on.
+```
+pip install -r requirements.txt
+```
+
+If you are not setting up Git and Visual Studio Code, open command prompt. Navigate to the folder containing this code.  
+Run the same pip install command.
 ```
 pip install -r requirements.txt
 ```
