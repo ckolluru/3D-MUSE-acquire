@@ -47,39 +47,39 @@ Open Micromanager and select (none) in the configuration window
 Go to devices > hardware configuration wizard and follow the steps from the micromanager Zaber device pages, to set up the XYZ stages. 
 Select spinnaker camera and find the blackfly camera you are using, set it up as well. Status should say OK
 
-We also set up DemoCamera (DHub) and select the Demo Objective (this is a dummy item that lets us specify an objective magnification)
+We also set up DemoCamera (DHub) and select the Demo Objective (this is a dummy item that lets us specify an objective magnification)<br>
 ![Objective mag setup 1](docs/obj_mag_1.png)
 
-Select ok on this window
+Select ok on this window<br>
 ![Objective mag setup 2](docs/obj_mag_2.png)
 
-Select the Demo Objective
+Select the Demo Objective<br>
 ![Objective mag setup 3](docs/obj_mag_3.png)
 
-You should see a DCamera and DObjective setup
+You should see a DCamera and DObjective setup<br>
 ![Objective mag setup 4](docs/obj_mag_4.png)
 
 Leave defaults on step 3 and 4. In step 3, it may leave focus stage direction empty, select positive towards sample if that's the case.
 
-In step 5, it should show you a table of states and labels for the demo objective turret. Leave as is.
+In step 5, it should show you a table of states and labels for the demo objective turret. Leave as is.<br>
 ![Objective mag setup 5](docs/obj_mag_5.png)
 
 Save the configuration file in a suitable location, preferably in the same folder as this repository.
 
 Next, we will enter the pixel size values for each of the objectives
 Go to Devices > Pixel Size Calibration, select New
-Click OK on the warning window where it says devices will move
+Click OK on the warning window where it says devices will move<br>
 ![Pixel size cal 1](docs/pixel_size_1.png)
 
 Give a suitable name in the pixel config editor (say 4x), enter pixel size (um), and click on the calculate button
 The 3x3 affine transform will be updated based on the pixel size. 
 Select the DObjective-Label for the use in group checkbox.
 The python code assumes that the 4x is objective-A, 10x is objective-B, 2x is objective-C
-Select the current property value appropriately from the dropdown in DObjective-Label row
+Select the current property value appropriately from the dropdown in DObjective-Label row<br>
 ![Pixel size cal 2](docs/pixel_size_2.png)
 
-Repeat this process for all the objectives you need, use the appropriate objective names
-![Pixel size cal 3](docs/pixel_size_3.png)
+Repeat this process for all the objectives you need, use the appropriate objective names<br>
+![Pixel size cal 3](docs/pixel_size_3.png)<br>
 ![Pixel size cal 4](docs/pixel_size_4.png)
 
 Save this pixel configuration to the same device cfg file, ok to overwrite
