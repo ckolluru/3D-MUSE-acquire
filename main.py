@@ -59,34 +59,35 @@ class Window(QMainWindow):
 			if self.core is None:
 				self.core = Core()	
 
-			# Change the stage timeout to a large value since it may take many seconds to move the stages to zero position
-			self.core.set_property('Core', 'TimeoutMs', '90000')
-
-			# Set the startup property to initialization
-			self.core.set_config('Startup', 'Initialization')
-
-			# Set the exposure time
-			self.core.set_exposure(int(self.exposureTimeLineEdit.text()))	
-			
-			# Block UI interaction (disable the buttons, line edit items etc.)
-			self.block_ui(True)
-
-			# Home the stages
-			self.core.home("XYStage")
-			self.core.home("Stage")
-
-			# Enable UI interaction back again
-			self.block_ui(False)
-
-			# Disable the home stages button, since you do not have to run it again (only needed if stages are rebooted)
-			self.homeStagesPushButton.setEnabled(False)
-
 		except:
 			# If you can't get a handle of micromanager core, it is probably not open, so show a message box
 			msgBox = QMessageBox()
 			msgBox.setText("Did not find MicroManager to be open, ensure that it is open.")
 			msgBox.exec()
+			return
 
+		# Change the stage timeout to a large value since it may take many seconds to move the stages to zero position
+		self.core.set_property('Core', 'TimeoutMs', '90000')
+
+		# Set the startup property to initialization
+		self.core.set_config('Startup', 'Initialization')
+
+		# Set the exposure time
+		self.core.set_exposure(int(self.exposureTimeLineEdit.text()))	
+		
+		# Block UI interaction (disable the buttons, line edit items etc.)
+		self.block_ui(True)
+
+		# Home the stages
+		self.core.home("XYStage")
+		self.core.home("Stage")
+
+		# Enable UI interaction back again
+		self.block_ui(False)
+
+		# Disable the home stages button, since you do not have to run it again (only needed if stages are rebooted)
+		self.homeStagesPushButton.setEnabled(False)
+		
 	# Change exposure time
 	def change_exposure_time(self):
 
