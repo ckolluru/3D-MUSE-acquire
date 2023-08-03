@@ -41,7 +41,7 @@ pip install -r requirements.txt
 
 Running the software
 ------------
-Go to ```bin\``` folder and run the batch script  
+Go to ```bin\``` folder and run the batch script  ```3D-MUSE-acquire.bat```
 - It will start a command window, do not close that at any time when using the application  
 
 
