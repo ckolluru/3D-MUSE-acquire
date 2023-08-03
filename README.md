@@ -97,6 +97,11 @@ In main.py, go to the ```initialize_arduino()``` function. Change the line as ne
 ```
 self.board = pyfirmata.Arduino(str("COM5"))
 ```
+
+Arduino should run the standard firmata code to communicate with pyfirmata library in python. Open Arduino IDE, select the board and COM port.  
+Upload this code from the examples to the board.
+![Arduino](docs/arduino.png)
+
 Other hardcoded items in the code
 ------------
 
