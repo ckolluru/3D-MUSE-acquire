@@ -3,6 +3,11 @@
 
 Setting up the software
 ------------
+Install micromanager nightly build from 20230530
+https://download.micro-manager.org/nightly/2.0/Windows/
+
+Choose the 20230530 from the list
+MMSetup_64bit_2.0.1_20230530.exe
 
 Install python 3.11 from Microsoft Store  
 https://www.microsoft.com/store/productid/9NRWMJP3717K?ocid=pdpshare
