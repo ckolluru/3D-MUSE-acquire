@@ -271,6 +271,11 @@
              </item>
              <item>
               <property name="text">
+               <string>2x</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
                <string>10x</string>
               </property>
              </item>

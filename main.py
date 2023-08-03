@@ -117,6 +117,9 @@ class Window(QMainWindow):
 
 		if str == '10x':
 			self.core.set_config('Objective', 'Objective-B')
+
+		if str == '2x':
+			self.core.set_config('Objective', 'Objective-C')
 	
 	# Get XYZ positions from Micromanager Multi-D acquisition window
 	def get_xyz_positions(self):
@@ -513,6 +516,9 @@ class Window(QMainWindow):
 				
 			if str(self.objectiveComboBox.currentText()) == '10x':
 				self.core.set_config('Objective', 'Objective-B')
+
+			if str(self.objectiveComboBox.currentText()) == '2x':
+				self.core.set_config('Objective', 'Objective-C')
 
 			# Get XY pixel size in microns, camera tile size in pixels (X and Y)
 			self.PIXEL_SIZE = self.core.get_pixel_size_um()
