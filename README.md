@@ -4,45 +4,45 @@
 Setting up the software
 ------------
 
-Install python 3.11 from Microsoft Store
+Install python 3.11 from Microsoft Store  
 https://www.microsoft.com/store/productid/9NRWMJP3717K?ocid=pdpshare
 
-Install Visual Studio Code
+Install Visual Studio Code  
 https://code.visualstudio.com/
 
-Download a zip of this repository
+Download a zip of this repository  
 https://github.com/ckolluru/3D-MUSE-acquire/archive/refs/heads/master.zip
 
-Unzip the contents of this zip file and move it to a suitable folder location
+Unzip the contents of this zip file and move it to a suitable folder location  
 
-Open Visual Studio Code
+Open Visual Studio Code  
 
-Click on the extensions button on the left, search for python and install the extension
+Click on the extensions button on the left, search for python and install the extension  
 VS Marketplace Link: https://marketplace.visualstudio.com/items?itemName=ms-python.python
-This is not an python interpreter, this just allows visual studio to format and display python code properly
+This is not a python interpreter, this just allows visual studio to format and display python code properly  
 
-Set the default terminal profile
-Press Ctrl + Shift + P
-Search for Terminal: Select Default Profile
-Select command line
+Set the default terminal profile  
+Press Ctrl + Shift + P  
+Search for Terminal: Select Default Profile  
+Select command line  
 
-Now go to File > Open Folder
-Select the folder with this code that was unzipped
-You should see all the files in the explorer tab on the left
+Now go to File > Open Folder  
+Select the folder with this code that was unzipped  
+You should see all the files in the explorer tab on the left  
 
-Open main.py file and pin it
+Open main.py file and pin it  
 
-Now on the menu bar, select terminal > new terminal
-In the terminal window, run the install command
-The requirements.txt file should list all Python libraries that the software depends on, and they will be installed using:
+Now on the menu bar, select terminal > new terminal  
+In the terminal window, run the install command  
+The requirements.txt file should list all Python libraries that the software depends on, and they will be installed using:  
 ```
 pip install -r requirements.txt
 ```
 
 Running the software
 ------------
-- Go to ```bin\``` folder and run the batch script
-- It will start a command window, do not close that at any time when using the application
+Go to ```bin\``` folder and run the batch script  
+- It will start a command window, do not close that at any time when using the application  
 
 
 Software screenshot
