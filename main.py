@@ -48,6 +48,9 @@ class Window(QMainWindow):
 		# Stitching module
 		self.stitcher = None
 
+		# Sorted indices for tiling
+		self.SORTED_INDICES = None
+
 	# Home the XYZ stages (push button callback function)
 	def home_stages(self):
 
