@@ -209,9 +209,13 @@ The MoBIE plugin should already be listed. Select it and click Close.
 
 Click Apply changes to install it.  
 
-Now use the search window in Fiji and type open Zarr (File system)
+Now use the search window in Fiji and type Zarr and click the Open OME-Zarr From File System command (File system)
+![zarr-1](docs/zarr_1.png)  
 
-Browse to the folder location e.g., MUSE_stitched_acq_1.zarr
+Browse to the folder location e.g., MUSE_stitched_acq_1.zarr  
+
+Check to make sure that the zarr folder has a .zattrs file in it.  The size of the folder should not be at least a few MBs (one image, one tile).
+![zarr-2](docs/zarr_2.png)
 
 This will open the BigDataViewer which will show the full dataset.  
 
