@@ -12,23 +12,33 @@ MMSetup_64bit_2.0.1_20230530.exe
 Install python 3.11 from Microsoft Store  
 https://www.microsoft.com/store/productid/9NRWMJP3717K?ocid=pdpshare
 
-Install Visual Studio Code  
-https://code.visualstudio.com/
-
 Download a zip of this repository  
 https://github.com/ckolluru/3D-MUSE-acquire/archive/refs/heads/master.zip
 
 Unzip the contents of this zip file and move it to a suitable folder location.    
 
+For simply running the software, Visual Studio code is not required. If you want to set up a development environment and make changes to the code, then you need Visual Studio Code  and Git.   
+
+Install Visual Studio Code   
+https://code.visualstudio.com/
+
+Install Git   
+https://git-scm.com/download/win
+
 Open Visual Studio Code  
 
-Click on the extensions button on the left, search for python, and install the extension. This is not a python interpreter, this just allows visual studio to format and display python code properly. The python interpreter is installed above from the Microsoft Store.  
+Click on the extensions button on the left, search for python, and install the extension. This is not a python interpreter, this just allows visual studio to format and display python code properly. The python interpreter is installed on the system using the steps mentioned above (from Microsoft Store).  
 
-Set the default terminal profile. Press Ctrl + Shift + P. Search for Terminal: Select Default Profile. Select the command line.
+Set the default terminal profile. Press Ctrl + Shift + P. Search for Terminal: Select Default Profile. Select the command line.  
 
 Now go to File > Open Folder. Select the folder with this code that was unzipped. You should see all the files in the explorer tab on the left. Open main.py file and pin it.  
 
-Now on the menu bar, select terminal > new terminal. In the terminal window, run the pip install command below. The requirements.txt file has a list of all python libraries that the software depends on.
+Now on the menu bar, select terminal > new terminal. In the terminal window, run the pip install command below. The requirements.txt file has a list of all python libraries that the software depends on.  
+```
+pip install -r requirements.txt
+```
+
+If you are not setting up Git and Visual Studio Code, open command prompt. Navigate to the folder containing this code. Run the same pip install command.
 ```
 pip install -r requirements.txt
 ```
@@ -84,7 +94,7 @@ Upload this code from the examples to the board.<br>
 Other hardcoded items in the code
 ------------
 
-Assume that sectioning is always at 3 microns. If not, change this line.  
+Assume that sectioning is always at 3 microns. If not, change this line in main.py.  
 ```
 z_thickness = 3 * (skipEvery + 1)
 ````
@@ -94,6 +104,19 @@ Assume that the limits for the X and Y stages are fixed. If this changes, change
 x_stage_max = 25400
 y_stage_max = 20000
 ```
+
+Assume that one sectioning cycle takes less than 25 seconds to complete. If not, change these lines with an appropriate time.  
+
+imaging_module.py (two places)
+```
+if time.time() - self.last_cutting_time > 25:
+  break
+```
+<br>trimming_module.py (one place)
+```
+if time.time() - last_cutting_time > 25:
+  break
+```    
 
 Running the software
 ------------
