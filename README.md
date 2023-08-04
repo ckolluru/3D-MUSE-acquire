@@ -190,3 +190,30 @@ If there is an error in the program, this software may shut down. You can relaun
 If the block was being imaged when this software crashes, the acquisition window displaying the images in MicroManager may say "(Running)" in the top left bar of the acquisition window. In tha case, Micromanager would need to be closed and restarted. You will need to set the tile positions again in the Multi D acquisition window. It is easy to load in the position file again if you saved it earlier.
 There is no "pause" option in the software. You stop and start acquisition as desired.
 To shutdown, switch off microtome, cover the knife guard. Switch off power supply to xyz stages and light source. Disconnect the arduino and camera cables. Close this software and turn off PC.
+
+IMPORTANT: When imaging is complete, upload the full storage directory to Globus/NAS as needed. The imaging PCs are not meant to be where the data is stored long term.
+
+Viewing the stitched image datasets in Fiji
+------------
+
+Install Fiji  
+https://imagej.net/software/fiji/downloads  
+
+Run Fiji
+
+Go to Help>Update...  
+
+In the ImageJ updater dialog, click on Manage update sites.  
+
+The MoBIE plugin should already be listed. Select it and click Close.  
+
+Click Apply changes to install it.  
+
+Now use the search window in Fiji and type open Zarr (File system)
+
+Browse to the folder location e.g., MUSE_stitched_acq_1.zarr
+
+This will open the BigDataViewer which will show the full dataset.  
+
+Information on how to use the bigdataviewer is available in the first half of this video.  
+https://www.youtube.com/watch?v=EApotxnnQD8
