@@ -119,7 +119,7 @@
               </font>
              </property>
              <property name="text">
-              <string>Important: Ensure that the tile list remains the same for the entire MUSE block. Tiles need to be set with overlap of 20 percent (not um). Set tiles in a generous manner, so that the nerve is still visible in the tiles when you go further into the block.</string>
+              <string>Important: Ensure that the tile list remains the same for the entire MUSE block. Tiles need to be set with overlap of 20 percent (not um). Set tiles in a generous manner, so that the nerve is still visible in the tiles when you go further into the block. Ensure tile positions are set up properly in Multi-D acquisition window before running an imaging cycle.  Number of cuts * section thickness must be less than the length of block remaining. Remove knife cover before running a sectioning cycle.</string>
              </property>
              <property name="alignment">
               <set>Qt::AlignCenter</set>
