@@ -193,13 +193,17 @@ To shutdown, switch off microtome, cover the knife guard. Switch off power suppl
 
 IMPORTANT: When imaging is complete, upload the full storage directory to Globus/NAS as needed. The imaging PCs are not meant to be where the data is stored long term.
 
-Viewing the stitched image datasets in Fiji
+Viewing the image datasets in Fiji
 ------------
 
 Install Fiji  
 https://imagej.net/software/fiji/downloads  
 
-Run Fiji
+Run Fiji  
+
+If you are viewing just a single tile stack, you can drag and drop in Fiji  
+
+Follow steps below to view stitched data (in a zarr folder)  
 
 Go to Help>Update...  
 
@@ -209,15 +213,15 @@ The MoBIE plugin should already be listed. Select it and click Close.
 
 Click Apply changes to install it.  
 
-Now use the search window in Fiji and type Zarr and click the Open OME-Zarr From File System command (File system)
+Now use the search window in Fiji and type Zarr and click the Open OME-Zarr From File System command (File system)  
 ![zarr-1](docs/zarr_1.png)  
 
-Browse to the folder location e.g., MUSE_stitched_acq_1.zarr  
+Browse to the folder location e.g., MUSE_stitched_acq_1.zarr   
 
-Check to make sure that the zarr folder has a .zattrs file in it.  The size of the folder should not be at least a few MBs (one image, one tile).
+Check to make sure that the zarr folder has a .zattrs file in it.  The size of the folder should not be at least a few MBs (one image, one tile).   
 ![zarr-2](docs/zarr_2.png)
 
-This will open the BigDataViewer which will show the full dataset.  
+This will open the BigDataViewer which will show the full dataset.    
 
-Information on how to use the bigdataviewer is available in the first half of this video.  
+Information on how to use the bigdataviewer is available in the first half of this video.    
 https://www.youtube.com/watch?v=EApotxnnQD8
