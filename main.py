@@ -80,6 +80,10 @@ class Window(QMainWindow):
 
 		# Home the stages
 		self.core.home("XYStage")
+
+		time.sleep(5)
+
+		# Home the Z stage
 		self.core.home("Stage")
 
 		# Enable UI interaction back again
