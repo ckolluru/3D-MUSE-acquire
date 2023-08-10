@@ -17,7 +17,11 @@ https://github.com/ckolluru/3D-MUSE-acquire/archive/refs/heads/master.zip
 
 Unzip the contents of this zip file and move it to a suitable folder location.    
 
-For simply running the software, Visual Studio code is not required. If you want to set up a development environment and make changes to the code, then you need Visual Studio Code  and Git.   
+For simply running the software, Visual Studio code is not required. But, see instructions below if you want a development environment setup.
+
+Development environment setup
+------------
+If you want to set up a development environment and make changes to the code, then you need Visual Studio Code  and Git.   
 
 Install Visual Studio Code   
 https://code.visualstudio.com/
@@ -38,6 +42,8 @@ Now on the menu bar, select terminal > new terminal. In the terminal window, run
 pip install -r requirements.txt
 ```
 
+Setting up without a development environment
+------------
 If you are not setting up Git and Visual Studio Code, open command prompt. Navigate to the folder containing this code. Run the same pip install command.
 ```
 pip install -r requirements.txt
