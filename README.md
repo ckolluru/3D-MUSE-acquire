@@ -193,6 +193,15 @@ To shutdown, switch off microtome, cover the knife guard. Switch off power suppl
 
 IMPORTANT: When imaging is complete, upload the full storage directory to Globus/NAS as needed. The imaging PCs are not meant to be where the data is stored long term.
 
+Troubleshooting issues
+------------
+If you see that the imaging PC is sending a cut signal (the cutting light on the relay board keeps going on and off), but the microtome is not actually cutting, it could be one of the following issues:  
+
+1. The specimen chuck may be at its most forward position and cannot move any further. Refer to the Nanocut user manual (page 43, figure 21, label number 5). Check to make sure that the button on the microtome's control panel that represents the coarse feed forward move (two arrows) does not have its yellow LED lit up.
+2. Ensure that the M-STOP button on the microtome is not yellow. It could be due to the lever under the handwheel being in the wrong position or the handwheel itself being locked.
+3. If the microtome has hit a hard object, it may have tripped the fuse. It is on the back of the microtome as a black button on the right, you may need to push it back in if it is out.
+4. The microtome should not be in the emergency stop (E-STOP) mode.
+
 Viewing the image datasets in Fiji
 ------------
 
