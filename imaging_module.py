@@ -152,7 +152,7 @@ class imagingClass(QtCore.QThread):
 			if self.current_cut_index != self.old_cut_index:
 
 				# Loop through the number of skip cycles needed
-				for i in range(self.skipEvery):
+				for i in range(1, self.skipEvery + 1):
 
 					# Poll once every second to see if the cut signal is complete
 					while not self.board.digital[12].read():
