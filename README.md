@@ -113,7 +113,7 @@ y_stage_max = 20000
 
 Assume that one sectioning cycle takes less than 25 seconds to complete. If not, change these lines with an appropriate time.  
 
-imaging_module.py (two places)
+imaging_module.py (three places)
 ```
 if time.time() - self.last_cutting_time > 25:
   break
