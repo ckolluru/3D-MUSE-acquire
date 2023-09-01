@@ -344,7 +344,7 @@ class imagingClass(QtCore.QThread):
 
 						if not self.threadActive:
 							break
-						
+
 						# Send cut signal
 						self.last_cutting_time = time.time()
 						self.current_cut_index = self.current_cut_index + 1
@@ -354,8 +354,6 @@ class imagingClass(QtCore.QThread):
 
 						logging.info('Additional cuts - End of cutting section %s', self.current_cut_index)
 						
-
-
 		# Log appropriately
 		if self.threadActive:
 			logging.info('Completed acquisition cycle, finished %s cuts', self.num_cuts)
