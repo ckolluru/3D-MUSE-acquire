@@ -342,6 +342,9 @@ class imagingClass(QtCore.QThread):
 								if time.time() - self.last_cutting_time > 25:
 										break
 
+						if not self.threadActive:
+							break
+						
 						# Send cut signal
 						self.last_cutting_time = time.time()
 						self.current_cut_index = self.current_cut_index + 1
