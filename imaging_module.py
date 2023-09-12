@@ -330,36 +330,39 @@ class imagingClass(QtCore.QThread):
 				if not self.threadActive:
 					break
 				
-				# Check if additional cuts are needed
-				while self.current_cut_index < self.num_cuts and self.threadActive:
+		# Check if additional cuts are needed
+		while self.current_cut_index < self.num_cuts and self.threadActive:
 
-						# Poll once every second to see if the cut signal is complete
-						while not self.board.digital[12].read():
-								time.sleep(1)
+			# Poll once every second to see if the cut signal is complete
+			while not self.board.digital[12].read():
+					time.sleep(1)
 
-								# If you don't get cut complete signal from the microtome in 25 seconds, assume cut was complete
-								# Do not want to get stuck in an infinite loop
-								if time.time() - self.last_cutting_time > 25:
-										break
-
-						if not self.threadActive:
+					# If you don't get cut complete signal from the microtome in 25 seconds, assume cut was complete
+					# Do not want to get stuck in an infinite loop
+					if time.time() - self.last_cutting_time > 25:
 							break
 
-						# Send cut signal
-						self.last_cutting_time = time.time()
-						self.current_cut_index = self.current_cut_index + 1
-						self.board.digital[9].write(0)
-						time.sleep(3)
-						self.board.digital[9].write(1)
+			if not self.threadActive:
+				break
 
-						logging.info('Additional cuts - End of cutting section %s', self.current_cut_index)
+			# Send cut signal
+			self.last_cutting_time = time.time()
+			self.current_cut_index = self.current_cut_index + 1
+			self.board.digital[9].write(0)
+			time.sleep(3)
+			self.board.digital[9].write(1)
+
+			logging.info('Additional cuts - End of cutting section %s', self.current_cut_index)
+			self.statusBarSignal.emit('Additional cuts - End of cutting section ' + str(self.current_cut_index))
 						
 		# Log appropriately
 		if self.threadActive:
 			logging.info('Completed acquisition cycle, finished %s cuts', self.num_cuts)
+			self.statusBarSignal.emit('Completed acquisition cycle, finished ' + str(self.num_cuts) + ' cuts')
 
 		else:
 			logging.info('Acquisition cycle stopped after %s cuts', self.current_cut_index)
+			self.statusBarSignal.emit('Acquisition cycle stopped after ' + str(self.current_cut_index) + ' cuts')
 
 		# Send the complete signal
 		self.completeSignal.emit(1)
