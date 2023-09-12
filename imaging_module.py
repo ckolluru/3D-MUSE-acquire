@@ -348,9 +348,9 @@ class imagingClass(QtCore.QThread):
 						# Send cut signal
 						self.last_cutting_time = time.time()
 						self.current_cut_index = self.current_cut_index + 1
-						self.board.digital[0].write(0)
+						self.board.digital[9].write(0)
 						time.sleep(3)
-						self.board.digital[0].write(1)
+						self.board.digital[9].write(1)
 
 						logging.info('Additional cuts - End of cutting section %s', self.current_cut_index)
 						
