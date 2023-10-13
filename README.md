@@ -7,7 +7,7 @@ Install micromanager nightly build from 20230530
 https://download.micro-manager.org/nightly/2.0/Windows/
 
 Install Spinnaker SDK 2.7 from FLIR (needs an account on their website)  
-Select API Development (not Evaluation) during the install process  
+Select Application Development (not Evaluation) during the install process screens   
 https://www.flir.com/products/spinnaker-sdk/?vertical=machine+vision&segment=iis  
 
 Choose the 20230530 from the list
@@ -22,6 +22,8 @@ https://github.com/ckolluru/3D-MUSE-acquire/archive/refs/heads/master.zip
 Unzip the contents of this zip file and move it to a suitable folder location.    
 
 For simply running the software, Visual Studio code is not required. But, see instructions below if you want a development environment setup.
+
+It looks like Windows 10 is necessary  
 
 Development environment setup
 ------------
@@ -108,6 +110,21 @@ Image info (from camera), Image intensity range, xyz nm/px
 <br>Ensure that xyz is the number you expect.  
 
 Ensure that micromanager is running a server to talk to pycromanager. Go to Tools > Options > Run server on port 4827.
+
+# Set the following micromanager configuration properties and groups once all the hardware is configured  
+ConfigGroup,Initialization,Startup,Gain, Auto, Off
+ConfigGroup,Initialization,Startup,Gain, 18
+ConfigGroup,Initialization,Startup,Stage,Acceleration [m/s^2],0.0250
+ConfigGroup,Initialization,Startup,Stage,Speed [mm/s],0.5000
+ConfigGroup,Initialization,Startup,XYStage,Acceleration X [m/s^2],0.0250
+ConfigGroup,Initialization,Startup,XYStage,Acceleration Y [m/s^2],0.0250
+ConfigGroup,Initialization,Startup,XYStage,Speed X [mm/s],1.0000
+ConfigGroup,Initialization,Startup,XYStage,Speed Y [mm/s],1.0000
+ConfigGroup,Initialization,Startup,XYStage,TransposeMirrorX,1
+ConfigGroup,Initialization,Startup,XYStage,TransposeMirrorY,1
+ConfigGroup,Initialization,Startup,Arduino-Switch,Label,Switch off all
+ConfigGroup,Initialization,Startup,Arduino-Shutter,OnOff,1
+
 
 Modifications based on COM ports
 ------------
