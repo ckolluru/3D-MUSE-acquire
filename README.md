@@ -41,6 +41,8 @@ Now on the menu bar, select terminal > new terminal. In the terminal window, run
 ```
 pip install -r requirements.txt
 ```
+Install Zaber Launcher from here:
+https://www.zaber.com/software
 
 Setting up without a development environment
 ------------
