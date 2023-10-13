@@ -120,7 +120,7 @@ Upload this code from the examples to the board.<br>
 In your pyfirmata install folder, change a line in this python script:  
 C:\Users\WG30Lab\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\LocalCache\local-packages\Python311\site-packages\pyfirmata\pyfirmata.py
 
-line 185 changes to: len_args = len(inspect.getargs(func)[0])
+line 185 changes to: len_args = len(inspect.getfullargspec(func)[0])
 
 Other hardcoded items in the code
 ------------
