@@ -3,10 +3,11 @@
 
 Setting up the software
 ------------
-Install micromanager nightly build from 20230530
+Install micromanager nightly build from 20230530  
 https://download.micro-manager.org/nightly/2.0/Windows/
 
-Install Spinnaker SDK 2.7 from FLIR (needs an account on their website)
+Install Spinnaker SDK 2.7 from FLIR (needs an account on their website)  
+Select API Development (not Evaluation) during the install process  
 https://www.flir.com/products/spinnaker-sdk/?vertical=machine+vision&segment=iis  
 
 Choose the 20230530 from the list
