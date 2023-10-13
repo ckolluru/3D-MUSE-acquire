@@ -103,6 +103,8 @@ Image info (from camera), Image intensity range, xyz nm/px
 
 <br>Ensure that xyz is the number you expect.  
 
+Ensure that micromanager is running a server to talk to pycromanager. Go to Tools > Options > Run server on port 4827.
+
 Modifications based on COM ports
 ------------
 Ensure that the COM port for the Arduino is correctly entered. It is hardcoded for now.
