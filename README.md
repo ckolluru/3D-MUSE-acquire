@@ -55,7 +55,21 @@ Setting up micromanager
 ------------
 In Micromanager, a configuration file is created to connect to the specific hardware. Open Micromanager and select (none) in the configuration window.  
 
-Go to devices > hardware configuration wizard and follow the steps from the micromanager Zaber device pages, to set up the XYZ stages. Select spinnaker camera and find the blackfly camera you are using, and set it up as well. The status should say OK.  We also set up DemoCamera (DHub) and select the Demo Objective (this is a dummy item that lets us specify an objective magnification)<br><br>
+Go to devices > hardware configuration wizard and follow the steps from the micromanager Zaber device pages, to set up the XYZ stages. We set up one XYStage and one Stage. The XYstage correspond to X-VSR stage and X-LSM stage. Use Zaber Launcher to identify which port each of the XYZ stages are connected to and the controller device number (one of either 01, 02, 03). We will use the port information to setup the stage in Micromanager.  Use the Zaber wiki to identify the correct values to enter (https://www.zaber.com/w/Software/MicroManager#Setting_Up_A_Two-Axis_System). Axis Number should be set to 1, controller device numbers come from Zaber Launcher, Linear Motion Per Rev is 1.2192 for Y stage (X-VSR) and 0.6096 for X-LSM stages. Port is the COM port from Zaber Launcher. This setup will change if you are using the Z stage with the linear encoder.
+
+Additional properties for the stages:
+AnswerTimeout: 500.0000
+BaudRate: 115200
+DTR: Disable
+DataBits: 8
+DelayBetweenCharsMs: 0.0000
+Fast USB to Serial: Disable
+Handshaking: Off
+Parity: None
+StopBits: 1
+Verbose: 1  
+
+Select spinnaker camera and find the blackfly camera you are using, and set it up as well. The status should say OK.  We also set up DemoCamera (DHub) and select the Demo Objective (this is a dummy item that lets us specify an objective magnification)<br><br>
 ![Objective mag setup 1](docs/obj_mag_1.png)
 
 <br>Select ok on this window<br><br>
@@ -95,9 +109,11 @@ In main.py, go to the ```initialize_arduino()``` function. Change the line as ne
 self.board = pyfirmata.Arduino(str("COM5"))
 ```
 
-Arduino should run the standard firmata code to communicate with pyfirmata library in python. Open Arduino IDE, select the board and COM port.  
+Arduino should run the standard firmata code to communicate with pyfirmata library in python. Open Arduino IDE, select the board and COM port.  In newer versions of the Arduino IDE, this code is available here: https://github.com/firmata/arduino/blob/53bb550d704ff9db76c01286c97a0f5c14321e49/examples/StandardFirmata/StandardFirmata.ino  
+
 Upload this code from the examples to the board.<br>
 ![Arduino](docs/arduino.png)
+
 
 Other hardcoded items in the code
 ------------
