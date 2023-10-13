@@ -65,7 +65,7 @@ Go to devices > hardware configuration wizard and follow the steps from the micr
 
 We will use the port information to setup the stage in Micromanager.  Use the Zaber wiki to identify the correct values to enter (https://www.zaber.com/w/Software/MicroManager#Setting_Up_A_Two-Axis_System). Axis Number should be set to 1, controller device numbers come from Zaber Launcher, Linear Motion Per Rev is 1.2192 for Y stage (X-VSR) and 0.6096 for X-LSM stages. Port is the COM port from Zaber Launcher. This setup will change if you are using the Z stage with the linear encoder.  
 
-Additional properties for the stages:
+Additional properties for the stages:  
 AnswerTimeout: 500.0000  
 BaudRate: 115200  
 DTR: Disable  
