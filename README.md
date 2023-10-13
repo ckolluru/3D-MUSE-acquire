@@ -55,19 +55,22 @@ Setting up micromanager
 ------------
 In Micromanager, a configuration file is created to connect to the specific hardware. Open Micromanager and select (none) in the configuration window.  
 
-Go to devices > hardware configuration wizard and follow the steps from the micromanager Zaber device pages, to set up the XYZ stages. We set up one XYStage and one Stage. The XYstage correspond to X-VSR stage and X-LSM stage. Use Zaber Launcher to identify which port each of the XYZ stages are connected to and the controller device number (one of either 01, 02, 03). We will use the port information to setup the stage in Micromanager.  Use the Zaber wiki to identify the correct values to enter (https://www.zaber.com/w/Software/MicroManager#Setting_Up_A_Two-Axis_System). Axis Number should be set to 1, controller device numbers come from Zaber Launcher, Linear Motion Per Rev is 1.2192 for Y stage (X-VSR) and 0.6096 for X-LSM stages. Port is the COM port from Zaber Launcher. This setup will change if you are using the Z stage with the linear encoder.
+Go to devices > hardware configuration wizard and follow the steps from the micromanager Zaber device pages, to set up the XYZ stages. We set up one XYStage and one Stage.  
+The XYstage correspond to X-VSR stage and X-LSM stage. Use Zaber Launcher to identify which port each of the XYZ stages are connected to and the controller device number (one of either 01, 02, 03).  
+We will use the port information to setup the stage in Micromanager.  Use the Zaber wiki to identify the correct values to enter (https://www.zaber.com/w/Software/MicroManager#Setting_Up_A_Two-Axis_System).  
+Axis Number should be set to 1, controller device numbers come from Zaber Launcher, Linear Motion Per Rev is 1.2192 for Y stage (X-VSR) and 0.6096 for X-LSM stages. Port is the COM port from Zaber Launcher.  This setup will change if you are using the Z stage with the linear encoder.  
 
 Additional properties for the stages:
-AnswerTimeout: 500.0000
-BaudRate: 115200
-DTR: Disable
-DataBits: 8
-DelayBetweenCharsMs: 0.0000
-Fast USB to Serial: Disable
-Handshaking: Off
-Parity: None
-StopBits: 1
-Verbose: 1  
+AnswerTimeout: 500.0000  
+BaudRate: 115200  
+DTR: Disable  
+DataBits: 8  
+DelayBetweenCharsMs: 0.0000  
+Fast USB to Serial: Disable  
+Handshaking: Off  
+Parity: None  
+StopBits: 1  
+Verbose: 1    
 
 Select spinnaker camera and find the blackfly camera you are using, and set it up as well. The status should say OK.  We also set up DemoCamera (DHub) and select the Demo Objective (this is a dummy item that lets us specify an objective magnification)<br><br>
 ![Objective mag setup 1](docs/obj_mag_1.png)
