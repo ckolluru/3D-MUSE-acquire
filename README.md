@@ -10,6 +10,10 @@ Install Spinnaker SDK 2.3.0.77 from FLIR (needs an account on their website)
 Select Application Development (not Evaluation) during the install process screens   
 https://www.flir.com/products/spinnaker-sdk/?vertical=machine+vision&segment=iis  
 
+Follow instructions on these pages  
+https://www.cairn-research.co.uk/wp-content/uploads/2019/05/READ-ME-INSTALLATION.pdf  
+https://micro-manager.org/Spinnaker
+
 Choose the 20230530 from the list
 MMSetup_64bit_2.0.1_20230530.exe
 
@@ -47,6 +51,17 @@ Now on the menu bar, select terminal > new terminal. In the terminal window, run
 ```
 pip install -r requirements.txt
 ```
+
+If pip install runs into issues manually install following packages 
+```
+pip install Pillow
+pip install ITKMontage
+pip install tqdm
+pip install zarr
+pip install scikit-image
+pip install opencv-python
+```
+
 Install Zaber Launcher from here:
 https://www.zaber.com/software
 
