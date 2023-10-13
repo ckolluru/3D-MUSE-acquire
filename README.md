@@ -81,6 +81,7 @@ Go to devices > hardware configuration wizard and follow the steps from the micr
 We will use the port information to setup the stage in Micromanager.  Use the Zaber wiki to identify the correct values to enter (https://www.zaber.com/w/Software/MicroManager#Setting_Up_A_Two-Axis_System). Axis Number should be set to 1, controller device numbers come from Zaber Launcher, Linear Motion Per Rev is 1.2192 for Y stage (X-VSR) and 0.6096 for X-LSM stages. Port is the COM port from Zaber Launcher. This setup will change if you are using the Z stage with the linear encoder.  
 
 Additional properties for the stages:  
+```
 AnswerTimeout: 500.0000  
 BaudRate: 115200  
 DTR: Disable  
@@ -91,7 +92,7 @@ Handshaking: Off
 Parity: None  
 StopBits: 1  
 Verbose: 1    
-
+```
 Select spinnaker camera and find the blackfly camera you are using, and set it up as well. The status should say OK.  We also set up DemoCamera (DHub) and select the Demo Objective (this is a dummy item that lets us specify an objective magnification)<br><br>
 ![Objective mag setup 1](docs/obj_mag_1.png)
 
@@ -119,25 +120,24 @@ Give a suitable name in the pixel config editor (say 4x), enter pixel size (um),
 
 <br>When you close this window above, it will ask to save this pixel configuration to the same device cfg file, it is OK to overwrite. Now, when the objective magnification is used from this software's dropdown, Micromanager will automatically be updated. See the bottom most line in the micromanager window, where it says
 
-Image info (from camera), Image intensity range, xyz nm/px
-
-<br>Ensure that xyz is the number you expect.  
+Image info (from camera), Image intensity range, xyz nm/px  
+Ensure that xyz is the number you expect.  
 
 Ensure that micromanager is running a server to talk to pycromanager. Go to Tools > Options > Run server on port 4827.
 
-# Set the following micromanager configuration properties and groups once all the hardware is configured  
-ConfigGroup,Initialization,Startup,Gain, Auto, Off
-ConfigGroup,Initialization,Startup,Gain, 18
-ConfigGroup,Initialization,Startup,Stage,Acceleration [m/s^2],0.0250
-ConfigGroup,Initialization,Startup,Stage,Speed [mm/s],0.5000
-ConfigGroup,Initialization,Startup,XYStage,Acceleration X [m/s^2],0.0250
-ConfigGroup,Initialization,Startup,XYStage,Acceleration Y [m/s^2],0.0250
-ConfigGroup,Initialization,Startup,XYStage,Speed X [mm/s],1.0000
-ConfigGroup,Initialization,Startup,XYStage,Speed Y [mm/s],1.0000
-ConfigGroup,Initialization,Startup,XYStage,TransposeMirrorX,1
-ConfigGroup,Initialization,Startup,XYStage,TransposeMirrorY,1
-ConfigGroup,Initialization,Startup,Arduino-Switch,Label,Switch off all
-ConfigGroup,Initialization,Startup,Arduino-Shutter,OnOff,1
+# Micromanager config groups and properties   
+ConfigGroup,Initialization,Startup,Gain, Auto, Off  
+ConfigGroup,Initialization,Startup,Gain, 18  
+ConfigGroup,Initialization,Startup,Stage,Acceleration [m/s^2],0.0250  
+ConfigGroup,Initialization,Startup,Stage,Speed [mm/s],0.5000  
+ConfigGroup,Initialization,Startup,XYStage,Acceleration X [m/s^2],0.0250  
+ConfigGroup,Initialization,Startup,XYStage,Acceleration Y [m/s^2],0.0250  
+ConfigGroup,Initialization,Startup,XYStage,Speed X [mm/s],1.0000  
+ConfigGroup,Initialization,Startup,XYStage,Speed Y [mm/s],1.0000  
+ConfigGroup,Initialization,Startup,XYStage,TransposeMirrorX,1  
+ConfigGroup,Initialization,Startup,XYStage,TransposeMirrorY,1  
+ConfigGroup,Initialization,Startup,Arduino-Switch,Label,Switch off all  
+ConfigGroup,Initialization,Startup,Arduino-Shutter,OnOff,1  
 
 
 Modifications based on COM ports
