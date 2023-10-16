@@ -127,7 +127,8 @@ Ensure that xyz is the number you expect.
 
 Ensure that micromanager is running a server to talk to pycromanager. Go to Tools > Options > Run server on port 4827.
 
-# Micromanager config groups and properties   
+Micromanager config groups and properties
+------------
 ```
 ConfigGroup,Initialization,Startup,Gain, Auto, Off  
 ConfigGroup,Initialization,Startup,Gain, 18  
@@ -142,6 +143,7 @@ ConfigGroup,Initialization,Startup,XYStage,TransposeMirrorY,1
 ConfigGroup,Initialization,Startup,Arduino-Switch,Label,Switch off all  
 ConfigGroup,Initialization,Startup,Arduino-Shutter,OnOff,1  
 ```
+Another config group should be created for the Objective with Objectives A-F as presets.
 
 Modifications based on COM ports
 ------------
