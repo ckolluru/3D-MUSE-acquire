@@ -7,7 +7,7 @@ Install micromanager nightly build from 20230530
 https://download.micro-manager.org/nightly/2.0/Windows/
 
 Install Spinnaker SDK 2.3.0.77 from FLIR (needs an account on their website)  
-Select Application Development (not Evaluation) during the install process screens   
+Select Application Development (not Evaluation) during the install process screens and also get Visual Studio 2010 along with other versions.  
 https://www.flir.com/products/spinnaker-sdk/?vertical=machine+vision&segment=iis  
 
 Follow instructions on these pages  
