@@ -74,6 +74,8 @@ pip install -r requirements.txt
 
 Setting up micromanager
 ------------
+Run Micro-Manager, select tools-options, and check the box that says Run server on port 4827 (you only need to do this once).
+
 In Micromanager, a configuration file is created to connect to the specific hardware. Open Micromanager and select (none) in the configuration window.  
 
 Go to devices > hardware configuration wizard and follow the steps from the micromanager Zaber device pages, to set up the XYZ stages. We set up one XYStage and one Stage. The XYstage correspond to X-VSR stage and X-LSM stage. Use Zaber Launcher to identify which port each of the XYZ stages are connected to and the controller device number (one of either 01, 02, 03).  
@@ -126,6 +128,7 @@ Ensure that xyz is the number you expect.
 Ensure that micromanager is running a server to talk to pycromanager. Go to Tools > Options > Run server on port 4827.
 
 # Micromanager config groups and properties   
+```
 ConfigGroup,Initialization,Startup,Gain, Auto, Off  
 ConfigGroup,Initialization,Startup,Gain, 18  
 ConfigGroup,Initialization,Startup,Stage,Acceleration [m/s^2],0.0250  
@@ -138,7 +141,7 @@ ConfigGroup,Initialization,Startup,XYStage,TransposeMirrorX,1
 ConfigGroup,Initialization,Startup,XYStage,TransposeMirrorY,1  
 ConfigGroup,Initialization,Startup,Arduino-Switch,Label,Switch off all  
 ConfigGroup,Initialization,Startup,Arduino-Shutter,OnOff,1  
-
+```
 
 Modifications based on COM ports
 ------------
