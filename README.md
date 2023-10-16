@@ -27,7 +27,7 @@ Unzip the contents of this zip file and move it to a suitable folder location.
 
 For simply running the software, Visual Studio code is not required. But, see instructions below if you want a development environment setup.
 
-*Tested only on Windows 10 for now*
+*Tested only on Windows 10 and Windows 11 for now*
 
 Development environment setup
 ------------
