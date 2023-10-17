@@ -180,6 +180,9 @@ len_args = len(inspect.getfullargspec(func)[0])
 Other hardcoded items in the code
 ------------
 
+Stages are setup such that when you are looking at the block face, y is positive going up and x is positive going left.  
+If this changes, then the tiling will not work as expected.
+ 
 Assume that sectioning is always at 3 microns. If not, change this line in main.py.  
 ```
 z_thickness = 3 * (skipEvery + 1)
