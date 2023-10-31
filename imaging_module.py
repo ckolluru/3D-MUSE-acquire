@@ -108,12 +108,11 @@ class imagingClass(QtCore.QThread):
 
 		# Autofocusing parameters
 		afm_method = afm.get_autofocus_method()
-		afm_method.set_property_value("Threshold", "0.1")  
+		afm_method.set_property_value("Threshold", "0.9")  
 		afm_method.set_property_value("1st step size", "3")
-		afm_method.set_property_value("1st setp number", "1")
+		afm_method.set_property_value("1st setp number", "6")
 		afm_method.set_property_value("2nd step size", "0.3")
-		afm_method.set_property_value("2nd step number", "2")
-		afm_method.set_property_value("Threshold", "0.1")
+		afm_method.set_property_value("2nd step number", "3")
 		afm_method.set_property_value("Crop ratio", "0.5")
 
 		# Apply these settings
