@@ -207,6 +207,21 @@ if time.time() - last_cutting_time > 25:
   break
 ```    
 
+Assume that the overlap between tiles is exactly 20%
+
+stitching_module.py (line 59)
+```
+        # Check that the xy_positions are properly set (assuming 20% overlap)
+        for index in range(xy_positions_sorted.shape[0]):
+            if (xy_positions_sorted[index, 0] % (tile_size_x * 0.8 * self.pixel_size)) != 0:
+                print('Did not see tiles at 20 percent overlap')
+                return None
+            
+            if (xy_positions_sorted[index, 1] % (tile_size_y * 0.8 * self.pixel_size)) != 0:
+                print('Did not see tiles at 20 percent overlap')
+                return None
+```
+
 Running the software
 ------------
 Go to ```bin\``` folder and run the batch script  ```3D-MUSE-acquire.bat```

@@ -546,8 +546,16 @@ class Window(QMainWindow):
 				x_stage_max = 25400
 				y_stage_max = 20000
 
-				self.SORTED_INDICES =self.stitcher.convert_xy_positions_to_tile_configuration(xy_positions, self.PIXEL_SIZE, self.TILE_CONFIG_PATH, x_stage_max, y_stage_max)
+				self.SORTED_INDICES =self.stitcher.convert_xy_positions_to_tile_configuration(xy_positions, self.PIXEL_SIZE, self.TILE_CONFIG_PATH, x_stage_max, y_stage_max, self.TILE_SIZE_X, self.TILE_SIZE_Y)
 
+				if self.SORTED_INDICES is None:
+					msgBox = QMessageBox()
+					msgBox.setText("Tiles were not set up with 20 PERCENT overlap. Please verify and try again.")
+					msgBox.exec()
+
+					self.block_ui(False)
+					return None
+				
 			# Pycro-manager acquisition (this is the interval time between events, used to calculate the minimum start time of an event)
 			# Our acquisition will not exactly follow this time interval since we wait for cutting signal between imaging cycles
 			# So it is ok to keep this to really small value

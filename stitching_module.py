@@ -25,7 +25,7 @@ class Stitcher():
         self.pixel_size = None
         self.z_thickness = None
 
-    def convert_xy_positions_to_tile_configuration(self, xy_positions, pixel_size, tile_config_path, x_stage_max=25400, y_stage_max=20000):
+    def convert_xy_positions_to_tile_configuration(self, xy_positions, pixel_size, tile_config_path, x_stage_max=25400, y_stage_max=20000, tile_size_x=4000, tile_size_y=3000):
 
         # Set the pixel size
         self.pixel_size = pixel_size
@@ -56,6 +56,16 @@ class Stitcher():
         sorted_indices = np.lexsort((x_positions, y_positions))
         xy_positions_sorted = xy_positions.take(tuple(sorted_indices), axis=0)
 
+        # Check that the xy_positions are properly set (assuming 20% overlap)
+        for index in range(xy_positions_sorted.shape[0]):
+            if (xy_positions_sorted[index, 0] % (tile_size_x * 0.8 * self.pixel_size)) != 0:
+                print('Did not see tiles at 20 percent overlap')
+                return None
+            
+            if (xy_positions_sorted[index, 1] % (tile_size_y * 0.8 * self.pixel_size)) != 0:
+                print('Did not see tiles at 20 percent overlap')
+                return None
+            
         # Create tile config text string
         tile_config_str = f"# Tile coordinates are in index space, not physical space\ndim = 2\n"
 

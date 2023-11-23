@@ -106,14 +106,14 @@ class imagingClass(QtCore.QThread):
 		afm = self.studio.get_autofocus_manager()
 		afm.set_autofocus_method_by_name("JAF(TB)")  
 
-		# Autofocusing parameters
+		# Autofocusing parameters (do not edit property names here, there is a typo intentionally)
 		afm_method = afm.get_autofocus_method()
 		afm_method.set_property_value("Threshold", "0.9")  
-		afm_method.set_property_value("1st step size", "3")
+		afm_method.set_property_value("1st step size", "7")
 		afm_method.set_property_value("1st setp number", "6")
-		afm_method.set_property_value("2nd step size", "0.3")
+		afm_method.set_property_value("2nd step size", "2")
 		afm_method.set_property_value("2nd step number", "3")
-		afm_method.set_property_value("Crop ratio", "0.5")
+		afm_method.set_property_value("Crop ratio", "0.75")
 
 		# Apply these settings
 		afm_method.apply_settings()
