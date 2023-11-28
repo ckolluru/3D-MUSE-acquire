@@ -1,6 +1,9 @@
 3D-MUSE-acquire
 ==========
 
+Read the microtome instruction manual first, available on the Leica website.
+https://www.leicabiosystems.com/sites/default/files/media_product-download/2022-11/HistoCore_NANOCUT_R_IFU_1v6I_en.pdf
+
 Setting up the software
 ------------
 Install micromanager nightly build from 20230530  
